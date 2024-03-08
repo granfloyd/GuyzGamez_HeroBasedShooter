@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float sensitivityX;
-    public float sensitivityY;
+    [Header("   CameraStuff")]
+    [SerializeField] private float sensitivityX;
+    [SerializeField] private float sensitivityY;
 
     public Transform orientation;
 
@@ -32,5 +33,6 @@ public class PlayerCamera : MonoBehaviour
         //rotate camera orientation
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
         orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        
     }
 }

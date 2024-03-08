@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("   PlayerMovement")]
     [Header("Movement")]
-    public float moveSpeed;
-    public float groundDrag;
-    public float jumpForce;
-    public float jumpCD;
-    public float airMultiplier;
-    public bool isReadyToJump;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float groundDrag;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float jumpCD;
+    [SerializeField] private float airMultiplier;
+    [SerializeField] private bool isReadyToJump;
 
     [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
     [Header("Ground Check")]
-    public float playerHeight;
-    public LayerMask Ground;
-    public bool isGrounded;
+    [SerializeField] private float playerHeight;
+    [SerializeField] private LayerMask Ground;
+    [SerializeField] private bool isGrounded;
 
     public Transform orientation;
 

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : PlayerMovement
 {
     [Header("   PlayerController")]
     [SerializeField] public HeroBase currentHero;
@@ -16,8 +16,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputAction ability1Action;
     [SerializeField] private InputAction ability2Action;
     [SerializeField] private InputAction ability3Action;
+    [SerializeField] private InputAction crouchAction;
+    [SerializeField] private InputAction jumpAction;
     [SerializeField] private InputAction changeHeroAction;
+    [SerializeField] static public HeroBase Player = null;
 
+    
+
+    private void Awake()
+    {
+        Player = null;       
+    }
+   
     public enum HeroIndex
     {
         DamageMain,
@@ -59,8 +69,8 @@ public class PlayerController : MonoBehaviour
 
         currentHero = selectedHero;
         currentHeroGameObject = selectedHeroGameObject;
-        HeroBase newHero = Instantiate(currentHero, transform.position, Quaternion.identity);
-        newHero.transform.SetParent(transform);
+        Player = Instantiate(currentHero, transform.position, Quaternion.identity);
+        Player.transform.SetParent(transform);
     }
     void OnEnable()
     {
@@ -68,6 +78,8 @@ public class PlayerController : MonoBehaviour
         ability2Action = myActions.FindAction("Ability2");
         ability3Action = myActions.FindAction("Ability3");
         changeHeroAction = myActions.FindAction("ChangeHero");
+        crouchAction = myActions.FindAction("Crouch");
+        jumpAction = myActions.FindAction("Jump");
         // Hook up the functions to the actions
         if (ability1Action != null)
         {
@@ -89,6 +101,17 @@ public class PlayerController : MonoBehaviour
             changeHeroAction.performed += OnChangeHero;
             changeHeroAction.Enable();
         }
+        if(crouchAction != null)
+        {
+            crouchAction.performed += OnCrouch;
+            crouchAction.Enable();
+        }
+        if(jumpAction != null)
+        {
+            jumpAction.performed += OnJump;
+            jumpAction.Enable();
+        }
+
     }
 
     void OnDisable()
@@ -110,6 +133,15 @@ public class PlayerController : MonoBehaviour
         {
             changeHeroAction.performed -= OnChangeHero;
         }
+        if(crouchAction != null)
+        {
+            crouchAction.performed -= OnCrouch;
+        }
+        if(jumpAction != null)
+        {
+            jumpAction.performed -= OnJump;
+        }
+
     }
 
     public void OnAbility1(InputAction.CallbackContext context)
@@ -168,7 +200,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Change Hero activated");
         if (context.performed)
         {
-            if(HeroSelectUI.Instance.isInSpawnArea == true)
+            if (HeroSelectUI.Instance.isInSpawnArea == true)
             {
                 HeroSelectUI.Instance.OpenSelectHeroScreen();
             }
@@ -178,4 +210,30 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        
+        if (context.performed)
+        {
+            Debug.Log("Cancel activated");
+            //if (Player.isFlying)
+            //{
+            //    Player.transform.position += Vector3.down * 4 * Time.deltaTime;
+            //}
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+       
+        if (context.performed)
+        {
+            Debug.Log("Jump activated");
+            //if (Player.isFlying)
+            //{
+            //    Player.transform.position += Vector3.up * 4 * Time.deltaTime;
+            //}
+        }
+    }   
 }

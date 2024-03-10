@@ -56,11 +56,18 @@ MonoBehaviour:
   Ground:
     serializedVersion: 2
     m_Bits: 8
-  isGrounded: 0
+  isGrounded: 1
   orientation: {fileID: 0}
   rb: {fileID: 0}
   health: 200
   fireRate: 0
+  isFlying: 0
+  ability1Cooldown: 7
+  ability1Duration: 5
+  ability2Cooldown: 0
+  ability2Duration: 0
+  ability3Cooldown: 0
+  ability3Duration: 0
 --- !u!136 &7297735519154734797
 CapsuleCollider:
   m_ObjectHideFlags: 0

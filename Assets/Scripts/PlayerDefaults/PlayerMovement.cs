@@ -22,16 +22,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isGrounded;
 
     public Transform orientation;
-
-    float horizontalInput;
-    float verticalInput;
-
-    Vector3 moveDirection;
-
     public Rigidbody rb;
+
+    public float horizontalInput;
+    public float verticalInput;
+
+    Vector3 moveDirection;    
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = gameObject.GetComponentInParent<Rigidbody>();
         rb.freezeRotation = true;
     }
     void Update()
@@ -77,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         }   
 
     }
-   
+    
     void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -89,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
-    void Jump()
+    public void Jump()
     {
         Physics.gravity = new Vector3(0, -20, 0);
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);

@@ -7,12 +7,68 @@ public class HeroBase : PlayerMovement
     [Header("   HeroBase")]    
     [SerializeField] protected float health;
     [SerializeField] protected float fireRate;
-    //[Header("HitBoxes")]
-    //[SerializeField] protected Collider BodyCollider;
-    private void Start()
+    public bool isFlying = false;
+
+    [Header("Ability1")]
+    [SerializeField] protected float ability1Cooldown = 7.0f;
+    [SerializeField] protected float ability1Duration = 5.0f;
+    protected float ability1Timer = 0.0f;
+    protected float ability1DurationTimer = 0.0f;
+    protected bool ability1Active = false;   
+
+    [Header("Ability2")]
+    [SerializeField] protected float ability2Cooldown = 0.0f;
+    [SerializeField] protected float ability2Duration = 0.0f;
+    protected float ability2Timer = 0.0f;
+    protected float ability2DurationTimer = 0.0f;
+    protected bool ability2Active = false;
+
+    [Header("Ability3")]
+    [SerializeField] protected float ability3Cooldown = 0.0f;
+    [SerializeField] protected float ability3Duration = 0.0f;
+    protected float ability3Timer = 0.0f;
+    protected float ability3DurationTimer = 0.0f;
+    protected bool ability3Active = false;
+
+    void Update()
     {
-        orientation = gameObject.transform.parent;
-        rb = gameObject.GetComponentInParent<Rigidbody>();
+        ability1Timer += Time.deltaTime;
+        ability2Timer += Time.deltaTime;
+        ability3Timer += Time.deltaTime;
+
+        if (ability1Active)
+        {
+            ability1DurationTimer += Time.deltaTime;
+            if(ability1DurationTimer >= ability1Duration)
+            {
+                ability1Active = false;
+                ability1DurationTimer = 0.0f;
+                ability1Timer = 0.0f;
+            }
+           
+        }
+        if (ability2Active)
+        {
+            ability2DurationTimer += Time.deltaTime;
+            if (ability2DurationTimer >= ability2Duration)
+            {
+                ability2Active = false;
+                ability2DurationTimer = 0.0f;
+                ability2Timer = 0.0f;
+            }
+
+        }
+        if (ability3Active)
+        {
+            ability3DurationTimer += Time.deltaTime;
+            if (ability3DurationTimer >= ability3Duration)
+            {
+                ability3Active = false;
+                ability3DurationTimer = 0.0f;
+                ability3Timer = 0.0f;
+            }
+
+        }
     }
     public virtual void PrimaryFire()
     {
@@ -26,17 +82,30 @@ public class HeroBase : PlayerMovement
 
     public virtual void Ability1()
     {
-        Debug.Log("LSHIFT: Ability 1");
+        
+        if (!ability1Active && ability1Timer >= ability1Cooldown)
+        {
+            Debug.Log("LSHIFT: Ability 1");
+            ability1Active = true;
+        }
     }
 
     public virtual void Ability2()
     {
-        Debug.Log("E: Ability 2");
+        if (!ability2Active && ability2Timer >= ability2Cooldown)
+        {
+            Debug.Log("E: Ability 2");
+            ability2Active = true;
+        }
     }
 
     public virtual void Ability3()
     {
-        Debug.Log("Q: Ability 3");
+        if (!ability3Active && ability3Timer >= ability3Cooldown)
+        {
+            Debug.Log("Q: Ability 3");
+            ability3Active = true;
+        }
     }
     public virtual void CollisionEnter(Collider other)
     {

@@ -149,7 +149,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81934e9f0e08274bbcc8f7effd26297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 4
+  groundDrag: 3
+  jumpForce: 2.5
+  jumpCD: 0.65
+  airMultiplier: 2
+  isReadyToJump: 1
+  jumpKey: 32
+  playerHeight: 2
+  Ground:
+    serializedVersion: 2
+    m_Bits: 8
+  isGrounded: 0
+  orientation: {fileID: 6658256870448330564}
+  rb: {fileID: 3546244896493198254}
+  horizontalInput: 0
+  verticalInput: 0
   currentHero: {fileID: 0}
+  currentHeroGameObject: {fileID: 0}
   heroes:
   - {fileID: -6397019945846295367, guid: 7b915e7d57a18c3438cec46e61a7fc45, type: 3}
   myActions: {fileID: -944628639613478452, guid: d8339310c4897e546aa2fc891e7c98e7,
@@ -177,6 +194,24 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 9b27157b-d6d7-471c-9add-c6c8c4172968
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  crouchAction:
+    m_Name: Crouch
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 11b9c79e-4285-458f-840d-7a503c283d5c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f83c6244-1d45-4b56-8d22-037160d8dd5b
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []

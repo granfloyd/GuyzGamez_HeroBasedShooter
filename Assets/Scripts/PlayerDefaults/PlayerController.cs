@@ -20,9 +20,6 @@ public class PlayerController : PlayerMovement
     [SerializeField] private InputAction jumpAction;
     [SerializeField] private InputAction changeHeroAction;
     [SerializeField] static public HeroBase Player = null;
-
-    
-
     private void Awake()
     {
         Player = null;       
@@ -103,14 +100,16 @@ public class PlayerController : PlayerMovement
         }
         if(crouchAction != null)
         {
-            crouchAction.performed += OnCrouch;
+            crouchAction.started += OnCrouch;
+            crouchAction.canceled += OnCrouch;
             crouchAction.Enable();
         }
         if(jumpAction != null)
         {
-            jumpAction.performed += OnJump;
+            jumpAction.started += OnJump;
+            jumpAction.canceled += OnJump;
             jumpAction.Enable();
-        }
+        }   
 
     }
 
@@ -135,13 +134,14 @@ public class PlayerController : PlayerMovement
         }
         if(crouchAction != null)
         {
-            crouchAction.performed -= OnCrouch;
+            crouchAction.started -= OnCrouch;
+            crouchAction.canceled -= OnCrouch;
         }
         if(jumpAction != null)
         {
-            jumpAction.performed -= OnJump;
-        }
-
+            jumpAction.started -= OnJump;
+            jumpAction.canceled -= OnJump;
+        }   
     }
 
     public void OnAbility1(InputAction.CallbackContext context)
@@ -156,7 +156,15 @@ public class PlayerController : PlayerMovement
             }
             else
             {
-                currentHero.Ability1();
+                if (Player.ability1Timer >= currentHero.ability1Cooldown)
+                {
+                    Player.Ability1();
+                    Player.ability1Timer = 0;
+                }
+                else
+                {
+                    Debug.Log("Ability 1 is on cooldown");
+                }
             }
         }
     }
@@ -213,27 +221,38 @@ public class PlayerController : PlayerMovement
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        
-        if (context.performed)
+        if(Player.isFlying)
         {
-            Debug.Log("Cancel activated");
-            //if (Player.isFlying)
-            //{
-            //    Player.transform.position += Vector3.down * 4 * Time.deltaTime;
-            //}
+            if (context.started)
+            {
+                isCrouching = true;
+
+                Debug.Log("croch activated");
+            }
+            if (context.canceled)
+            {
+                isCrouching = false;
+                Debug.Log("crouch canceled");
+            }
         }
+        
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-       
-        if (context.performed)
+        if(Player.isFlying)
         {
-            Debug.Log("Jump activated");
-            //if (Player.isFlying)
-            //{
-            //    Player.transform.position += Vector3.up * 4 * Time.deltaTime;
-            //}
+            if (context.started)
+            {
+                isJumping = true;
+                Debug.Log("croch activated");
+            }
+            if (context.canceled)
+            {
+                isJumping = false;
+                Debug.Log("crouch canceled");
+            }
         }
+        
     }   
 }

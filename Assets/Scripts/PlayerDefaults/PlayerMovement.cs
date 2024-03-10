@@ -27,7 +27,10 @@ public class PlayerMovement : MonoBehaviour
     public float horizontalInput;
     public float verticalInput;
 
-    Vector3 moveDirection;    
+    Vector3 moveDirection;
+
+    public bool isCrouching = false;
+    public bool isJumping = false;
     private void Start()
     {
         rb = gameObject.GetComponentInParent<Rigidbody>();
@@ -35,6 +38,18 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
+        if (isCrouching)
+        {
+            Debug.Log("Crouch started");
+            rb.AddForce(Vector3.down * moveSpeed * 10f * Time.deltaTime, ForceMode.Impulse);
+        }
+
+        if (isJumping)
+        {
+            Debug.Log("Jump started");
+            rb.AddForce(Vector3.up * moveSpeed * 10f * Time.deltaTime, ForceMode.Impulse);
+        }
+
         //ground check
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight + 0.5f, Ground);
 

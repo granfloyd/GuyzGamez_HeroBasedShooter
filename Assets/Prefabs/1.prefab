@@ -59,11 +59,16 @@ MonoBehaviour:
   isGrounded: 1
   orientation: {fileID: 0}
   rb: {fileID: 0}
+  horizontalInput: 0
+  verticalInput: 0
+  isCrouching: 0
+  isJumping: 0
   health: 200
   fireRate: 0
   isFlying: 0
   ability1Cooldown: 7
   ability1Duration: 5
+  ability1Timer: 0
   ability2Cooldown: 0
   ability2Duration: 0
   ability3Cooldown: 0

@@ -494,18 +494,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81934e9f0e08274bbcc8f7effd26297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &723527691 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 3546244896493198254, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1009208141}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &723527695 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6658256870448330564, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1009208141}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,13 +582,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4480956628592936799, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6658256870448330564, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.88
+      value: -7.6884813
       objectReference: {fileID: 0}
     - target: {fileID: 6658256870448330564, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
@@ -610,7 +598,7 @@ PrefabInstance:
     - target: {fileID: 6658256870448330564, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.18376866
       objectReference: {fileID: 0}
     - target: {fileID: 6658256870448330564, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
@@ -647,96 +635,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
+    - target: {fileID: 8139558881201728895, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 723527691}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: jumpCD
-      value: 0.65
+      propertyPath: m_LocalPosition.x
+      value: -0.37
       objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
+    - target: {fileID: 8139558881201728895, guid: 57bc85c7a320c8246a2215ef9a4628c0,
         type: 3}
-      propertyPath: jumpForce
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: myActions
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: d8339310c4897e546aa2fc891e7c98e7,
-        type: 3}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: groundDrag
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: isGrounded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: currentHero
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: orientation
-      value: 
-      objectReference: {fileID: 723527695}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: playerHeight
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: Ground.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: airMultiplier
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: isReadyToJump
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: jumpAction.m_Name
-      value: Jump
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: moveAction.m_Name
-      value: Move
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: crouchAction.m_Name
-      value: Crouch
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: currentHeroGameObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7537966932209563694, guid: 57bc85c7a320c8246a2215ef9a4628c0,
-        type: 3}
-      propertyPath: changeHeroAction.m_Name
-      value: Change Hero
+      propertyPath: m_LocalPosition.z
+      value: 0.456
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -757,7 +664,7 @@ GameObject:
   - component: {fileID: 1076171587}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Enemy1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -781,7 +688,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1076171588
 MeshRenderer:
@@ -1764,6 +1671,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Quad
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834109418556931578, guid: c940ee52c11cbcc4e9e0ad024870b229,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

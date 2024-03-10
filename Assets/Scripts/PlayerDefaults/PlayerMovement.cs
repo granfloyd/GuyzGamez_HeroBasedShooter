@@ -31,25 +31,30 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isCrouching = false;
     public bool isJumping = false;
+    
     private void Start()
     {
         rb = gameObject.GetComponentInParent<Rigidbody>();
         rb.freezeRotation = true;
     }
     void Update()
-    {
-        if (isCrouching)
+    { 
+        if(PlayerController.Player != null)
         {
-            Debug.Log("Crouch started");
-            rb.AddForce(Vector3.down * moveSpeed * 10f * Time.deltaTime, ForceMode.Impulse);
-        }
+            if (PlayerController.Player.isFlying)
+            {               
+                if (isCrouching)
+                {
+                    rb.AddForce(Vector3.down * moveSpeed * 4f * Time.deltaTime, ForceMode.Impulse);
+                }
 
-        if (isJumping)
-        {
-            Debug.Log("Jump started");
-            rb.AddForce(Vector3.up * moveSpeed * 10f * Time.deltaTime, ForceMode.Impulse);
+                if (isJumping)
+                {
+                    rb.AddForce(Vector3.up * moveSpeed * 4f * Time.deltaTime, ForceMode.Impulse);
+                }
+            }
         }
-
+        
         //ground check
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight + 0.5f, Ground);
 

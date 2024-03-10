@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5848897105420163867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765078473743841145}
+  - component: {fileID: -6397019945846295367}
+  - component: {fileID: 7297735519154734797}
+  m_Layer: 0
+  m_Name: Aerial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &765078473743841145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.42054582, y: -0.05309677, z: -5.5084743}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6397019945846295367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f6b542ec6a53440a1bb216bc658711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 4
+  groundDrag: 3
+  jumpForce: 2.5
+  jumpCD: 0.65
+  airMultiplier: 2
+  isReadyToJump: 1
+  jumpKey: 32
+  playerHeight: 2
+  Ground:
+    serializedVersion: 2
+    m_Bits: 8
+  isGrounded: 1
+  orientation: {fileID: 0}
+  rb: {fileID: 0}
+  horizontalInput: 0
+  verticalInput: 0
+  isCrouching: 0
+  isJumping: 0
+  health: 200
+  isFlying: 0
+  recovery: 0.5
+  recovery2: 1
+  heroWeaponPrefab: {fileID: 7293934375560898770, guid: a10732e14c84961479cfa05d4e0f333a,
+    type: 3}
+  weaponPos: {fileID: 0}
+  heroPrimaryFirePrefab: {fileID: 5308884282720409307, guid: 8bc4a32df342b2f4c97212dfbb24d4f4,
+    type: 3}
+  primaryFireSpawnPos: {fileID: 0}
+  weaponInstance: {fileID: 0}
+  bulletInstance: {fileID: 0}
+  primaryFireTimer: 0
+  secondaryFireTimer: 0
+  ability1Cooldown: 7
+  ability1Duration: 5
+  ability1Timer: 0
+  ability2Prefab: {fileID: 5308884282720409307, guid: baf65b7540e88ee4ea7a0d33f4c9cc9b,
+    type: 3}
+  ability2Instance: {fileID: 0}
+  ability2Cooldown: 5
+  ability2Duration: 0
+  ability2Timer: 0
+  ability3Cooldown: 0
+  ability3Duration: 0
+  ability3Timer: 0
+  boostForce: 40
+--- !u!136 &7297735519154734797
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

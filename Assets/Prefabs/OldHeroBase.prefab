@@ -625,6 +625,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81934e9f0e08274bbcc8f7effd26297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  groundDrag: 0
+  jumpForce: 0
+  jumpCD: 0
+  airMultiplier: 0
+  isReadyToJump: 0
+  jumpKey: 32
+  playerHeight: 0
+  Ground:
+    serializedVersion: 2
+    m_Bits: 0
+  isGrounded: 0
+  orientation: {fileID: 0}
+  rb: {fileID: 0}
+  horizontalInput: 0
+  verticalInput: 0
+  isCrouching: 0
+  isJumping: 0
   currentHero: {fileID: 0}
   currentHeroGameObject: {fileID: 0}
   heroes:
@@ -659,11 +677,47 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  crouchAction:
+    m_Name: Crouch
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8167ca55-6285-47bc-90e4-f268fd774410
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 60ccad4c-f06a-4c64-958b-654d949d7c68
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   changeHeroAction:
     m_Name: Change Hero
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 02de8f7c-f0f0-4f17-98cc-84ec525dba91
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  primaryFireAction:
+    m_Name: Primary Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 50bde26f-ab9e-44a1-85fe-4b386522825b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  secondaryFireAction:
+    m_Name: Secondary Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1061ee2a-9431-4883-afc0-60799cf7f8d1
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -754,6 +808,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 95ff8b5c-ebda-4d58-a817-6edb41cb6968
     m_ActionName: Player/ChangeHero[/Keyboard/h]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 06617576-0323-4e6e-86d5-17ffb82e2d1f
+    m_ActionName: Player/Crouch[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 46f2d973-4429-4df9-a8ba-9186a80b3994
+    m_ActionName: Player/Jump[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player

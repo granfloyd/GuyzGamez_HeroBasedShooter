@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3810171161882877727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6850946492812992460}
+  m_Layer: 0
+  m_Name: orientationX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6850946492812992460
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3810171161882877727}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.424, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6658256870448330564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3929566432899402714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8139558881201728895}
+  m_Layer: 0
+  m_Name: WeaponPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8139558881201728895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3929566432899402714}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.37, y: 0.4194, z: 0.456}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6658256870448330564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4480956628592936799
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,6 +96,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8139558881201728895}
+  - {fileID: 6850946492812992460}
   - {fileID: 8808911079016918734}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -119,7 +183,7 @@ Rigidbody:
   m_GameObject: {fileID: 4480956628592936799}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 6
+  m_Drag: 4
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -165,6 +229,8 @@ MonoBehaviour:
   rb: {fileID: 3546244896493198254}
   horizontalInput: 0
   verticalInput: 0
+  isCrouching: 0
+  isJumping: 0
   currentHero: {fileID: 0}
   currentHeroGameObject: {fileID: 0}
   heroes:
@@ -225,6 +291,24 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  primaryFireAction:
+    m_Name: Primary Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c4873225-f3b9-43e4-820e-c960eea9145f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  secondaryFireAction:
+    m_Name: Secondary Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ea916f7c-6e46-4c1d-9fea-48a8293c538f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!1 &5537183305451027420
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +334,7 @@ Transform:
   m_GameObject: {fileID: 5537183305451027420}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.05, z: 0.4}
+  m_LocalPosition: {x: 0, y: 0.964, z: 0.4}
   m_LocalScale: {x: 0.17, y: 0.24, z: 0.17}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -271,7 +355,7 @@ GameObject:
   - component: {fileID: 7988838875333861698}
   m_Layer: 0
   m_Name: PlayerCamera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -285,7 +369,7 @@ Transform:
   m_GameObject: {fileID: 7398713218553002538}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.842, z: 0.529}
+  m_LocalPosition: {x: 0, y: -1.32, z: 0.529}
   m_LocalScale: {x: 5.882353, y: 4.166667, z: 5.882353}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -309,7 +393,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 20.78461
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -324,7 +408,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -400,4 +484,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivityX: 800
   sensitivityY: 800
-  orientation: {fileID: 6658256870448330564}
+  orientationy: {fileID: 6658256870448330564}
+  orientationx: {fileID: 6850946492812992460}
+  gunOrientation: {fileID: 8139558881201728895}

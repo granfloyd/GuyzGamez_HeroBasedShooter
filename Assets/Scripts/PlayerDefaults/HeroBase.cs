@@ -4,32 +4,71 @@ using UnityEngine;
 
 public class HeroBase : PlayerMovement
 {
-    [Header("   HeroBase")]    
-    [SerializeField] protected float health;
-    [SerializeField] protected float fireRate;
+    [Header("   HeroBase")]
+    [SerializeField] protected int health;
     public bool isFlying = false;
+    [SerializeField] public float recovery = 0.5f;
+    [SerializeField] public float recovery2 = 1.0f;
+    public GameObject heroWeaponPrefab;
+    public Transform weaponPos;
+    public GameObject heroPrimaryFirePrefab;
+    public Transform primaryFireSpawnPos;
+    [HideInInspector] public GameObject weaponInstance = null;
+    [HideInInspector] public GameObject bulletInstance = null;
+
+    [Header("PrimaryFire")]
+    [SerializeField] public float primaryFireTimer = 0.0f;    
+
+    [Header("SecondaryFire")]
+    [SerializeField] public float secondaryFireTimer = 0.0f;
 
     [Header("Ability1")]
+    
     [SerializeField] public float ability1Cooldown = 7.0f;
     [SerializeField] public float ability1Duration = 5.0f;
     public float ability1Timer = 0.0f;
 
     [Header("Ability2")]
-    [SerializeField] protected float ability2Cooldown = 0.0f;
-    [SerializeField] protected float ability2Duration = 0.0f;
-    protected float ability2Timer = 0.0f;
+    [SerializeField] protected GameObject ability2Prefab;
+    [HideInInspector] public GameObject ability2Instance = null;    
+    [SerializeField] public float ability2Cooldown = 0.0f;
+    [SerializeField] public float ability2Duration = 0.0f;
+    public float ability2Timer = 0.0f;
 
     [Header("Ability3")]
-    [SerializeField] protected float ability3Cooldown = 0.0f;
-    [SerializeField] protected float ability3Duration = 0.0f;
-    protected float ability3Timer = 0.0f;
-
+    [SerializeField] public float ability3Cooldown = 0.0f;
+    [SerializeField] public float ability3Duration = 0.0f;
+    public float ability3Timer = 0.0f;
+    void Start()
+    {
+        if (heroWeaponPrefab != null)
+        {
+            primaryFireSpawnPos = heroWeaponPrefab.transform.GetChild(0);
+        }
+    }
     void Update()
     {
-        ability1Timer += Time.deltaTime;
-        ability2Timer += Time.deltaTime;
-        ability3Timer += Time.deltaTime;
-        //Debug.Log("Ability1: " + ability1Timer);
+        if(ability1Timer < ability1Cooldown)
+        {
+            ability1Timer += Time.deltaTime;
+        }
+        if(ability2Timer < ability2Cooldown)
+        {
+            ability2Timer += Time.deltaTime;
+        }
+        else if(ability3Timer < ability3Cooldown)
+        {
+            ability3Timer += Time.deltaTime;
+        }
+
+        if (primaryFireTimer < recovery)
+        {
+            primaryFireTimer += Time.deltaTime;
+        }
+        if (secondaryFireTimer < recovery2)
+        {
+            secondaryFireTimer += Time.deltaTime;
+        }
     }
     public virtual void PrimaryFire()
     {

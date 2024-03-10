@@ -8,14 +8,15 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float sensitivityX;
     [SerializeField] private float sensitivityY;
 
-    public Transform orientation;
+    public Transform orientationy;//pivot y
+    public Transform orientationx;
+    public Transform gunOrientation;
 
     float xRotation;
     float yRotation;
     // Start is called before the first frame update
     void Start()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
@@ -28,11 +29,12 @@ public class PlayerCamera : MonoBehaviour
         yRotation += mouseX;
 
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        xRotation = Mathf.Clamp(xRotation, -90f, 65f);
 
         //rotate camera orientation
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
-        orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
-        
+        orientationy.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        orientationx.rotation = Quaternion.Euler(xRotation,0f, 0f);
+        gunOrientation.rotation = Quaternion.Euler(xRotation,yRotation, 0f);
     }
 }

@@ -19,6 +19,8 @@ public class PlayerController : PlayerMovement
     [SerializeField] private InputAction crouchAction;
     [SerializeField] private InputAction jumpAction;
     [SerializeField] private InputAction changeHeroAction;
+    [SerializeField] private InputAction primaryFireAction;
+    [SerializeField] private InputAction secondaryFireAction;
     [SerializeField] static public HeroBase Player = null;
     private void Awake()
     {
@@ -77,6 +79,8 @@ public class PlayerController : PlayerMovement
         changeHeroAction = myActions.FindAction("ChangeHero");
         crouchAction = myActions.FindAction("Crouch");
         jumpAction = myActions.FindAction("Jump");
+        primaryFireAction = myActions.FindAction("PrimaryFire");
+        secondaryFireAction = myActions.FindAction("SecondaryFire");
         // Hook up the functions to the actions
         if (ability1Action != null)
         {
@@ -110,6 +114,16 @@ public class PlayerController : PlayerMovement
             jumpAction.canceled += OnJump;
             jumpAction.Enable();
         }   
+        if(primaryFireAction != null)
+        {
+            primaryFireAction.performed += OnPrimaryFire;
+            primaryFireAction.Enable();
+        }
+        if(secondaryFireAction != null)
+        {
+            secondaryFireAction.performed += OnSecondaryFire;
+            secondaryFireAction.Enable();
+        }
 
     }
 
@@ -141,9 +155,60 @@ public class PlayerController : PlayerMovement
         {
             jumpAction.started -= OnJump;
             jumpAction.canceled -= OnJump;
-        }   
+        }  
+        if(primaryFireAction != null)
+        {
+            primaryFireAction.performed -= OnPrimaryFire;
+        }
+        if(secondaryFireAction != null)
+        {
+            secondaryFireAction.performed -= OnSecondaryFire;
+        }
     }
-
+    public void OnPrimaryFire(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (currentHero == null)
+            {
+                return;
+            }
+            else
+            {
+                if (Player.primaryFireTimer >= currentHero.recovery)
+                {
+                    Player.PrimaryFire();
+                    Player.primaryFireTimer = 0;
+                }
+                else
+                {
+                    Debug.Log("M1 is on cooldown");
+                }
+            }
+        }
+    }   
+    public void OnSecondaryFire(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (currentHero == null)
+            {
+                return;
+            }
+            else
+            {
+                if (Player.secondaryFireTimer >= currentHero.recovery2)
+                {
+                    Player.SecondaryFire();
+                    Player.secondaryFireTimer = 0;
+                }
+                else
+                {
+                    Debug.Log("M2 is on cooldown");
+                }
+            }
+        }
+    }
     public void OnAbility1(InputAction.CallbackContext context)
     {
         Debug.Log("Ability LSHIFT activated");
@@ -151,7 +216,6 @@ public class PlayerController : PlayerMovement
         {
             if (currentHero == null)
             {
-                Debug.Log("tried to press LSHIFT Bozo didnt pick hero");
                 return;
             }
             else
@@ -176,12 +240,19 @@ public class PlayerController : PlayerMovement
         {
             if (currentHero == null)
             {
-                Debug.Log("tried to press E Bozo didnt pick hero");
                 return;
             }
             else
             {
-                currentHero.Ability2();
+                if (Player.ability2Timer >= currentHero.ability2Cooldown)
+                {
+                    Player.Ability2();
+                    Player.ability2Timer = 0;
+                }
+                else
+                {
+                    Debug.Log("Ability 2 is on cooldown");
+                }
             }
         }
     }

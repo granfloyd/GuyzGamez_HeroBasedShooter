@@ -9,6 +9,11 @@ public class HeroBase : PlayerMovement
     [SerializeField] protected float fireRate;
     //[Header("HitBoxes")]
     //[SerializeField] protected Collider BodyCollider;
+    private void Start()
+    {
+        orientation = gameObject.transform.parent;
+        rb = gameObject.GetComponentInParent<Rigidbody>();
+    }
     public virtual void PrimaryFire()
     {
         Debug.Log("M1");
@@ -33,8 +38,32 @@ public class HeroBase : PlayerMovement
     {
         Debug.Log("Q: Ability 3");
     }
-    public virtual void CollisionEnter(Collider other) { }
-    public virtual void CollisionExit(Collider other) { }
+    public virtual void CollisionEnter(Collider other)
+    {
+        if (other.tag != CollisionPlayer.SpawnCollision)
+        {
+            return;
+        }
+        else
+        {
+            SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
+            spawnArea.EnteredSpawnArea();
+            Debug.Log("in spawn");
+        }
+    }
+    public virtual void CollisionExit(Collider other)
+    {
+        if (other.tag != CollisionPlayer.SpawnCollision)
+        {
+            return;
+        }
+        else
+        {
+            SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
+            spawnArea.ExitedSpawnArea();
+            Debug.Log("out spawn");
+        }
+    }
     
     void OnTriggerEnter(Collider other)
     {

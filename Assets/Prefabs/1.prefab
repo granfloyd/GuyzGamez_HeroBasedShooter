@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 765078473743841145}
-  - component: {fileID: -3191111649769703648}
+  - component: {fileID: -6397019945846295367}
+  - component: {fileID: 7297735519154734797}
   m_Layer: 0
   m_Name: 1
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3191111649769703648
+--- !u!114 &-6397019945846295367
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,18 +45,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f6b542ec6a53440a1bb216bc658711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
-  groundDrag: 0
-  jumpForce: 0
-  jumpCD: 0
-  airMultiplier: 0
-  isReadyToJump: 0
+  moveSpeed: 4
+  groundDrag: 3
+  jumpForce: 2.5
+  jumpCD: 0.65
+  airMultiplier: 2
+  isReadyToJump: 1
   jumpKey: 32
-  playerHeight: 0
+  playerHeight: 2
   Ground:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   isGrounded: 0
   orientation: {fileID: 0}
-  health: 0
+  rb: {fileID: 0}
+  health: 200
   fireRate: 0
+--- !u!136 &7297735519154734797
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

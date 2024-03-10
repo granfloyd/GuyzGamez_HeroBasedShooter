@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 moveDirection;
 
-    Rigidbody rb;
+    public Rigidbody rb;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();

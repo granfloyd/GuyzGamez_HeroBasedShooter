@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 4144471814207061292}
   - component: {fileID: 477820905771703856}
   m_Layer: 0
-  m_Name: HeroBase
+  m_Name: OldHeroBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -638,11 +638,12 @@ MonoBehaviour:
     m_Bits: 8
   isGrounded: 0
   orientation: {fileID: 6258800979570901382}
+  rb: {fileID: 0}
   health: 2
   fireRate: 2
   currentHero: {fileID: 0}
   heroes:
-  - {fileID: -3191111649769703648, guid: 7b915e7d57a18c3438cec46e61a7fc45, type: 3}
+  - {fileID: -6397019945846295367, guid: 7b915e7d57a18c3438cec46e61a7fc45, type: 3}
   - {fileID: -3191111649769703648, guid: e30406fb01df54e4d9a8aa194b4569cf, type: 3}
   - {fileID: -3191111649769703648, guid: f56c45886ae460b4fa41f67b12f331c2, type: 3}
   ability1Action:
@@ -720,10 +721,6 @@ MonoBehaviour:
     m_ActionName: Player/Ability1[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 74481a99-838f-4b09-a0cd-b30766867ca1
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: bd9c851e-9fc4-42ac-920b-ca3996d63323
     m_ActionName: UI/Submit[/Keyboard/enter]
   - m_PersistentCalls:
@@ -752,12 +749,16 @@ MonoBehaviour:
     m_ActionName: UI/RightClick[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 655dd12b-9fe2-460b-87dd-841e2e4ebbca
-    m_ActionName: UI/TrackedDevicePosition
+    m_ActionId: d570ca79-e106-41b3-87c0-cc4652166d7f
+    m_ActionName: Player/Ability2[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: e7e025e6-5d58-4022-83d3-667f93495abb
-    m_ActionName: UI/TrackedDeviceOrientation
+    m_ActionId: 45568afb-f5fb-4c07-b395-4963955ae85e
+    m_ActionName: Player/Ability3[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 95ff8b5c-ebda-4d58-a817-6edb41cb6968
+    m_ActionName: Player/ChangeHero[/Keyboard/h]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player

@@ -1,17 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class PlayerController : HeroBase
+public class PlayerController : MonoBehaviour
 {
     [Header("   PlayerController")]
-    [SerializeField] protected HeroBase currentHero;
+    [SerializeField] public HeroBase currentHero;
+    [SerializeField] public GameObject currentHeroGameObject = null;
     [SerializeField] private List<HeroBase> heroes = new List<HeroBase>();
+    [SerializeField] private InputActionAsset myActions;
     [SerializeField] private InputAction ability1Action;
     [SerializeField] private InputAction ability2Action;
     [SerializeField] private InputAction ability3Action;
+    [SerializeField] private InputAction changeHeroAction;
+
     public enum HeroIndex
     {
         DamageMain,
@@ -19,47 +25,91 @@ public class PlayerController : HeroBase
         SupportMain,
         Default = DamageMain
     }
-    void Awake()
-    {
-        ability1Action = new InputAction(binding: "<Keyboard>/leftShift");
-        ability1Action.performed += OnAbility1;
-
-        ability2Action = new InputAction(binding: "<Keyboard>/e");
-        ability2Action.performed += OnAbility2;
-
-        ability3Action = new InputAction(binding: "<Keyboard>/q");
-        ability3Action.performed += OnAbility3;
-    }
     public void SelectHero(HeroIndex heroindex)
     {
+        HeroBase selectedHero = null;
+        GameObject selectedHeroGameObject = null;
         switch (heroindex)
         {
             case HeroIndex.DamageMain:
-                currentHero = heroes[0];
+                selectedHero = heroes[0];
+                selectedHeroGameObject = heroes[0].gameObject;
                 break;
             case HeroIndex.TankMain:
-                currentHero = heroes[1];
+                selectedHero = heroes[1];
                 break;
             case HeroIndex.SupportMain:
-                currentHero = heroes[2];
+                selectedHero = heroes[2];
                 break;
             default:
-                currentHero = heroes[0];
+                selectedHero = heroes[0];
                 break;
         }
+
+        if (selectedHero == currentHero)
+        {
+            Debug.Log("same hero");
+            return;
+        }
+
+        if (currentHero != null)
+        {
+            Destroy(currentHeroGameObject);
+        }
+
+        currentHero = selectedHero;
+        currentHeroGameObject = selectedHeroGameObject;
+        HeroBase newHero = Instantiate(currentHero, transform.position, Quaternion.identity);
+        newHero.transform.SetParent(transform);
     }
     void OnEnable()
     {
-        ability1Action.Enable();
-        ability2Action.Enable();
-        ability3Action.Enable();
+        ability1Action = myActions.FindAction("Ability1");
+        ability2Action = myActions.FindAction("Ability2");
+        ability3Action = myActions.FindAction("Ability3");
+        changeHeroAction = myActions.FindAction("ChangeHero");
+        // Hook up the functions to the actions
+        if (ability1Action != null)
+        {
+            ability1Action.performed += OnAbility1;
+            ability1Action.Enable();
+        }
+        if (ability2Action != null)
+        {
+            ability2Action.performed += OnAbility2;
+            ability2Action.Enable();
+        }
+        if (ability3Action != null)
+        {
+            ability3Action.performed += OnAbility3;
+            ability3Action.Enable();
+        }
+        if(changeHeroAction != null)
+        {
+            changeHeroAction.performed += OnChangeHero;
+            changeHeroAction.Enable();
+        }
     }
 
     void OnDisable()
     {
-        ability1Action.Disable();
-        ability2Action.Disable();
-        ability3Action.Disable();
+        // Clean up - remove the functions from the actions
+        if (ability1Action != null)
+        {
+            ability1Action.performed -= OnAbility1;
+        }                               
+        if (ability2Action != null)     
+        {                               
+            ability2Action.performed -= OnAbility2;
+        }                               
+        if (ability3Action != null)     
+        {                               
+            ability3Action.performed -= OnAbility3;
+        }
+        if(changeHeroAction != null)
+        {
+            changeHeroAction.performed -= OnChangeHero;
+        }
     }
 
     public void OnAbility1(InputAction.CallbackContext context)
@@ -113,33 +163,19 @@ public class PlayerController : HeroBase
             
         }
     }
-
-    public override void CollisionEnter(Collider other)
+    public void OnChangeHero(InputAction.CallbackContext context)
     {
-        if (other.tag != CollisionPlayer.SpawnCollision)
+        Debug.Log("Change Hero activated");
+        if (context.performed)
         {
-            Debug.Log(other.tag);
-            return;
-        }
-        else
-        {
-            
-            SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
-            spawnArea.EnteredSpawnArea(); 
-            Debug.Log("in spawn");
-        }
-    }
-    public override void CollisionExit(Collider other)
-    {
-        if (other.tag != CollisionPlayer.SpawnCollision)
-        {
-            Debug.Log(other.tag);
-            return;
-        }
-        else
-        {
-            
-            Debug.Log("out spawn");
+            if(HeroSelectUI.Instance.isInSpawnArea == true)
+            {
+                HeroSelectUI.Instance.OpenSelectHeroScreen();
+            }
+            else
+            {
+                Debug.Log("not in spawn area");
+            }
         }
     }
 }

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SpawnArea : HeroSelectUI
+public class SpawnArea : MonoBehaviour//HeroSelectUI
 {
     public void EnteredSpawnArea()//safezone
     {
-        RenderUI();
-        
+        HeroSelectUI.Instance.RenderUI(); 
+        HeroSelectUI.Instance.isInSpawnArea = true;
     }
     public void ExitedSpawnArea()//safezone
     {
-        HideUI();
-        
+        HeroSelectUI.Instance.HideUI();    
+        HeroSelectUI.Instance.isInSpawnArea = false;
     }
 
 }

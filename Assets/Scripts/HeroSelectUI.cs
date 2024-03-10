@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class HeroSelectUI : MonoBehaviour
 {
+    public static HeroSelectUI Instance { get; private set; }
+    public bool isInSpawnArea = false;
     [SerializeField] private PlayerController playerController;
 
     [SerializeField] protected GameObject selectHeroUI;
@@ -12,6 +14,22 @@ public class HeroSelectUI : MonoBehaviour
 
     [SerializeField] protected List<Button> heroButtons;
 
+    private void Awake()
+    {
+        // If an instance already exists, destroy this one
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Set this as the instance
+        Instance = this;
+        if(playerController.currentHero == null)
+        {
+            OpenSelectHeroScreen();
+        }
+    }
 
     private void Start()
     {
@@ -21,7 +39,6 @@ public class HeroSelectUI : MonoBehaviour
             heroButtons[i].onClick.AddListener(() => ButtonClicked(index));
         }
     }
-
     public void RenderUI()
     {
         selectHeroUI.SetActive(true);
@@ -29,17 +46,19 @@ public class HeroSelectUI : MonoBehaviour
     }
     public void HideUI()
     {
-        selectHeroUI.SetActive(false);
         Debug.Log("bye bye");
+        selectHeroUI.SetActive(false);        
     }
     public void OpenSelectHeroScreen()
     {
+        Cursor.visible = true;
         selectHeroScreen.SetActive(true);
     }
     public void CloseSelectHeroScreen()
     {
+        Cursor.visible = false;
         selectHeroScreen.SetActive(false);
-    }   
+    }
 
     private void ButtonClicked(int buttonIndex)
     {

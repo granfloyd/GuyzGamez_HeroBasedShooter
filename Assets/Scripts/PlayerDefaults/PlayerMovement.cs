@@ -45,12 +45,12 @@ public class PlayerMovement : MonoBehaviour
             {               
                 if (isCrouching)
                 {
-                    rb.AddForce(Vector3.down * moveSpeed * 4f * Time.deltaTime, ForceMode.Impulse);
+                    rb.AddForce(Vector3.down * moveSpeed * Time.deltaTime, ForceMode.Impulse);
                 }
 
                 if (isJumping)
                 {
-                    rb.AddForce(Vector3.up * moveSpeed * 4f * Time.deltaTime, ForceMode.Impulse);
+                    rb.AddForce(Vector3.up * moveSpeed * Time.deltaTime, ForceMode.Impulse);
                 }
             }
         }
@@ -88,11 +88,11 @@ public class PlayerMovement : MonoBehaviour
         //on ground
         if(isGrounded)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * moveSpeed * 2, ForceMode.Force);
         }
         else if(!isGrounded) //in air
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10 * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * moveSpeed  * airMultiplier, ForceMode.Force);
         }   
 
     }
@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Jump()
     {
-        Physics.gravity = new Vector3(0, -20, 0);
+        //Physics.gravity = new Vector3(0, -20, 0);
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce * 2, ForceMode.Impulse);
     }

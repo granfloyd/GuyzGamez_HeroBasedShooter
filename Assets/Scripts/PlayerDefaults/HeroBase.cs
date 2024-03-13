@@ -7,6 +7,8 @@ public class HeroBase : PlayerMovement
     [Header("   HeroBase")]
     [SerializeField] protected int health;
     public bool isFlying = false;
+    public Vector3 crosshairPos;
+    public Vector3 tempGunAngle;
     [SerializeField] public float recovery = 0.5f;
     [SerializeField] public float recovery2 = 1.0f;
     public GameObject heroWeaponPrefab;
@@ -69,6 +71,40 @@ public class HeroBase : PlayerMovement
         {
             secondaryFireTimer += Time.deltaTime;
         }
+        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+        Vector3 bulletSpawnPos = PlayerController.Player.primaryFireSpawnPos.position;
+
+        crosshairPos = Camera.main.ScreenToWorldPoint(screenCenter);
+
+        Vector3 cameraPos = Camera.main.gameObject.transform.position;
+        Vector3 cameraDirection = Camera.main.gameObject.transform.forward;
+
+        //Vector3 gunAngle;
+        //Debug.DrawLine(bulletSpawnPos, cameraPos + cameraDirection * 10.0f, Color.white);
+
+        int layerMask = 2;
+        // Perform the raycast
+        RaycastHit hit;
+        if (Physics.Raycast(cameraPos, cameraDirection, out hit, 100.0f, layerMask))
+        {
+            Vector3 temp = hit.point - bulletSpawnPos;
+
+            tempGunAngle = temp.normalized;
+
+            //Debug.DrawLine(crosshairPos, hit.point, Color.red);
+
+            //Debug.DrawLine(bulletSpawnPos, hit.point, Color.red);
+            //Debug.Log("Hit object: " + hit.collider.gameObject.name);
+        }
+        else
+        {
+            Vector3 endpointPosition = cameraPos + cameraDirection * 100.0f;
+            Vector3 bulletEndPointDistance = endpointPosition - bulletSpawnPos;
+            tempGunAngle = bulletEndPointDistance.normalized;
+
+        }
+        if (tempGunAngle != Vector3.zero)
+            Debug.DrawRay(bulletSpawnPos, tempGunAngle * 5, Color.yellow);
     }
     public virtual void PrimaryFire()
     {

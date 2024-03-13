@@ -5,10 +5,11 @@ public class Projectile : MonoBehaviour
     public float speed = 50f;
     public float lifespan = 5f;
     public Rigidbody rb;
-
+    
     [SerializeField] private bool isHomingType;
     void Start()
     {
+        //Vector3 tempAngle = Aerial.tempGunAngle;
         rb = GetComponent<Rigidbody>();
         if(isHomingType)
         {
@@ -16,10 +17,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-            Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
-            transform.position = worldCenter;
-            rb.velocity = Camera.main.transform.forward * speed;
+
         }
         
         Destroy(gameObject, lifespan);

@@ -17,7 +17,12 @@ public class Aerial : HeroBase
     }
     public override void PrimaryFire()
     {
-        Instantiate(heroPrimaryFirePrefab, PlayerController.Player.primaryFireSpawnPos.position, PlayerController.Player.orientation.localRotation);
+        HeroBase player = PlayerController.Player;
+        GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab,
+            PlayerController.Player.primaryFireSpawnPos.position,
+            PlayerController.Player.orientation.localRotation);
+        Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
+        rb.velocity = tempGunAngle * 10f;
     }
 
     public override void SecondaryFire()

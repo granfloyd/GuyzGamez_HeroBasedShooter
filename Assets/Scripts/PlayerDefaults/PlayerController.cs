@@ -69,7 +69,8 @@ public class PlayerController : PlayerMovement
         currentHero = selectedHero;
         currentHeroGameObject = selectedHeroGameObject;
         Player = Instantiate(currentHero, transform.position, Quaternion.identity);
-        Player.transform.SetParent(transform);
+        transform.SetParent(Player.transform);
+        //Player.transform.SetParent(transform);
     }
     void OnEnable()
     {
@@ -126,7 +127,18 @@ public class PlayerController : PlayerMovement
         }
 
     }
-
+    private void Update()
+    {
+        if (Player == null)
+        {
+            return;
+        }
+        else
+        {
+            Player.MyInput();
+        }
+    }
+    
     void OnDisable()
     {
         // Clean up - remove the functions from the actions
@@ -211,7 +223,6 @@ public class PlayerController : PlayerMovement
     }
     public void OnAbility1(InputAction.CallbackContext context)
     {
-        Debug.Log("Ability LSHIFT activated");
         if (context.performed)
         {
             if (currentHero == null)
@@ -235,7 +246,6 @@ public class PlayerController : PlayerMovement
 
     public void OnAbility2(InputAction.CallbackContext context)
     {
-        Debug.Log("Ability 2 E activated");
         if (context.performed)
         {
             if (currentHero == null)
@@ -259,12 +269,10 @@ public class PlayerController : PlayerMovement
 
     public void OnAbility3(InputAction.CallbackContext context)
     {
-        Debug.Log("Ability 3 Q activated");
         if (context.performed)
         {
             if(currentHero == null)
             {
-                Debug.Log("tried to press Q Bozo didnt pick hero");
                 return;
             }
             else
@@ -276,7 +284,6 @@ public class PlayerController : PlayerMovement
     }
     public void OnChangeHero(InputAction.CallbackContext context)
     {
-        Debug.Log("Change Hero activated");
         if (context.performed)
         {
             if (HeroSelectUI.Instance.isInSpawnArea == true)
@@ -292,38 +299,25 @@ public class PlayerController : PlayerMovement
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if(Player.isFlying)
+        if (context.started)
         {
-            if (context.started)
-            {
-                isCrouching = true;
-
-                Debug.Log("croch activated");
-            }
-            if (context.canceled)
-            {
-                isCrouching = false;
-                Debug.Log("crouch canceled");
-            }
+            Player.isMovingDown = true;
         }
-        
+        if (context.canceled)
+        {
+            Player.isMovingDown = false;
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(Player.isFlying)
+        if (context.started)
         {
-            if (context.started)
-            {
-                isJumping = true;
-                Debug.Log("croch activated");
-            }
-            if (context.canceled)
-            {
-                isJumping = false;
-                Debug.Log("crouch canceled");
-            }
+            Player.isMovingUp = true;
         }
-        
+        if (context.canceled)
+        {
+            Player.isMovingUp = false;
+        }
     }   
 }

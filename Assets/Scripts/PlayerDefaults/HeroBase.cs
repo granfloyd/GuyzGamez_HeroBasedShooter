@@ -48,9 +48,10 @@ public class HeroBase : PlayerMovement
             primaryFireSpawnPos = heroWeaponPrefab.transform.GetChild(0);
         }
     }
-    void Update()
+    protected void Update()
     {
-        if(ability1Timer < ability1Cooldown)
+        base.Update();
+        if (ability1Timer < ability1Cooldown)
         {
             ability1Timer += Time.deltaTime;
         }

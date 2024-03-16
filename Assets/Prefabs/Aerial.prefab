@@ -79,8 +79,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5848897105420163867}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 60
+  m_Drag: 6
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -110,10 +110,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f6b542ec6a53440a1bb216bc658711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  flySpeed: 3
+  moveSpeed: 7
+  flySpeed: 7
+  groundDrag: 6
   jumpForce: 4
-  jumpCD: 0.65
+  jumpCD: 0.75
   airMultiplier: 1
   isReadyToJump: 1
   isJumping: 0
@@ -158,7 +159,7 @@ MonoBehaviour:
   ability3Cooldown: 0
   ability3Duration: 0
   ability3Timer: 0
-  boostForce: 10
+  boostForce: 20
 --- !u!136 &7297735519154734797
 CapsuleCollider:
   m_ObjectHideFlags: 0

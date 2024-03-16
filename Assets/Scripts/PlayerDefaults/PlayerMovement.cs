@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("   PlayerMovement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float flySpeed;
+    [SerializeField] private float groundDrag;
     [SerializeField] private float jumpForce;
     [SerializeField] private float jumpCD;
     [SerializeField] private float airMultiplier;
@@ -34,17 +35,17 @@ public class PlayerMovement : MonoBehaviour
     
     private void Start()
     {
-        //rb = gameObject.GetComponentInParent<Rigidbody>();
-        //rb.freezeRotation = true;
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
     }
     protected void Update()
     {
-        
         //ground check
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
         // Draw the raycast in the scene view
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
+        SpeedControl();
     }
     void FixedUpdate()
     {
@@ -56,65 +57,99 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-       if(player == null)
-       {
-           return;            
-       } 
-       else if (!player.isFlying)
-       {
-           if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
-           {
-               Jump();
-               Invoke("ResetJump", jumpCD);
-           }
-       }
+        if(player == null)
+        {
+            return;            
+        } 
+        else if (!player.isFlying)
+        {
+            if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
+            {
+                Jump();
+                Invoke("ResetJump", jumpCD);
+            }
+        }
        
-       if (player.isFlying)
-       {
-           if (isMovingUp)
-           {
-               MakePlayerMoveUp();
-           }
-           else if (isMovingDown)
-           {
-               MakePlayerMoveDown();
-           }
-       }
+        if (player.isFlying)
+        {
+            player.rb.drag = 1;
+            if (isMovingUp)
+            {
+                MakePlayerMoveUp();
+            }
+            else if (isMovingDown)
+            {
+                MakePlayerMoveDown();
+            }
+        }   
+        else
+        {
+            if(player.isGrounded)
+            {
+                player.rb.drag = groundDrag;
+            }
+            else
+            {
+                player.rb.drag = 1;
+            }
+        }
     }
 
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
         //on ground
         if (isGrounded)
         {
-            transform.Translate(moveDirection.normalized * moveSpeed * Time.deltaTime, Space.World);
+            rb.AddForce(moveDirection.normalized * moveSpeed * groundDrag * rb.mass, ForceMode.Force);
         }
-        else if(!isGrounded) //in air
+        else if (!isGrounded) //in air
         {
-            transform.Translate(moveDirection.normalized * moveSpeed * airMultiplier * Time.deltaTime, Space.World);
-        }   
+            if (PlayerController.Player != null)
+            {
+                if (PlayerController.Player.isFlying)
+                {
+                    Debug.Log("doing it right");
+                    rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
+                }
+                else
+                {
+                    rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
+                }
+            }
+        }
+    }
+    void SpeedControl()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
 
+        //limit velocity if needed
+        if (flatVel.magnitude > moveSpeed)
+        {
+            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVel.x, limitedVel.y, limitedVel.z);
+        }
     }
     private void Jump()
     {
+        isJumping = true;
+        rb.drag = 1;
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * jumpForce * rb.mass, ForceMode.Impulse);
         isReadyToJump = false;
     }
     private void MakePlayerMoveUp()
     {
-        transform.Translate(Vector3.up * flySpeed * Time.deltaTime, Space.World);
-        //transform.position += Vector3.up * moveSpeed * Time.deltaTime;
+        rb.AddForce(Vector3.up * flySpeed, ForceMode.Force);
     }
     private void MakePlayerMoveDown()
     {
-        transform.Translate(Vector3.down * flySpeed * Time.deltaTime, Space.World);
+        rb.AddForce(Vector3.down * flySpeed, ForceMode.Force);
     }
     private void ResetJump()
     {
         isReadyToJump = true;
+        isJumping = false;
     }
    
 }

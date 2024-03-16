@@ -7,7 +7,7 @@ public class Aerial : HeroBase
     private void Start()
     {
         HeroBase player = PlayerController.Player;
-        boostForce = 10f;
+        boostForce = 40f;
         Cursor.lockState = CursorLockMode.Locked;
         player.weaponPos = player.gameObject.transform.GetChild(0);
         player.weaponInstance = Instantiate(heroWeaponPrefab, player.weaponPos);
@@ -38,24 +38,20 @@ public class Aerial : HeroBase
         HeroBase player = PlayerController.Player;
         if (player.isFlying)
         {
-            player.rb.velocity = new Vector3(player.rb.velocity.x,0, player.rb.velocity.z);
+            player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
             player.isFlying = false;
-            player.rb.useGravity = true;
-           
+            player.rb.useGravity = true;           
         }        
     }
     void Boost()
     {
-        HeroBase player = PlayerController.Player;        
-        player.rb.AddForce(Vector3.up * boostForce, ForceMode.Impulse);
-        Invoke("TurnOffGravity", 0.5f);
-    }
-    void TurnOffGravity()
-    {   
         HeroBase player = PlayerController.Player;
         player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
         player.isFlying = true;
+        player.rb.AddForce(Vector3.up * boostForce * player.rb.mass * 4, ForceMode.Impulse);
         player.rb.useGravity = false;
+
+
     }
     public override void Ability2()
     {

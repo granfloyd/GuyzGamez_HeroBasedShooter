@@ -2,25 +2,20 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 50f;
-    public float lifespan = 5f;
+    public float Speed;
+    public float Lifespan;
+    public int Damage;
     public Rigidbody rb;
-    
-    [SerializeField] private bool isHomingType;
+    void SetSpeedLifespanDamage(float speed,float lifespan,int damage)
+    {
+        Speed = speed;
+        Lifespan = lifespan;
+        Damage = damage;
+    }
     void Start()
     {
-        //Vector3 tempAngle = Aerial.tempGunAngle;
-        rb = GetComponent<Rigidbody>();
-        if(isHomingType)
-        {
-            
-        }
-        else
-        {
-
-        }
-        
-        Destroy(gameObject, lifespan);
+        SetSpeedLifespanDamage(100,2,10);       
+        Destroy(gameObject, Lifespan);
     }
 
     void OnCollisionEnter(Collision other)
@@ -33,6 +28,13 @@ public class Projectile : MonoBehaviour
         if (other.gameObject.tag != "Player")
         {
             rb.velocity = Vector3.zero;
+        }
+
+        if(other.gameObject.tag == "Enemy1")
+        {
+            HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
+            enemyhp.TakeDamage(Damage);
+            Destroy(gameObject);
         }
     }
     private void OnTriggerEnter(Collider other)

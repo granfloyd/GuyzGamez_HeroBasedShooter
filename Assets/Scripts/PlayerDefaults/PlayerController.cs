@@ -209,7 +209,7 @@ public class PlayerController : PlayerMovement
             }
             else
             {
-                if (Player.secondaryFireTimer >= currentHero.recovery2)
+                if (Player.secondaryFireTimer >= currentHero.recovery)
                 {
                     Player.SecondaryFire();
                     Player.secondaryFireTimer = 0;
@@ -277,6 +277,7 @@ public class PlayerController : PlayerMovement
             }
             else
             {
+
                 currentHero.Ability3();
             }
             

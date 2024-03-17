@@ -1,48 +1,88 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeroBase : PlayerMovement
 {
     [Header("   HeroBase")]
     [SerializeField] protected int health;
+    [SerializeField] public float recovery;    
     public bool isFlying = false;
+
     public Vector3 crosshairPos;
-    public Vector3 tempGunAngle;
-    [SerializeField] public float recovery = 0.5f;
-    [SerializeField] public float recovery2 = 1.0f;
+    public Vector3 tempGunAngle;    
     public GameObject heroWeaponPrefab;
     public Transform weaponPos;
     public GameObject heroPrimaryFirePrefab;
     public Transform primaryFireSpawnPos;
     [HideInInspector] public GameObject weaponInstance = null;
     [HideInInspector] public GameObject bulletInstance = null;
+    [SerializeField] public Slider durationSlider;
+    [SerializeField] public Slider ability3Slider;
 
     [Header("PrimaryFire")]
-    [SerializeField] public float primaryFireTimer = 0.0f;    
+    [SerializeField] public float primaryFireTimer;    
 
     [Header("SecondaryFire")]
-    [SerializeField] public float secondaryFireTimer = 0.0f;
+    [SerializeField] public float secondaryFireTimer;
 
-    [Header("Ability1")]
-    
-    [SerializeField] public float ability1Cooldown = 7.0f;
-    [SerializeField] public float ability1Duration = 5.0f;
-    public float ability1Timer = 0.0f;
+    [Header("Ability1")]    
+    [SerializeField] public float ability1Cooldown;
+    [SerializeField] public float ability1Duration;
+    public float ability1Timer;
 
-    [Header("Ability2")]
-    [SerializeField] protected GameObject ability2Prefab;
-    [HideInInspector] public GameObject ability2Instance = null;    
-    [SerializeField] public float ability2Cooldown = 0.0f;
-    [SerializeField] public float ability2Duration = 0.0f;
-    public float ability2Timer = 0.0f;
+    [Header("Ability2")] 
+    [SerializeField] public float ability2Cooldown;
+    [SerializeField] public float ability2Duration;
+    public float ability2Timer;
 
     [Header("Ability3")]
-    [SerializeField] public float ability3Cooldown = 0.0f;
-    [SerializeField] public float ability3Duration = 0.0f;
-    public float ability3Timer = 0.0f;
-    void Start()
+    [SerializeField] public float ability3Charge;//called in heros damage scripts
+    [SerializeField] public float ability3MaxCharge;
+    [SerializeField] public float ability3Cooldown;
+    [SerializeField] public float ability3Duration;
+    public float ability3Timer;
+    public void SetDurationSlider(float duration)
     {
+        HeroBase player = PlayerController.Player;
+        player.durationSlider.gameObject.SetActive(true);
+        player.durationSlider.maxValue = duration;
+        player.durationSlider.value = duration;
+    }
+    public void UpdateDurationSlider()
+    {
+        HeroBase player = PlayerController.Player;
+        if (player.durationSlider.value > 0)
+        {
+            player.durationSlider.value -= Time.deltaTime;
+        }
+        else
+        {
+            player.durationSlider.gameObject.SetActive(false);
+        }
+    }
+
+    public void SetUltSlider(float maxcharge)
+    {
+        HeroBase player = PlayerController.Player;
+        player.ability3Slider.maxValue = maxcharge;
+        player.ability3Slider.value = 0;
+        player.ability3Charge = player.ability3Slider.value;
+    }   
+    public void UpdateUltSlider(float howmuch)
+    {
+        HeroBase player = PlayerController.Player;
+        Debug.Log(player.ability3Slider.value);
+        if (player.ability3Slider.value < player.ability3Slider.maxValue)
+        {
+            player.ability3Slider.value += howmuch;
+            player.ability3Charge = player.ability3Slider.value;
+            Debug.Log(player.ability3Slider.value);
+        }
+    }
+    void Start()
+    { 
         if (heroWeaponPrefab != null)
         {
             primaryFireSpawnPos = heroWeaponPrefab.transform.GetChild(0);
@@ -51,6 +91,7 @@ public class HeroBase : PlayerMovement
     protected void Update()
     {
         base.Update();
+        UpdateDurationSlider();
         if (ability1Timer < ability1Cooldown)
         {
             ability1Timer += Time.deltaTime;
@@ -68,10 +109,11 @@ public class HeroBase : PlayerMovement
         {
             primaryFireTimer += Time.deltaTime;
         }
-        if (secondaryFireTimer < recovery2)
+        if (secondaryFireTimer < recovery)
         {
             secondaryFireTimer += Time.deltaTime;
         }
+
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
         Vector3 bulletSpawnPos = PlayerController.Player.primaryFireSpawnPos.position;
 

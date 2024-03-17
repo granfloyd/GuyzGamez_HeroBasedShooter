@@ -7,7 +7,10 @@ public class Aerial : HeroBase
     private void Start()
     {
         HeroBase player = PlayerController.Player;
+        player.ability3Charge = 0;
+        player.ability3MaxCharge = 20;
         boostForce = 40f;
+        player.SetUltSlider(ability3MaxCharge);
         Cursor.lockState = CursorLockMode.Locked;
         player.weaponPos = player.gameObject.transform.GetChild(0);
         player.weaponInstance = Instantiate(heroWeaponPrefab, player.weaponPos);
@@ -20,7 +23,7 @@ public class Aerial : HeroBase
             PlayerController.Player.primaryFireSpawnPos.position,
             PlayerController.Player.orientation.localRotation);
         Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
-        rb.velocity = tempGunAngle * 10f;
+        rb.velocity = tempGunAngle * 50f;
     }
     
     public override void SecondaryFire()
@@ -31,6 +34,7 @@ public class Aerial : HeroBase
     public override void Ability1()
     {
         Boost();
+        SetDurationSlider(ability1Duration);
         Invoke("Ability1Duration", ability1Duration);
     }
     public override void Ability1Duration()
@@ -50,17 +54,18 @@ public class Aerial : HeroBase
         player.isFlying = true;
         player.rb.AddForce(Vector3.up * boostForce * player.rb.mass * 4, ForceMode.Impulse);
         player.rb.useGravity = false;
-
-
     }
     public override void Ability2()
     {
-        //HeroBase player = PlayerController.Player;
-        //player.ability2Instance = Instantiate(ability2Prefab, player.transform.position, player.orientation.localRotation);
+        HeroBase player = PlayerController.Player;
     }
     
     public override void Ability3()
     {
-        Debug.Log("Q: Ability 3: DamageMain");
+        HeroBase player = PlayerController.Player;
+        if (player.ability3Charge >= player.ability3MaxCharge)
+        {
+            player.SetUltSlider(player.ability3MaxCharge);
+        }
     }
 }

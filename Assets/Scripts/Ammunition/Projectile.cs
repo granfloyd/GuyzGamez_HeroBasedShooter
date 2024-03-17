@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     }
     void Start()
     {
-        SetSpeedLifespanDamage(100,2,10);       
+        SetSpeedLifespanDamage(50,2,10);       
         Destroy(gameObject, Lifespan);
     }
 
@@ -32,6 +32,7 @@ public class Projectile : MonoBehaviour
 
         if(other.gameObject.tag == "Enemy1")
         {
+            PlayerController.Player.UpdateUltSlider(Damage);
             HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
             enemyhp.TakeDamage(Damage);
             Destroy(gameObject);

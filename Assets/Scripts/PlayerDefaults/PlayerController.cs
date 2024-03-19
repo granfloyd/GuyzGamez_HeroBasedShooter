@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,11 +23,13 @@ public class PlayerController : PlayerMovement
     [SerializeField] private InputAction primaryFireAction;
     [SerializeField] private InputAction secondaryFireAction;
     [SerializeField] static public HeroBase Player = null;
+    public ulong clientId;
+
     private void Awake()
     {
-        Player = null;       
+        clientId = NetworkManager.LocalClientId;
+        Player = null;
     }
-   
     public enum HeroIndex
     {
         DamageMain,
@@ -46,6 +49,7 @@ public class PlayerController : PlayerMovement
                 break;
             case HeroIndex.TankMain:
                 selectedHero = heroes[1];
+                selectedHeroGameObject = heroes[1].gameObject;
                 break;
             case HeroIndex.SupportMain:
                 selectedHero = heroes[2];
@@ -55,22 +59,61 @@ public class PlayerController : PlayerMovement
                 break;
         }
 
-        if (selectedHero == currentHero)
-        {
-            Debug.Log("same hero");
-            return;
-        }
+        //if (selectedHero == currentHero)
+        //{
+        //    Debug.Log("same hero");
+        //    return;
+        //}
 
-        if (currentHero != null)
+        //if (currentHero != null)
+        //{
+        //    Debug.Log("fart");
+        //    Destroy(currentHeroGameObject);
+        //}
+        if(Player == null)
         {
-            Destroy(currentHeroGameObject);
+            Debug.Log("very good fart");
         }
-
-        currentHero = selectedHero;
-        currentHeroGameObject = selectedHeroGameObject;
-        Player = Instantiate(currentHero, transform.position, Quaternion.identity);
-        transform.SetParent(Player.transform);
-        //Player.transform.SetParent(transform);
+        //if (IsClient)
+        //{
+        //    RequestSpawnHeroServerRpc(heroindex, clientId);
+        //}
+    }
+    //[ServerRpc]
+    //public void RequestSpawnHeroServerRpc(HeroIndex heroindex,ulong clientID)
+    //{
+    //    if (IsServer)
+    //    {
+    //        HeroBase selectedHero = null;
+    //        GameObject selectedHeroGameObject = null;
+    //        switch (heroindex)
+    //        {
+    //            case HeroIndex.DamageMain:
+    //                selectedHero = heroes[0];
+    //                selectedHeroGameObject = heroes[0].gameObject;
+    //                break;
+    //            case HeroIndex.TankMain:
+    //                selectedHero = heroes[1];
+    //                break;
+    //            case HeroIndex.SupportMain:
+    //                selectedHero = heroes[2];
+    //                break;
+    //            default:
+    //                selectedHero = heroes[0];
+    //                break;
+    //        }
+    //
+    //        currentHero = selectedHero;
+    //        currentHeroGameObject = selectedHeroGameObject;
+    //        Player = Instantiate(currentHero, transform.position, Quaternion.identity);
+    //        Player.GetComponent<NetworkObject>().Spawn();
+    //        Player.GetComponent<NetworkObject>().ChangeOwnership(clientID);
+    //        transform.SetParent(Player.transform);
+    //    }
+    //}
+    private void ChangeOwnership(ulong clientId)
+    {
+        Player.GetComponent<NetworkObject>().ChangeOwnership(clientId);
     }
     void OnEnable()
     {

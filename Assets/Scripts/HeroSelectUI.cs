@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeroSelectUI : NetworkBehaviour
-{ 
+public class HeroSelectUI : MonoBehaviour
+{
     public static HeroSelectUI Instance { get; private set; }
     public bool isInSpawnArea = false;
-    [SerializeField] public PlayerController playerController; //called in player controller start
+    [SerializeField] private PlayerController playerController;
 
     [SerializeField] protected GameObject selectHeroUI;
     [SerializeField] protected GameObject selectHeroScreen;
@@ -17,8 +16,6 @@ public class HeroSelectUI : NetworkBehaviour
 
     private void Awake()
     {
-
-        
         // If an instance already exists, destroy this one
         if (Instance != null)
         {
@@ -28,7 +25,10 @@ public class HeroSelectUI : NetworkBehaviour
 
         // Set this as the instance
         Instance = this;
-        
+        if(playerController.currentHero == null)
+        {
+            OpenSelectHeroScreen();
+        }
     }
 
     private void Start()
@@ -39,31 +39,14 @@ public class HeroSelectUI : NetworkBehaviour
             heroButtons[i].onClick.AddListener(() => ButtonClicked(index));
         }
     }
-    private void Update()
-    {
-        if (NetworkManager.LocalClient.PlayerObject == null)
-        {
-            return;
-        }
-        else
-        {
-            playerController = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        }        
-        
-        if (playerController != null)
-        {
-            if (playerController.currentHero == null)
-            {
-                OpenSelectHeroScreen();
-            }
-        }
-    }
     public void RenderUI()
     {
         selectHeroUI.SetActive(true);
+        Debug.Log("Hallo");
     }
     public void HideUI()
     {
+        Debug.Log("bye bye");
         selectHeroUI.SetActive(false);        
     }
     public void OpenSelectHeroScreen()

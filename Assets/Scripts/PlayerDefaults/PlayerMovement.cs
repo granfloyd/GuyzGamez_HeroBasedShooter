@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerMovement : NetworkBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [Header("   PlayerMovement")]
     [SerializeField] private float moveSpeed;
@@ -41,10 +40,6 @@ public class PlayerMovement : NetworkBehaviour
     }
     protected void Update()
     {
-        if(!IsOwner)
-        {
-            return;
-        }
         //ground check
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
         // Draw the raycast in the scene view
@@ -54,10 +49,6 @@ public class PlayerMovement : NetworkBehaviour
     }
     void FixedUpdate()
     {
-        if (!IsOwner)
-        {
-            return;
-        }
         MovePlayer();
     }
     public void MyInput()
@@ -118,6 +109,7 @@ public class PlayerMovement : NetworkBehaviour
             {
                 if (PlayerController.Player.isFlying)
                 {
+                    Debug.Log("doing it right");
                     rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
                 }
                 else

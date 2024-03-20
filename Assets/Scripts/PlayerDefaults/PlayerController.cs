@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerController : PlayerMovement
 {
@@ -22,8 +19,10 @@ public class PlayerController : PlayerMovement
     [SerializeField] private InputAction primaryFireAction;
     [SerializeField] private InputAction secondaryFireAction;
     [SerializeField] static public HeroBase Player = null;
+    [SerializeField] private NetworkManager networkManager;
     private void Awake()
     {
+        networkManager = NetworkManager.Singleton;
         Player = null;       
     }
    
@@ -34,7 +33,12 @@ public class PlayerController : PlayerMovement
         SupportMain,
         Default = DamageMain
     }
-    public void SelectHero(HeroIndex heroindex)
+    [ServerRpc]
+    public void ServerSpawnHeroServerRpc(HeroIndex heroIndex, ServerRpcParams rpcParams = default)
+    {
+        SelectHero(heroIndex, rpcParams.Receive.SenderClientId);
+    }
+    public void SelectHero(HeroIndex heroindex, ulong clientId)
     {
         HeroBase selectedHero = null;
         GameObject selectedHeroGameObject = null;
@@ -46,6 +50,7 @@ public class PlayerController : PlayerMovement
                 break;
             case HeroIndex.TankMain:
                 selectedHero = heroes[1];
+                selectedHeroGameObject = heroes[1].gameObject;
                 break;
             case HeroIndex.SupportMain:
                 selectedHero = heroes[2];
@@ -69,8 +74,8 @@ public class PlayerController : PlayerMovement
         currentHero = selectedHero;
         currentHeroGameObject = selectedHeroGameObject;
         Player = Instantiate(currentHero, transform.position, Quaternion.identity);
+        Player.NetworkObject.SpawnWithOwnership(clientId);
         transform.SetParent(Player.transform);
-        //Player.transform.SetParent(transform);
     }
     void OnEnable()
     {
@@ -179,6 +184,7 @@ public class PlayerController : PlayerMovement
     }
     public void OnPrimaryFire(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             if (currentHero == null)
@@ -189,7 +195,8 @@ public class PlayerController : PlayerMovement
             {
                 if (Player.primaryFireTimer >= currentHero.recovery)
                 {
-                    Player.PrimaryFire();
+                    ulong clientId = NetworkManager.Singleton.LocalClientId;
+                    Player.PrimaryFire(clientId);
                     Player.primaryFireTimer = 0;
                 }
                 else
@@ -201,6 +208,7 @@ public class PlayerController : PlayerMovement
     }   
     public void OnSecondaryFire(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             if (currentHero == null)
@@ -223,6 +231,7 @@ public class PlayerController : PlayerMovement
     }
     public void OnAbility1(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             if (currentHero == null)
@@ -246,6 +255,7 @@ public class PlayerController : PlayerMovement
 
     public void OnAbility2(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             if (currentHero == null)
@@ -269,6 +279,7 @@ public class PlayerController : PlayerMovement
 
     public void OnAbility3(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             if(currentHero == null)
@@ -285,6 +296,7 @@ public class PlayerController : PlayerMovement
     }
     public void OnChangeHero(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             if (HeroSelectUI.Instance.isInSpawnArea == true)
@@ -300,6 +312,7 @@ public class PlayerController : PlayerMovement
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.started)
         {
             Player.isMovingDown = true;
@@ -312,6 +325,7 @@ public class PlayerController : PlayerMovement
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.started)
         {
             Player.isMovingUp = true;

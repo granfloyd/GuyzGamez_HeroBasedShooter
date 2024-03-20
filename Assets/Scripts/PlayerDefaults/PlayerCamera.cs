@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : NetworkBehaviour
 {
     [Header("   CameraStuff")]
     [SerializeField] private float sensitivityX;
@@ -23,6 +25,7 @@ public class PlayerCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensitivityY;
 

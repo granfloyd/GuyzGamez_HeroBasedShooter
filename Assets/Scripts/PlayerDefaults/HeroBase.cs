@@ -53,6 +53,11 @@ public class HeroBase : PlayerMovement
     public void UpdateDurationSlider()
     {
         HeroBase player = PlayerController.Player;
+        if (player == null)
+        {
+            Debug.LogError("Player is not set yet.");
+            return;
+        }
         if (player.durationSlider.value > 0)
         {
             player.durationSlider.value -= Time.deltaTime;
@@ -83,15 +88,22 @@ public class HeroBase : PlayerMovement
     }
     void Start()
     { 
-        if (heroWeaponPrefab != null)
+        if(IsOwner)
         {
-            primaryFireSpawnPos = heroWeaponPrefab.transform.GetChild(0);
-        }
+            if (heroWeaponPrefab != null)
+            {
+                primaryFireSpawnPos = heroWeaponPrefab.transform.GetChild(0);
+            }
+        }        
     }
-    protected void Update()
+    new protected void Update()
     {
+        if (!IsOwner) return;
         base.Update();
+        if (!IsOwner) return;
         UpdateDurationSlider();
+        
+
         if (ability1Timer < ability1Cooldown)
         {
             ability1Timer += Time.deltaTime;
@@ -149,55 +161,65 @@ public class HeroBase : PlayerMovement
         if (tempGunAngle != Vector3.zero)
             Debug.DrawRay(bulletSpawnPos, tempGunAngle * 5, Color.yellow);
     }
-    public virtual void PrimaryFire()
-    {
+    public virtual void PrimaryFire(ulong clientId)
+    { 
+        if (!IsOwner) return; 
         Debug.Log("M1");
     }
 
     public virtual void SecondaryFire()
     {
+        if (!IsOwner) return;
         Debug.Log("M2");
     }
 
     public virtual void Ability1()
     {
+        if (!IsOwner) return;
         Debug.Log("lshift");
     }
 
     public virtual void Ability2()
     {
+        if (!IsOwner) return;
         Debug.Log("e");
     }
 
     public virtual void Ability3()
     {
+        if (!IsOwner) return;
         Debug.Log("q");
     }
     public virtual void CollisionEnter(Collider other)
     {
-        if (other.tag != CollisionPlayer.SpawnCollision)
+        if(IsOwner)
         {
-            return;
-        }
-        else
-        {
-            SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
-            spawnArea.EnteredSpawnArea();
-            Debug.Log("in spawn");
-        }
+            if (other.tag != CollisionPlayer.SpawnCollision)
+            {
+                return;
+            }
+            else
+            {
+                SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
+                spawnArea.EnteredSpawnArea();
+            }
+        }        
     }
     public virtual void CollisionExit(Collider other)
     {
-        if (other.tag != CollisionPlayer.SpawnCollision)
+        if (IsOwner)
         {
-            return;
+            if (other.tag != CollisionPlayer.SpawnCollision)
+            {
+                return;
+            }
+            else
+            {
+                SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
+                spawnArea.ExitedSpawnArea();
+            }
         }
-        else
-        {
-            SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
-            spawnArea.ExitedSpawnArea();
-            Debug.Log("out spawn");
-        }
+            
     }
     public virtual void Ability1Duration() { }
     void OnTriggerEnter(Collider other)

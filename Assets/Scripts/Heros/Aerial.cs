@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class Aerial : HeroBase
@@ -6,24 +7,42 @@ public class Aerial : HeroBase
    
     private void Start()
     {
-        HeroBase player = PlayerController.Player;
-        player.ability3Charge = 0;
-        player.ability3MaxCharge = 20;
-        boostForce = 40f;
-        player.SetUltSlider(ability3MaxCharge);
-        Cursor.lockState = CursorLockMode.Locked;
-        player.weaponPos = player.gameObject.transform.GetChild(0);
-        player.weaponInstance = Instantiate(heroWeaponPrefab, player.weaponPos);
-        player.primaryFireSpawnPos = player.weaponInstance.transform.GetChild(0);
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+            if (player == null)
+            {
+                Debug.LogError("Player is not set yet.");
+                return;
+            }
+            player.ability3Charge = 0;
+            player.ability3MaxCharge = 20;
+            boostForce = 40f;
+            player.SetUltSlider(ability3MaxCharge);
+            Cursor.lockState = CursorLockMode.Locked;
+            player.weaponPos = player.gameObject.transform.GetChild(0);
+            player.weaponInstance = Instantiate(heroWeaponPrefab, player.weaponPos);
+            player.primaryFireSpawnPos = player.weaponInstance.transform.GetChild(0);
+        }
+        
     }
-    public override void PrimaryFire()
+    public override void PrimaryFire(ulong clientId)
     {
-        HeroBase player = PlayerController.Player;
-        GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab,
-            PlayerController.Player.primaryFireSpawnPos.position,
-            PlayerController.Player.orientation.localRotation);
-        Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
-        rb.velocity = tempGunAngle * 50f;
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+            GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab,
+               player.primaryFireSpawnPos.position,
+               player.orientation.localRotation);
+            
+
+            // Spawn the bullet's NetworkObject
+            NetworkObject bulletNetworkObject = spawnedPrimaryFire.GetComponent<NetworkObject>();
+            bulletNetworkObject.SpawnWithOwnership(clientId); 
+            
+            Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
+            rb.velocity = tempGunAngle * 50f;
+        }
     }
     
     public override void SecondaryFire()
@@ -33,9 +52,12 @@ public class Aerial : HeroBase
     
     public override void Ability1()
     {
-        Boost();
-        SetDurationSlider(ability1Duration);
-        Invoke("Ability1Duration", ability1Duration);
+        if (IsOwner)
+        {
+            Boost();
+            SetDurationSlider(ability1Duration);
+            Invoke("Ability1Duration", ability1Duration);
+        }
     }
     public override void Ability1Duration()
     {
@@ -62,10 +84,13 @@ public class Aerial : HeroBase
     
     public override void Ability3()
     {
-        HeroBase player = PlayerController.Player;
-        if (player.ability3Charge >= player.ability3MaxCharge)
+        if (IsOwner)
         {
-            player.SetUltSlider(player.ability3MaxCharge);
+            HeroBase player = PlayerController.Player;
+            if (player.ability3Charge >= player.ability3MaxCharge)
+            {
+                player.SetUltSlider(player.ability3MaxCharge);
+            }
         }
     }
 }

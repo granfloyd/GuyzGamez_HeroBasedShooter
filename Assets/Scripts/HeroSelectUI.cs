@@ -55,18 +55,22 @@ public class HeroSelectUI : MonoBehaviour
     }
     private void ButtonClicked(int buttonIndex)
     {
+
         switch (buttonIndex)
         {
             case 0:
                 playerController.ServerSpawnHeroServerRpc(PlayerController.HeroIndex.DamageMain);
+                Debug.Log("press1");
                 CloseSelectHeroScreen();
                 break;
             case 1:
                 playerController.ServerSpawnHeroServerRpc(PlayerController.HeroIndex.TankMain);
+                Debug.Log("press2");
                 CloseSelectHeroScreen();
                 break;
             case 2:
                 playerController.ServerSpawnHeroServerRpc(PlayerController.HeroIndex.SupportMain);
+                Debug.Log("press3");
                 CloseSelectHeroScreen();
                 break;
             default:

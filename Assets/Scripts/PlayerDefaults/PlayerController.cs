@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerController : PlayerMovement
 {
@@ -23,7 +24,7 @@ public class PlayerController : PlayerMovement
     private void Awake()
     {
         networkManager = NetworkManager.Singleton;
-        Player = null;       
+        Player = null;
     }
    
     public enum HeroIndex
@@ -36,12 +37,22 @@ public class PlayerController : PlayerMovement
     [ServerRpc]
     public void ServerSpawnHeroServerRpc(HeroIndex heroIndex, ServerRpcParams rpcParams = default)
     {
-        SelectHero(heroIndex, rpcParams.Receive.SenderClientId);
+        //SelectHero(heroIndex, rpcParams.Receive.SenderClientId);
+        ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
+    }
+
+    [ClientRpc]
+    public void ClientSelectHeroClientRpc(HeroIndex heroIndex, ulong clientId, ClientRpcParams rpcParams = default)
+    {
+        SelectHero(heroIndex, clientId);
     }
     public void SelectHero(HeroIndex heroindex, ulong clientId)
     {
+        Debug.Log("SelectHero called with hero index: " + heroindex + " and client ID: " + clientId);
+
         HeroBase selectedHero = null;
         GameObject selectedHeroGameObject = null;
+
         switch (heroindex)
         {
             case HeroIndex.DamageMain:
@@ -70,123 +81,33 @@ public class PlayerController : PlayerMovement
         {
             Destroy(currentHeroGameObject);
         }
-
         currentHero = selectedHero;
         currentHeroGameObject = selectedHeroGameObject;
-        Player = Instantiate(currentHero, transform.position, Quaternion.identity);
-        Player.NetworkObject.SpawnWithOwnership(clientId);
-        transform.SetParent(Player.transform);
-    }
-    void OnEnable()
-    {
-        ability1Action = myActions.FindAction("Ability1");
-        ability2Action = myActions.FindAction("Ability2");
-        ability3Action = myActions.FindAction("Ability3");
-        changeHeroAction = myActions.FindAction("ChangeHero");
-        crouchAction = myActions.FindAction("Crouch");
-        jumpAction = myActions.FindAction("Jump");
-        primaryFireAction = myActions.FindAction("PrimaryFire");
-        secondaryFireAction = myActions.FindAction("SecondaryFire");
-        // Hook up the functions to the actions
-        if (ability1Action != null)
+
+        Debug.Log("Selected hero: " + selectedHero);
+        Debug.Log("Current hero: " + currentHero);
+        if(Player != null)
         {
-            ability1Action.performed += OnAbility1;
-            ability1Action.Enable();
+            Debug.Log("PLAYER" + Player.name);
         }
-        if (ability2Action != null)
+        
+        if (NetworkManager.Singleton.IsServer)
         {
-            ability2Action.performed += OnAbility2;
-            ability2Action.Enable();
+            Player = Instantiate(currentHero, transform.position, Quaternion.identity);
+            Player.NetworkObject.SpawnWithOwnership(clientId);
+            transform.SetParent(Player.transform);
         }
-        if (ability3Action != null)
-        {
-            ability3Action.performed += OnAbility3;
-            ability3Action.Enable();
-        }
-        if(changeHeroAction != null)
-        {
-            changeHeroAction.performed += OnChangeHero;
-            changeHeroAction.Enable();
-        }
-        if(crouchAction != null)
-        {
-            crouchAction.started += OnCrouch;
-            crouchAction.canceled += OnCrouch;
-            crouchAction.Enable();
-        }
-        if(jumpAction != null)
-        {
-            jumpAction.started += OnJump;
-            jumpAction.canceled += OnJump;
-            jumpAction.Enable();
-        }   
-        if(primaryFireAction != null)
-        {
-            primaryFireAction.performed += OnPrimaryFire;
-            primaryFireAction.Enable();
-        }
-        if(secondaryFireAction != null)
-        {
-            secondaryFireAction.performed += OnSecondaryFire;
-            secondaryFireAction.Enable();
-        }
+       // Player.NetworkObject.SpawnWithOwnership(clientId);
+        Debug.Log(clientId + "client id spawned hero");
 
     }
-    private void Update()
-    {
-        if (Player == null)
-        {
-            return;
-        }
-        else
-        {
-            Player.MyInput();
-        }
-    }
-    
-    void OnDisable()
-    {
-        // Clean up - remove the functions from the actions
-        if (ability1Action != null)
-        {
-            ability1Action.performed -= OnAbility1;
-        }                               
-        if (ability2Action != null)     
-        {                               
-            ability2Action.performed -= OnAbility2;
-        }                               
-        if (ability3Action != null)     
-        {                               
-            ability3Action.performed -= OnAbility3;
-        }
-        if(changeHeroAction != null)
-        {
-            changeHeroAction.performed -= OnChangeHero;
-        }
-        if(crouchAction != null)
-        {
-            crouchAction.started -= OnCrouch;
-            crouchAction.canceled -= OnCrouch;
-        }
-        if(jumpAction != null)
-        {
-            jumpAction.started -= OnJump;
-            jumpAction.canceled -= OnJump;
-        }  
-        if(primaryFireAction != null)
-        {
-            primaryFireAction.performed -= OnPrimaryFire;
-        }
-        if(secondaryFireAction != null)
-        {
-            secondaryFireAction.performed -= OnSecondaryFire;
-        }
-    }
+   
     public void OnPrimaryFire(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
         if (context.performed)
         {
+            if (!IsOwner) return;
             if (currentHero == null)
             {
                 return;
@@ -201,7 +122,7 @@ public class PlayerController : PlayerMovement
                 }
                 else
                 {
-                    Debug.Log("M1 is on cooldown");
+                    Debug.Log(NetworkManager.Singleton.LocalClientId+ "M1 is on cooldown");
                 }
             }
         }
@@ -224,7 +145,7 @@ public class PlayerController : PlayerMovement
                 }
                 else
                 {
-                    Debug.Log("M2 is on cooldown");
+                    Debug.Log(" M2 is on cooldown");
                 }
             }
         }
@@ -240,15 +161,15 @@ public class PlayerController : PlayerMovement
             }
             else
             {
-                if (Player.ability1Timer >= currentHero.ability1Cooldown)
-                {
-                    Player.Ability1();
-                    Player.ability1Timer = 0;
-                }
-                else
-                {
-                    Debug.Log("Ability 1 is on cooldown");
-                }
+                //if (Player.ability1Timer >= currentHero.ability1Cooldown)
+                //{
+                //    Player.Ability1();
+                //    Player.ability1Timer = 0;
+                //}
+                //else
+                //{
+                //    Debug.Log("Ability 1 is on cooldown");
+                //}
             }
         }
     }
@@ -264,15 +185,15 @@ public class PlayerController : PlayerMovement
             }
             else
             {
-                if (Player.ability2Timer >= currentHero.ability2Cooldown)
-                {
-                    Player.Ability2();
-                    Player.ability2Timer = 0;
-                }
-                else
-                {
-                    Debug.Log("Ability 2 is on cooldown");
-                }
+                //if (Player.ability2Timer >= currentHero.ability2Cooldown)
+                //{
+                //    Player.Ability2();
+                //    Player.ability2Timer = 0;
+                //}
+                //else
+                //{
+                //    Debug.Log("Ability 2 is on cooldown");
+                //}
             }
         }
     }
@@ -334,5 +255,103 @@ public class PlayerController : PlayerMovement
         {
             Player.isMovingUp = false;
         }
-    }   
+    }
+    void OnEnable()
+    {
+        ability1Action = myActions.FindAction("Ability1");
+        ability2Action = myActions.FindAction("Ability2");
+        ability3Action = myActions.FindAction("Ability3");
+        changeHeroAction = myActions.FindAction("ChangeHero");
+        crouchAction = myActions.FindAction("Crouch");
+        jumpAction = myActions.FindAction("Jump");
+        primaryFireAction = myActions.FindAction("PrimaryFire");
+        secondaryFireAction = myActions.FindAction("SecondaryFire");
+        // Hook up the functions to the actions
+        if (ability1Action != null)
+        {
+            ability1Action.performed += OnAbility1;
+            ability1Action.Enable();
+        }
+        if (ability2Action != null)
+        {
+            ability2Action.performed += OnAbility2;
+            ability2Action.Enable();
+        }
+        if (ability3Action != null)
+        {
+            ability3Action.performed += OnAbility3;
+            ability3Action.Enable();
+        }
+        if (changeHeroAction != null)
+        {
+            changeHeroAction.performed += OnChangeHero;
+            changeHeroAction.Enable();
+        }
+        if (crouchAction != null)
+        {
+            crouchAction.started += OnCrouch;
+            crouchAction.canceled += OnCrouch;
+            crouchAction.Enable();
+        }
+        if (jumpAction != null)
+        {
+            jumpAction.started += OnJump;
+            jumpAction.canceled += OnJump;
+            jumpAction.Enable();
+        }
+        if (primaryFireAction != null)
+        {
+            primaryFireAction.performed += OnPrimaryFire;
+            primaryFireAction.Enable();
+        }
+        if (secondaryFireAction != null)
+        {
+            secondaryFireAction.performed += OnSecondaryFire;
+            secondaryFireAction.Enable();
+        }
+
+    }
+    private void Update()
+    {
+
+    }
+
+    void OnDisable()
+    {
+        // Clean up - remove the functions from the actions
+        if (ability1Action != null)
+        {
+            ability1Action.performed -= OnAbility1;
+        }
+        if (ability2Action != null)
+        {
+            ability2Action.performed -= OnAbility2;
+        }
+        if (ability3Action != null)
+        {
+            ability3Action.performed -= OnAbility3;
+        }
+        if (changeHeroAction != null)
+        {
+            changeHeroAction.performed -= OnChangeHero;
+        }
+        if (crouchAction != null)
+        {
+            crouchAction.started -= OnCrouch;
+            crouchAction.canceled -= OnCrouch;
+        }
+        if (jumpAction != null)
+        {
+            jumpAction.started -= OnJump;
+            jumpAction.canceled -= OnJump;
+        }
+        if (primaryFireAction != null)
+        {
+            primaryFireAction.performed -= OnPrimaryFire;
+        }
+        if (secondaryFireAction != null)
+        {
+            secondaryFireAction.performed -= OnSecondaryFire;
+        }
+    }
 }

@@ -1,31 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerCamera : NetworkBehaviour
+public class PlayerCamera : MonoBehaviour
 {
     [Header("   CameraStuff")]
     [SerializeField] private float sensitivityX;
     [SerializeField] private float sensitivityY;
 
-    public Transform orientationy;//pivot y
-    public Transform orientationx;
+    public Transform cameraPos;
+    public Transform camOrientationy;//pivot y
+    public Transform camOrientationx;
     public Transform gunOrientation;
 
-    float xRotation;
-    float yRotation;
+    public float xRotation;
+    public float yRotation;
+
+    static bool iscamset = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.visible = false;
+        //Cursor.visible = false;
+        HeroBase player = PlayerController.Player;
+    }
+    public void SetCamera() //called in hero base
+    {
+        Debug.Log("Setting Camera");
+        HeroBase player = PlayerController.Player;
+        cameraPos = player.gameObject.transform.GetChild(2);
+        camOrientationy = player.gameObject.transform;
+        camOrientationx = player.gameObject.transform.GetChild(1);
+        gunOrientation = player.gameObject.transform.GetChild(0);
+        iscamset = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!IsOwner) return;
+        if (PlayerController.Player != null)
+        {
+            if (!iscamset)
+            SetCamera();
+        }
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensitivityY;
 
@@ -35,9 +51,13 @@ public class PlayerCamera : NetworkBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 65f);
 
         //rotate camera orientation
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
-        orientationy.rotation = Quaternion.Euler(0f, yRotation, 0f);
-        orientationx.rotation = Quaternion.Euler(xRotation,0f, 0f);
-        gunOrientation.rotation = Quaternion.Euler(xRotation,yRotation, 0f);
+        if (iscamset)
+        {
+            transform.position = cameraPos.transform.position;
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            camOrientationy.rotation = Quaternion.Euler(0f, yRotation, 0f);
+            camOrientationx.rotation = Quaternion.Euler(xRotation, 0f, 0f);
+            gunOrientation.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+        }
     }
 }

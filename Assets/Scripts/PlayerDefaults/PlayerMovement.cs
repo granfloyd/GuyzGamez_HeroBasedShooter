@@ -43,9 +43,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         if(!IsOwner) return;
 
-        //ground check
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
-        // Draw the raycast in the scene view
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
         SpeedControl();
@@ -57,17 +55,16 @@ public class PlayerMovement : NetworkBehaviour
     }
     public void MyInput()
     {
+        
         if (!IsOwner) return;
-
         HeroBase player = PlayerController.Player;
+        if (player == null) return;
+        Debug.Log("L");
+
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-
-        if(player == null)
-        {
-            return;            
-        } 
-        else if (!player.isFlying)
+        
+        if (!player.isFlying)
         {
             if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
             {
@@ -124,6 +121,7 @@ public class PlayerMovement : NetworkBehaviour
             }
         }
     }
+
     void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);

@@ -12,7 +12,6 @@ public class HeroSelectUI : MonoBehaviour
 
     [SerializeField] protected GameObject selectHeroUI;
     [SerializeField] protected GameObject selectHeroScreen;
-
     [SerializeField] protected List<Button> heroButtons;
 
     private void Awake()

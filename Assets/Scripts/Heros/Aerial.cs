@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using static PlayerController;
 
 public class Aerial : HeroBase
 {

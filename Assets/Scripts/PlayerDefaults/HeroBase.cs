@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static PlayerController;
 
 public class HeroBase : PlayerMovement
 {
+    
     [Header("   HeroBase")]
+    [SerializeField] public HeroIndex heroId;
     [SerializeField] protected int health;
+
     [SerializeField] public float recovery;    
     public bool isFlying = false;
     //public Vector3 crosshairPos;

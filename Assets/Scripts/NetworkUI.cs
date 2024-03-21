@@ -53,6 +53,7 @@ public class NetworkUI : NetworkBehaviour
             return;
         }
 
+
         pc = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
         HeroSelectUI.Instance.playerController = pc;
     }

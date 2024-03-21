@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class PlayerMovement : NetworkBehaviour
@@ -41,8 +42,8 @@ public class PlayerMovement : NetworkBehaviour
     }
     protected void Update()
     {
-        if(!IsOwner) return;
-
+        if (!IsOwner) return;
+        rb.isKinematic = false;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
@@ -50,52 +51,49 @@ public class PlayerMovement : NetworkBehaviour
     }
     void FixedUpdate()
     {
+        
         if (!IsOwner) return;
         MovePlayer();
     }
     public void MyInput()
     {
-        
         if (!IsOwner) return;
-        HeroBase player = PlayerController.Player;
-        if (player == null) return;
-        Debug.Log("L");
 
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        
-        if (!player.isFlying)
+        if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
         {
-            if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
-            {
-                Jump();
-                Invoke("ResetJump", jumpCD);
-            }
+            Jump();
+            Invoke("ResetJump", jumpCD);
         }
-       
-        if (player.isFlying)
-        {
-            player.rb.drag = 1;
-            if (isMovingUp)
-            {
-                MakePlayerMoveUp();
-            }
-            else if (isMovingDown)
-            {
-                MakePlayerMoveDown();
-            }
-        }   
-        else
-        {
-            if(player.isGrounded)
-            {
-                player.rb.drag = groundDrag;
-            }
-            else
-            {
-                player.rb.drag = 1;
-            }
-        }
+        //if (!isFlying)
+        //{
+        //    put jump stuff here
+        //}
+        //
+        //if (isFlying)
+        //{
+        //    rb.drag = 1;
+        //    if (isMovingUp)
+        //    {
+        //        MakePlayerMoveUp();
+        //    }
+        //    else if (isMovingDown)
+        //    {
+        //        MakePlayerMoveDown();
+        //    }
+        //}
+        //else
+        //{
+        //    if (isGrounded)
+        //    {
+        //        rb.drag = groundDrag;
+        //    }
+        //    else
+        //    {
+        //        rb.drag = 1;
+        //    }
+        //}
     }
 
     private void MovePlayer()
@@ -106,31 +104,22 @@ public class PlayerMovement : NetworkBehaviour
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * groundDrag * rb.mass, ForceMode.Force);
         }
-        else if (!isGrounded) //in air
+        //in air
+        else
         {
-            if (PlayerController.Player != null)
-            {
-                if (PlayerController.Player.isFlying)
-                {
-                    rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
-                }
-                else
-                {
-                    rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
-                }
-            }
+            rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
         }
     }
 
     void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
         //limit velocity if needed
         if (flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, limitedVel.y, limitedVel.z);
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
     private void Jump()
@@ -154,5 +143,5 @@ public class PlayerMovement : NetworkBehaviour
         isReadyToJump = true;
         isJumping = false;
     }
-   
+
 }

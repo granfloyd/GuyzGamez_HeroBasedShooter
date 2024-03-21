@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 3974880023979706245}
   - component: {fileID: 1567285881373917222}
   - component: {fileID: 6330501167222083681}
-  - component: {fileID: -2109237480253757652}
-  - component: {fileID: -8064920441498208109}
+  - component: {fileID: -2356283544919473679}
   m_Layer: 0
   m_Name: Spectator
   m_TagString: Player
@@ -195,7 +194,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-2109237480253757652
+--- !u!114 &-2356283544919473679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -204,7 +203,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2502935585226710434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: b5f82385aa0d99d459a43e4e12a6661a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -225,15 +224,3 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &-8064920441498208109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2502935585226710434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

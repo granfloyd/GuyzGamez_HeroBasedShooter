@@ -1,5 +1,8 @@
+using System;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -15,32 +18,33 @@ public class PlayerCamera : MonoBehaviour
     public float xRotation;
     public float yRotation;
 
-    static bool iscamset = false;
+    public bool iscamset = false;
 
     // Start is called before the first frame update
     void Start()
     {
         //Cursor.visible = false;
-        HeroBase player = PlayerController.Player;
     }
     public void SetCamera() //called in hero base
     {
         Debug.Log("Setting Camera");
-        HeroBase player = PlayerController.Player;
+        int clientId = (int)NetworkManager.Singleton.LocalClientId;
+        HeroBase player = PlayerController.PlayersList[clientId];
         cameraPos = player.gameObject.transform.GetChild(2);
         camOrientationy = player.gameObject.transform;
         camOrientationx = player.gameObject.transform.GetChild(1);
         gunOrientation = player.gameObject.transform.GetChild(0);
         iscamset = true;
     }
-
     // Update is called once per frame
     void Update()
     {
-        if (PlayerController.Player != null)
+        int clientId = (int)NetworkManager.Singleton.LocalClientId;
+        HeroBase player = PlayerController.PlayersList[clientId];
+        if (player != null)
         {
             if (!iscamset)
-            SetCamera();
+                SetCamera();
         }
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensitivityY;

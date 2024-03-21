@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -19,14 +22,10 @@ public class PlayerController : PlayerMovement
     [SerializeField] private InputAction changeHeroAction;
     [SerializeField] private InputAction primaryFireAction;
     [SerializeField] private InputAction secondaryFireAction;
-    [SerializeField] static public HeroBase Player = null;
-    [SerializeField] private NetworkManager networkManager;
-    private void Awake()
-    {
-        networkManager = NetworkManager.Singleton;
-        Player = null;
-    }
-   
+    //[SerializeField] static public HeroBase Player = null;
+    public static Dictionary<ulong, HeroBase> Players = new Dictionary<ulong, HeroBase>();
+    public static List<HeroBase> PlayersList = new List<HeroBase>();
+    public List<HeroBase> openPlayersList = new List<HeroBase>();
     public enum HeroIndex
     {
         DamageMain,
@@ -34,11 +33,34 @@ public class PlayerController : PlayerMovement
         SupportMain,
         Default = DamageMain
     }
+    private void Awake()
+    {
+        
+    }
     [ServerRpc]
     public void ServerSpawnHeroServerRpc(HeroIndex heroIndex, ServerRpcParams rpcParams = default)
     {
-        //SelectHero(heroIndex, rpcParams.Receive.SenderClientId);
         ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
+        
+        HeroBase player = Instantiate(currentHero, transform.position, Quaternion.identity);
+        player.NetworkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+        transform.SetParent(player.transform);
+        LazySet(rpcParams.Receive.SenderClientId, player);
+        Players[rpcParams.Receive.SenderClientId] = player;
+    }
+    public void LazySet(ulong id, HeroBase player)
+    {
+        PlayersList.Insert((int)id,player);
+    }
+
+    private new void Update() // Use the 'new' keyword to hide the inherited member
+    {
+        base.Update(); // Call the base class's Update method
+                       // Debug log for Players dictionary
+        foreach (KeyValuePair<ulong, HeroBase> player in Players)
+        {
+            //.Log($"Key: {player.Key}, Value: {player.Value}");
+        }
     }
 
     [ClientRpc]
@@ -86,22 +108,17 @@ public class PlayerController : PlayerMovement
 
         Debug.Log("Selected hero: " + selectedHero);
         Debug.Log("Current hero: " + currentHero);
-        if(Player != null)
-        {
-            Debug.Log("PLAYER" + Player.name);
-        }
-        
-        if (NetworkManager.Singleton.IsServer)
-        {
-            Player = Instantiate(currentHero, transform.position, Quaternion.identity);
-            Player.NetworkObject.SpawnWithOwnership(clientId);
-            transform.SetParent(Player.transform);
-        }
-       // Player.NetworkObject.SpawnWithOwnership(clientId);
-        Debug.Log(clientId + "client id spawned hero");
 
+        //if (NetworkManager.Singleton.IsServer)
+        //{
+        //    HeroBase player = Instantiate(currentHero, transform.position, Quaternion.identity);
+        //    player.NetworkObject.SpawnWithOwnership(clientId);
+        //    transform.SetParent(player.transform);
+        //    Players[clientId] = player;
+        //}
+        Debug.Log(clientId + "client id spawned hero");
     }
-   
+
     public void OnPrimaryFire(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
@@ -114,19 +131,22 @@ public class PlayerController : PlayerMovement
             }
             else
             {
-                if (Player.primaryFireTimer >= currentHero.recovery)
+                HeroBase player;
+                if (Players.TryGetValue(NetworkManager.Singleton.LocalClientId, out player))
                 {
-                    ulong clientId = NetworkManager.Singleton.LocalClientId;
-                    Player.PrimaryFire(clientId);
-                    Player.primaryFireTimer = 0;
-                }
-                else
-                {
-                    Debug.Log(NetworkManager.Singleton.LocalClientId+ "M1 is on cooldown");
+                    if (player.primaryFireTimer >= currentHero.recovery)
+                    {
+                        player.PrimaryFire(NetworkManager.Singleton.LocalClientId);
+                        player.primaryFireTimer = 0;
+                    }
+                    else
+                    {
+                        Debug.Log(NetworkManager.Singleton.LocalClientId+ "M1 is on cooldown");
+                    }
                 }
             }
         }
-    }   
+    }
     public void OnSecondaryFire(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
@@ -138,14 +158,18 @@ public class PlayerController : PlayerMovement
             }
             else
             {
-                if (Player.secondaryFireTimer >= currentHero.recovery)
+                HeroBase player;
+                if (Players.TryGetValue(NetworkManager.Singleton.LocalClientId, out player))
                 {
-                    Player.SecondaryFire();
-                    Player.secondaryFireTimer = 0;
-                }
-                else
-                {
-                    Debug.Log(" M2 is on cooldown");
+                    if (player.secondaryFireTimer >= currentHero.recovery)
+                    {
+                        player.SecondaryFire();
+                        player.secondaryFireTimer = 0;
+                    }
+                    else
+                    {
+                        Debug.Log(" M2 is on cooldown");
+                    }
                 }
             }
         }
@@ -236,11 +260,11 @@ public class PlayerController : PlayerMovement
         if (!IsOwner) return;
         if (context.started)
         {
-            Player.isMovingDown = true;
+            currentHero.isMovingDown = true;
         }
         if (context.canceled)
         {
-            Player.isMovingDown = false;
+            currentHero.isMovingDown = false;
         }
     }
 
@@ -249,11 +273,11 @@ public class PlayerController : PlayerMovement
         if (!IsOwner) return;
         if (context.started)
         {
-            Player.isMovingUp = true;
+            currentHero.isMovingUp = true;
         }
         if (context.canceled)
         {
-            Player.isMovingUp = false;
+            currentHero.isMovingUp = false;
         }
     }
     void OnEnable()
@@ -311,11 +335,6 @@ public class PlayerController : PlayerMovement
         }
 
     }
-    private void Update()
-    {
-
-    }
-
     void OnDisable()
     {
         // Clean up - remove the functions from the actions

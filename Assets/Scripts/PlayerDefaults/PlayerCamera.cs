@@ -28,8 +28,7 @@ public class PlayerCamera : MonoBehaviour
     public void SetCamera() //called in hero base
     {
         Debug.Log("Setting Camera");
-        int clientId = (int)NetworkManager.Singleton.LocalClientId;
-        HeroBase player = PlayerController.PlayersList[clientId];
+        HeroBase player = PlayerController.Player;
         cameraPos = player.gameObject.transform.GetChild(2);
         camOrientationy = player.gameObject.transform;
         camOrientationx = player.gameObject.transform.GetChild(1);
@@ -39,9 +38,7 @@ public class PlayerCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int clientId = (int)NetworkManager.Singleton.LocalClientId;
-        HeroBase player = PlayerController.PlayersList[clientId];
-        if (player != null)
+        if (PlayerController.Player != null)
         {
             if (!iscamset)
                 SetCamera();

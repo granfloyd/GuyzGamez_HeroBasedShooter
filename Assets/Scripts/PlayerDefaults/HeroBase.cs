@@ -101,9 +101,7 @@ public class HeroBase : PlayerMovement
     }
     new protected void Update()
     {
-        if (!IsOwner) return;
         base.Update();
-        if (!IsOwner) return;
         //UpdateDurationSlider();
         
 
@@ -164,7 +162,7 @@ public class HeroBase : PlayerMovement
         //if (tempGunAngle != Vector3.zero)
         //    Debug.DrawRay(bulletSpawnPos, tempGunAngle * 5, Color.yellow);
     }
-    public virtual void PrimaryFire(ulong clientId)
+    public virtual void PrimaryFire()
     { 
         if (!IsOwner) return; 
         Debug.Log("M1");

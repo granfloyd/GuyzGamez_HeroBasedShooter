@@ -761,7 +761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startServerButton: {fileID: 119718317}
   startClientButton: {fileID: 340795252}
-  pc: {fileID: 0}
+  pc: {fileID: 1973371923}
 --- !u!114 &620187084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1215,8 +1215,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 664231222}
-    PlayerPrefab: {fileID: 2502935585226710434, guid: c6a4ada698d54a542a098fa36b7a984e,
-      type: 3}
+    PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 86f849cc4afbc794a9eaeea2012d725a, type: 2}
@@ -2404,6 +2403,129 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1973371922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1973371924}
+  - component: {fileID: 1973371923}
+  m_Layer: 0
+  m_Name: PlayerController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1973371923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973371922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a81934e9f0e08274bbcc8f7effd26297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHero: {fileID: 0}
+  currentHeroGameObject: {fileID: 0}
+  heroes:
+  - {fileID: -6397019945846295367, guid: 7b915e7d57a18c3438cec46e61a7fc45, type: 3}
+  - {fileID: 2651883187976737843, guid: e7d2494d1e9f6f245a7562a161ca7205, type: 3}
+  myActions: {fileID: -944628639613478452, guid: d8339310c4897e546aa2fc891e7c98e7,
+    type: 3}
+  ability1Action:
+    m_Name: Ability 1
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 157ba83d-8cf7-4ad1-be1f-f9d4de778229
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  ability2Action:
+    m_Name: Ability 2
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 112ab1dd-77ea-4d79-8bcd-704cb60f85c3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  ability3Action:
+    m_Name: Ability 3
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 63259bd8-55fb-44d7-a88b-39836d44f2fd
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  crouchAction:
+    m_Name: Crouch
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b2e49599-129e-489e-b7f2-3eeab5c1f2de
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d1fa6f68-5c6e-4bc7-af82-fb2b765eb3fd
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  changeHeroAction:
+    m_Name: Change Hero
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 2b6e1ccb-e851-4b95-af64-8c5e31109469
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  primaryFireAction:
+    m_Name: Primary Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 73069fb6-c45e-4f59-9f6d-3d5aafef361b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  secondaryFireAction:
+    m_Name: Secondary Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0f30afd8-e6ff-4394-8b83-d2736d2d874c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+--- !u!4 &1973371924
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973371922}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.43271437, y: 3.829147, z: -2.715236}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &939558993503625072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2787,7 +2909,7 @@ PrefabInstance:
         type: 3}
       propertyPath: playerController
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1973371923}
     - target: {fileID: 5245528806217967429, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
         type: 3}
       propertyPath: m_IsActive
@@ -2808,6 +2930,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 637847160}
+  - {fileID: 1973371924}
   - {fileID: 630204639}
   - {fileID: 620187087}
   - {fileID: 8671262072485326436}

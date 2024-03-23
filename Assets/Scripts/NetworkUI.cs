@@ -36,25 +36,14 @@ public class NetworkUI : NetworkBehaviour
     {
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
-            SetPlayerController();
+            //SetPlayerController();
         }
     }
     public void SetPlayerController()
     {
-        if (NetworkManager.LocalClient == null || NetworkManager.LocalClient.PlayerObject == null)
-        {
-            Debug.LogError("PlayerObject is not set yet.");
-            return;
-        }
-
-        if (HeroSelectUI.Instance == null)
-        {
-            Debug.LogError("HeroSelectUI instance is not set yet.");
-            return;
-        }
 
 
-        pc = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
-        HeroSelectUI.Instance.playerController = pc;
+        //pc = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerController>();
+        //HeroSelectUI.Instance.playerController = pc;
     }
 }

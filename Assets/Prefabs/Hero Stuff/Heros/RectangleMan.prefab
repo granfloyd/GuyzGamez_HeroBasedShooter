@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 5996829385433127422}
   - component: {fileID: 2651883187976737843}
   - component: {fileID: -6569279843921154052}
-  - component: {fileID: 1391607193584566647}
+  - component: {fileID: 5264867310349337250}
   m_Layer: 0
   m_Name: RectangleMan
   m_TagString: Player
@@ -232,7 +232,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &1391607193584566647
+--- !u!114 &5264867310349337250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,10 +249,10 @@ MonoBehaviour:
   SyncPositionZ: 1
   SyncRotAngleX: 1
   SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01

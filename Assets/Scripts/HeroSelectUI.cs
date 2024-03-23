@@ -1,19 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeroSelectUI : MonoBehaviour
+public class HeroSelectUI : NetworkBehaviour
 {
     public static HeroSelectUI Instance { get; private set; }
-    public bool isInSpawnArea = false;
-    [SerializeField] public PlayerController playerController;
-
+    [SerializeField] private List<HeroBase> heroes = new List<HeroBase>();
     [SerializeField] protected GameObject selectHeroUI;
     [SerializeField] protected GameObject selectHeroScreen;
     [SerializeField] protected List<Button> heroButtons;
-
+    public HeroBase bussy;
+    public HeroBase newhero;
     private void Awake()
     {
         // If an instance already exists, destroy this one
@@ -23,7 +22,8 @@ public class HeroSelectUI : MonoBehaviour
             return;
         }
         // Set this as the instance
-        Instance = this;        
+        Instance = this;  
+        
     }
 
     private void Start()
@@ -33,6 +33,71 @@ public class HeroSelectUI : MonoBehaviour
             int index = i; // To avoid the issue with modified closure in C#
             heroButtons[i].onClick.AddListener(() => ButtonClicked(index));
         }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void ServerSpawnHeroServerRpc(PlayerController.HeroIndex heroIndex, ServerRpcParams rpcParams = default)
+    {
+        ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
+        // Instantiate the selected hero
+        HeroBase instantiatedHero = Instantiate(PlayerController.currentHero, //1. set hero
+            SpawnArea.Instance.spawnPoint.position, //2. set position
+            Quaternion.identity);                  //3. rotation
+                                                   // Set ownership to the client that requested the spawn
+        instantiatedHero.NetworkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+
+        // Assign the instantiated hero to the Player variable of the client that instantiated the hero
+        ClientSlutPlayerClientRpc(instantiatedHero.NetworkObject.NetworkObjectId, rpcParams.Receive.SenderClientId);
+    }
+
+    [ClientRpc]
+    public void ClientSelectHeroClientRpc(PlayerController.HeroIndex heroIndex, ulong clientId, ClientRpcParams rpcParams = default)
+    {
+        SelectHero(heroIndex, clientId);
+    }
+
+    [ClientRpc]
+    private void ClientSlutPlayerClientRpc(ulong spawnheroId, ulong clientId, ClientRpcParams rpcParams = default)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            Debug.Log("setting player");
+            var spawnhero = NetworkManager.Singleton.SpawnManager.SpawnedObjects[spawnheroId].GetComponent<HeroBase>();
+            PlayerController.Player = spawnhero;
+        }
+    }
+    public void SelectHero(PlayerController.HeroIndex heroindex, ulong clientId)
+    {
+        Debug.Log("SelectHero called with hero index: " + heroindex + " and client ID: " + clientId);
+
+        HeroBase selectedHero = null;
+
+        switch (heroindex)
+        {
+            case PlayerController.HeroIndex.DamageMain:
+                selectedHero = heroes[0];
+                break;
+            case PlayerController.HeroIndex.TankMain:
+                selectedHero = heroes[1];
+                break;
+            case PlayerController.HeroIndex.SupportMain:
+                selectedHero = heroes[2];
+                break;
+            default:
+                selectedHero = heroes[0];
+                break;
+        }
+
+        if (selectedHero == PlayerController.currentHero)
+        {
+            Debug.Log("same hero");
+            return;
+        }
+
+        PlayerController.currentHero = selectedHero;
+        bussy = PlayerController.currentHero;
+        Debug.Log("current hero is: " + PlayerController.currentHero);
+        Debug.Log(PlayerController.currentHero.gameObject.name);
+
     }
     public void RenderUI()
     {
@@ -58,17 +123,17 @@ public class HeroSelectUI : MonoBehaviour
         switch (buttonIndex)
         {
             case 0:
-                playerController.ServerSpawnHeroServerRpc(PlayerController.HeroIndex.DamageMain);
+                ServerSpawnHeroServerRpc(PlayerController.HeroIndex.DamageMain);
                 Debug.Log("press1");
                 CloseSelectHeroScreen();
                 break;
             case 1:
-                playerController.ServerSpawnHeroServerRpc(PlayerController.HeroIndex.TankMain);
+                ServerSpawnHeroServerRpc(PlayerController.HeroIndex.TankMain);
                 Debug.Log("press2");
                 CloseSelectHeroScreen();
                 break;
             case 2:
-                playerController.ServerSpawnHeroServerRpc(PlayerController.HeroIndex.SupportMain);
+                ServerSpawnHeroServerRpc(PlayerController.HeroIndex.SupportMain);
                 Debug.Log("press3");
                 CloseSelectHeroScreen();
                 break;

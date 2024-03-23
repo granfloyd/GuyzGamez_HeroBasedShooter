@@ -7,9 +7,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("   PlayerController")]
-    [SerializeField] public HeroBase currentHero;
-    [SerializeField] public GameObject currentHeroGameObject = null;
-    [SerializeField] private List<HeroBase> heroes = new List<HeroBase>();
+    [SerializeField] static public HeroBase currentHero;
+    [SerializeField] static public HeroBase Player = null;
+    
     [SerializeField] private InputActionAsset myActions;
     [SerializeField] private InputAction ability1Action;
     [SerializeField] private InputAction ability2Action;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputAction changeHeroAction;
     [SerializeField] private InputAction primaryFireAction;
     [SerializeField] private InputAction secondaryFireAction;
-    [SerializeField] static public HeroBase Player = null;
+    
     public enum HeroIndex
     {
         DamageMain,
@@ -29,64 +29,18 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-        
+        Player = null;
     }
-    [ServerRpc]
-    public void ServerSpawnHeroServerRpc(HeroIndex heroIndex, ServerRpcParams rpcParams = default)
+    private void Update()
     {
-        ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
-        
-        Player = Instantiate(currentHero, transform.position, Quaternion.identity);
-        Player.NetworkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
-        transform.SetParent(Player.transform);
-    }
-
-    [ClientRpc]
-    public void ClientSelectHeroClientRpc(HeroIndex heroIndex, ulong clientId, ClientRpcParams rpcParams = default)
-    {
-        SelectHero(heroIndex, clientId);
-    }
-    public void SelectHero(HeroIndex heroindex, ulong clientId)
-    {
-        Debug.Log("SelectHero called with hero index: " + heroindex + " and client ID: " + clientId);
-
-        HeroBase selectedHero = null;
-        GameObject selectedHeroGameObject = null;
-
-        switch (heroindex)
+        if (Player != null)
         {
-            case HeroIndex.DamageMain:
-                selectedHero = heroes[0];
-                selectedHeroGameObject = heroes[0].gameObject;
-                break;
-            case HeroIndex.TankMain:
-                selectedHero = heroes[1];
-                selectedHeroGameObject = heroes[1].gameObject;
-                break;
-            case HeroIndex.SupportMain:
-                selectedHero = heroes[2];
-                break;
-            default:
-                selectedHero = heroes[0];
-                break;
+            Debug.Log(Player.gameObject.name);
         }
-
-        if (selectedHero == currentHero)
+        else
         {
-            Debug.Log("same hero");
-            return;
+            Debug.Log("Player is null");    
         }
-
-        if (currentHero != null)
-        {
-            Destroy(currentHeroGameObject);
-        }
-        currentHero = selectedHero;
-        currentHeroGameObject = selectedHeroGameObject;
-
-        Debug.Log("Selected hero: " + selectedHero);
-        Debug.Log("Current hero: " + currentHero);
-        Debug.Log(clientId + "client id spawned hero");
     }
 
     public void OnPrimaryFire(InputAction.CallbackContext context)
@@ -205,7 +159,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (HeroSelectUI.Instance.isInSpawnArea == true)
+            if (SpawnArea.Instance.isInSpawnArea == true)
             {
                 HeroSelectUI.Instance.OpenSelectHeroScreen();
             }

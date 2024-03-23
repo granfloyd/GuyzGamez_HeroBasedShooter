@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 5996829385433127422}
   - component: {fileID: -6397019945846295367}
   - component: {fileID: 1601990111586344745}
-  - component: {fileID: -1820674296700416050}
+  - component: {fileID: 6487457442385066224}
   m_Layer: 0
   m_Name: Aerial
   m_TagString: Player
@@ -232,7 +232,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-1820674296700416050
+--- !u!114 &6487457442385066224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,10 +249,10 @@ MonoBehaviour:
   SyncPositionZ: 1
   SyncRotAngleX: 1
   SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01

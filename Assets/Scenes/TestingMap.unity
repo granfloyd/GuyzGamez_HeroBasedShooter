@@ -2433,10 +2433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHero: {fileID: 0}
-  currentHeroGameObject: {fileID: 0}
-  heroes:
-  - {fileID: -6397019945846295367, guid: 7b915e7d57a18c3438cec46e61a7fc45, type: 3}
-  - {fileID: 2651883187976737843, guid: e7d2494d1e9f6f245a7562a161ca7205, type: 3}
+  Player: {fileID: 0}
   myActions: {fileID: -944628639613478452, guid: d8339310c4897e546aa2fc891e7c98e7,
     type: 3}
   ability1Action:
@@ -2800,11 +2797,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeroSelectUI
       objectReference: {fileID: 0}
-    - target: {fileID: 845834870583374376, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1967848682198111216, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2905,21 +2897,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4075755436471573613, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3820461938
+      objectReference: {fileID: 0}
     - target: {fileID: 4779852623781185443, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
         type: 3}
-      propertyPath: playerController
+      propertyPath: pc
       value: 
       objectReference: {fileID: 1973371923}
-    - target: {fileID: 5245528806217967429, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8797845469551846875, guid: e8dadbacc0ae43b498b8b8744c6ebf2a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

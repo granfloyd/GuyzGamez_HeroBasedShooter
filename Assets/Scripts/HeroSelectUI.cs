@@ -25,7 +25,6 @@ public class HeroSelectUI : NetworkBehaviour
         Instance = this;  
         
     }
-
     private void Start()
     {
         for (int i = 0; i < heroButtons.Count; i++)
@@ -34,7 +33,8 @@ public class HeroSelectUI : NetworkBehaviour
             heroButtons[i].onClick.AddListener(() => ButtonClicked(index));
         }
     }
-    [ServerRpc(RequireOwnership = false)]
+
+    [ServerRpc(RequireOwnership = false)]//so client can use should come back here later to change
     public void ServerSpawnHeroServerRpc(PlayerController.HeroIndex heroIndex, ServerRpcParams rpcParams = default)
     {
         ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
@@ -95,9 +95,6 @@ public class HeroSelectUI : NetworkBehaviour
 
         PlayerController.currentHero = selectedHero;
         bussy = PlayerController.currentHero;
-        Debug.Log("current hero is: " + PlayerController.currentHero);
-        Debug.Log(PlayerController.currentHero.gameObject.name);
-
     }
     public void RenderUI()
     {

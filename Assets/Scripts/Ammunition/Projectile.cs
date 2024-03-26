@@ -15,8 +15,12 @@ public class Projectile : NetworkBehaviour
     }
     void Start()
     {
-        SetSpeedLifespanDamage(50,2,10);       
-        Destroy(gameObject, Lifespan);
+        SetSpeedLifespanDamage(50,2,10);
+        if(IsServer)
+        {
+            Destroy(gameObject, Lifespan);
+        }
+        
     }
 
     void OnCollisionEnter(Collision other)

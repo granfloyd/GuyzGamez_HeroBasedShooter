@@ -33,14 +33,14 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        if (Player != null)
-        {
-            Debug.Log(Player.gameObject.name);
-        }
-        else
-        {
-            Debug.Log("Player is null");    
-        }
+        //if (Player != null)
+        //{
+        //    Debug.Log(Player.gameObject.name);
+        //}
+        //else
+        //{
+        //    Debug.Log("Player is null");    
+        //}
     }
 
     public void OnPrimaryFire(InputAction.CallbackContext context)

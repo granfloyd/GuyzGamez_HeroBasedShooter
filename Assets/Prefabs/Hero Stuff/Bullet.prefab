@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: -2148358089565717170}
   - component: {fileID: 5785899942455085638}
   - component: {fileID: 1330464823582548144}
-  - component: {fileID: -717889257190090071}
-  - component: {fileID: -3110954698388652655}
+  - component: {fileID: 1509673227821151512}
+  - component: {fileID: 2795700859920547829}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -173,7 +173,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-717889257190090071
+--- !u!114 &1509673227821151512
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5308884282720409307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: b5f82385aa0d99d459a43e4e12a6661a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -203,7 +203,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &-3110954698388652655
+--- !u!114 &2795700859920547829
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

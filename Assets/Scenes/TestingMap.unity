@@ -2432,8 +2432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81934e9f0e08274bbcc8f7effd26297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHero: {fileID: 0}
-  Player: {fileID: 0}
   myActions: {fileID: -944628639613478452, guid: d8339310c4897e546aa2fc891e7c98e7,
     type: 3}
   ability1Action:

@@ -51,7 +51,6 @@ public class PlayerMovement : NetworkBehaviour
     }
     void FixedUpdate()
     {
-        
         if (!IsOwner) return;
         MovePlayer();
     }

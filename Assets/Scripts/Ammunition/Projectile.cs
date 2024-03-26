@@ -37,7 +37,7 @@ public class Projectile : NetworkBehaviour
 
         if(other.gameObject.tag == "Enemy1")
         {
-            //PlayerController.Player.UpdateUltSlider(Damage);
+            HeroUI.Instance.UpdateUltSlider(10);
             HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
             enemyhp.TakeDamage(Damage);
             Destroy(gameObject);

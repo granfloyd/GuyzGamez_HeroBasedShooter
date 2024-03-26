@@ -38,12 +38,10 @@ public class PlayerMovement : NetworkBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
     }
     protected void Update()
     {
         if (!IsOwner) return;
-        rb.isKinematic = false;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
@@ -58,41 +56,43 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        HeroBase player = PlayerController.Player;
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
+        
+
+        if (!player.isFlying)
         {
-            Jump();
-            Invoke("ResetJump", jumpCD);
+            if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
+            {
+                Jump();
+                Invoke("ResetJump", jumpCD);
+            }
         }
-        //if (!isFlying)
-        //{
-        //    put jump stuff here
-        //}
-        //
-        //if (isFlying)
-        //{
-        //    rb.drag = 1;
-        //    if (isMovingUp)
-        //    {
-        //        MakePlayerMoveUp();
-        //    }
-        //    else if (isMovingDown)
-        //    {
-        //        MakePlayerMoveDown();
-        //    }
-        //}
-        //else
-        //{
-        //    if (isGrounded)
-        //    {
-        //        rb.drag = groundDrag;
-        //    }
-        //    else
-        //    {
-        //        rb.drag = 1;
-        //    }
-        //}
+        
+        if (player.isFlying)
+        {
+            rb.drag = 1;
+            if (isMovingUp)
+            {
+                MakePlayerMoveUp();
+            }
+            else if (isMovingDown)
+            {
+                MakePlayerMoveDown();
+            }
+        }
+        else
+        {
+            if (isGrounded)
+            {
+                rb.drag = groundDrag;
+            }
+            else
+            {
+                rb.drag = 1;
+            }
+        }
     }
 
     private void MovePlayer()

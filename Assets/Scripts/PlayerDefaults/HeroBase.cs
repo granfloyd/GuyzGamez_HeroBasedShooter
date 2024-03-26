@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static PlayerController;
 
 public class HeroBase : PlayerMovement
 {    
     [Header("   HeroBase")]
-    [SerializeField] public HeroIndex heroId;
+    [SerializeField] public PlayerController.HeroIndex heroId;
     [SerializeField] protected int health;
     [SerializeField] public float recovery;
     [SerializeField] public bool isFlying = false;
@@ -25,40 +24,19 @@ public class HeroBase : PlayerMovement
     [Header("SecondaryFire")]
     [SerializeField] public float secondaryFireTimer;
 
-    [Header("Ability1")]    
-    [SerializeField] public float ability1Cooldown;
-    [SerializeField] public float ability1Duration;
-    public float ability1Timer;
-    
-    [Header("Ability2")] 
-    [SerializeField] public float ability2Cooldown;
-    [SerializeField] public float ability2Duration;
-    public float ability2Timer;
-    
-    [Header("Ability3")]
-    [SerializeField] public float ability3Charge;//called in heros damage scripts
-    [SerializeField] public float ability3MaxCharge;
-    [SerializeField] public float ability3Cooldown;
-    [SerializeField] public float ability3Duration;
-    public float ability3Timer;
-
+    public Ability baseAbility1 { get; set; }
+    public Ability baseAbility2{ get; set; }
+    public Ability baseAbility3{ get; set; }   
+   
+    [SerializeField] public float ability3Charge;
+    public float ability3MaxCharge;
     new protected void Update()
     {
-        base.Update();       
+        base.Update();
 
-        if (ability1Timer < ability1Cooldown)
-        {
-            ability1Timer += Time.deltaTime;
-        }
-        if(ability2Timer < ability2Cooldown)
-        {
-            ability2Timer += Time.deltaTime;
-        }
-        else if(ability3Timer < ability3Cooldown)
-        {
-            ability3Timer += Time.deltaTime;
-        }
-
+        PlayerController.Player.baseAbility1.UpdateTimer();
+        PlayerController.Player.baseAbility2.UpdateTimer();
+        PlayerController.Player.baseAbility3.UpdateTimer();
         if (primaryFireTimer < recovery)
         {
             primaryFireTimer += Time.deltaTime;
@@ -67,7 +45,7 @@ public class HeroBase : PlayerMovement
         {
             secondaryFireTimer += Time.deltaTime;
         }
-        if(Player != null && IsOwner)
+        if(PlayerController.Player != null && IsOwner)
         CalculateGunAngle();
     }
     private void CalculateGunAngle()

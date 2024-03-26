@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using static PlayerController;
 
 public class Merlin : HeroBase
 {
@@ -10,19 +9,31 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
+            PlayerController.Player.baseAbility1 = new Ability(5f, 5f);
+            PlayerController.Player.baseAbility2 = new Ability(15f, 3f); 
+            PlayerController.Player.baseAbility3 = new Ability(20f, 10f);
             HeroBase player = PlayerController.Player;
+            HeroUI.Instance.SetUltSlider();
             if (player == null)
             {
                 Debug.LogError("Player is not set yet.");
                 return;
             }
-            player.ability3Charge = 0;
-            player.ability3MaxCharge = 20;
             boostForce = 40f;
-            //player.SetUltSlider(ability3MaxCharge);
             Cursor.lockState = CursorLockMode.Locked;
         }
         
+    }
+    protected new void Update()
+    {
+        base.Update();
+        if (IsOwner)
+        {
+            if (PlayerController.Player.baseAbility1.duration >= 0)
+            {
+                HeroUI.Instance.UpdateDurationSlider(PlayerController.Player.baseAbility1);
+            }
+        }
     }
     public override void PrimaryFire()
     {
@@ -56,10 +67,11 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             Boost();
-            //SetDurationSlider(ability1Duration);
-            Invoke("Ability1Duration", ability1Duration);
+            HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
+            Invoke("Ability1Duration", PlayerController.Player.baseAbility1.duration);
         }
     }
+
     public override void Ability1Duration()
     {
         HeroBase player = PlayerController.Player;
@@ -75,7 +87,7 @@ public class Merlin : HeroBase
         HeroBase player = PlayerController.Player;
         player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
         player.isFlying = true;
-        player.rb.AddForce(Vector3.up * boostForce * player.rb.mass * 4, ForceMode.Impulse);
+        player.rb.AddForce(Vector3.up * boostForce * player.rb.mass, ForceMode.Impulse);
         player.rb.useGravity = false;
     }
     public override void Ability2()

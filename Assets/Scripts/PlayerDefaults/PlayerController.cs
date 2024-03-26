@@ -97,21 +97,19 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (currentHero == null)
+            if (Player == null || Player.baseAbility1 == null)
             {
+                Debug.LogError("Player or Ability1 is not set yet.");
                 return;
+            }
+            if (Player.baseAbility1.IsReady())
+            {
+                Player.Ability1();
+                Player.baseAbility1.Use();
             }
             else
             {
-                //if (Player.ability1Timer >= currentHero.ability1Cooldown)
-                //{
-                //    Player.Ability1();
-                //    Player.ability1Timer = 0;
-                //}
-                //else
-                //{
-                //    Debug.Log("Ability 1 is on cooldown");
-                //}
+                Debug.Log("Ability 1 is on cooldown");
             }
         }
     }

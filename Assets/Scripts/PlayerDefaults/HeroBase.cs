@@ -34,9 +34,13 @@ public class HeroBase : PlayerMovement
     {
         base.Update();
 
-        PlayerController.Player.baseAbility1.UpdateTimer();
-        PlayerController.Player.baseAbility2.UpdateTimer();
-        PlayerController.Player.baseAbility3.UpdateTimer();
+        if(PlayerController.Player != null && IsOwner)
+        {
+            PlayerController.Player.baseAbility1.UpdateTimer();
+            PlayerController.Player.baseAbility2.UpdateTimer();
+            PlayerController.Player.baseAbility3.UpdateTimer();
+        }
+        
         if (primaryFireTimer < recovery)
         {
             primaryFireTimer += Time.deltaTime;
@@ -69,9 +73,6 @@ public class HeroBase : PlayerMovement
             Vector3 bulletEndPointDistance = endpointPosition - bulletSpawnPos;
             tempGunAngle = bulletEndPointDistance.normalized;
         }
-
-        if (tempGunAngle != Vector3.zero)
-            Debug.DrawRay(bulletSpawnPos, tempGunAngle * 5, Color.yellow);
     }
     public virtual void PrimaryFire()
     { 

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class PlayerMovement : NetworkBehaviour
 {
     [Header("   PlayerMovement")]
+    [SerializeField] private NetworkAnimator networkAnimator;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float flySpeed;
     [SerializeField] private float groundDrag;
@@ -43,9 +45,21 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (!IsOwner) return;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
+
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
         SpeedControl();
+
+        if(isGrounded)
+        {
+            networkAnimator.Animator.SetBool("isGrounded", true);
+            networkAnimator.Animator.SetBool("isFalling", false);
+        }
+        else
+        {
+            networkAnimator.Animator.SetBool("isGrounded", false);
+            networkAnimator.Animator.SetBool("isFalling", true);
+        }
     }
     void FixedUpdate()
     {
@@ -54,13 +68,13 @@ public class PlayerMovement : NetworkBehaviour
     }
     public void MyInput()
     {
-        if (!IsOwner) return;
+        
 
         HeroBase player = PlayerController.Player;
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        
-
+        networkAnimator.Animator.SetFloat("horz", horizontalInput);
+        networkAnimator.Animator.SetFloat("vert", verticalInput);
         if (!player.isFlying)
         {
             if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
@@ -97,7 +111,18 @@ public class PlayerMovement : NetworkBehaviour
 
     private void MovePlayer()
     {
+        if (!IsOwner) return;
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        if(moveDirection.magnitude > Vector3.zero.magnitude)
+        {
+            networkAnimator.Animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            networkAnimator.Animator.SetBool("isMoving", false);
+        }
+
         //on ground
         if (isGrounded)
         {
@@ -123,6 +148,7 @@ public class PlayerMovement : NetworkBehaviour
     }
     private void Jump()
     {
+        networkAnimator.Animator.SetBool("isJumping", true);
         isJumping = true;
         rb.drag = 1;
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -139,6 +165,7 @@ public class PlayerMovement : NetworkBehaviour
     }
     private void ResetJump()
     {
+        networkAnimator.Animator.SetBool("isJumping", false);
         isReadyToJump = true;
         isJumping = false;
     }

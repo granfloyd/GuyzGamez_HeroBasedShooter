@@ -6,6 +6,8 @@ TagManager:
   tags:
   - SpawnCollision
   - Enemy1
+  - PlayerHead
+  - PlayerBody
   layers:
   - Default
   - TransparentFX

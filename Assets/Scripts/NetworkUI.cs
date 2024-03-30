@@ -9,6 +9,7 @@ using Unity.Services.Core;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Relay.Models;
 using TMPro;
+using Unity.Networking.Transport.Relay;
 
 public class NetworkUI : MonoBehaviour
 { 
@@ -60,15 +61,11 @@ public class NetworkUI : MonoBehaviour
 
             Debug.Log("Join code: " + joinCode);
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(
-                allocation.RelayServer.IpV4,
-                (ushort)allocation.RelayServer.Port,
-                allocation.AllocationIdBytes,
-                allocation.Key,
-                allocation.ConnectionData);
+            RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartHost();
-            NetworkManager.Singleton.SceneManager.LoadScene(map1, UnityEngine.SceneManagement.LoadSceneMode.Single);
+            //NetworkManager.Singleton.SceneManager.LoadScene(map1, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
         catch (RelayServiceException e)
         {
@@ -82,19 +79,19 @@ public class NetworkUI : MonoBehaviour
         try
         {
             joinCode = inputFieldText.text;
+            if (string.IsNullOrEmpty(joinCode))
+            {
+                Debug.LogError("Join code is null or empty");
+                return;
+            }
             Debug.Log("Joining relay with code: " + joinCode);
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
-                joinAllocation.RelayServer.IpV4,
-                (ushort)joinAllocation.RelayServer.Port,
-                joinAllocation.AllocationIdBytes,
-                joinAllocation.Key,
-                joinAllocation.ConnectionData,
-                joinAllocation.HostConnectionData);
+            RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartClient();
-            NetworkManager.Singleton.SceneManager.LoadScene(map1, UnityEngine.SceneManagement.LoadSceneMode.Single);
+            //NetworkManager.Singleton.SceneManager.LoadScene(map1, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
         catch (RelayServiceException e)
         {

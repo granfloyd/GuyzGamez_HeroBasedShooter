@@ -31,6 +31,9 @@ public class NetworkUI : MonoBehaviour
     public bool isClient = false;
     public string map1 = "TestingMap";
 
+    public GameObject JOINCODE;
+    public TMP_Text JOINCODETEXT;
+
     private async void Start()
     {
         await UnityServices.InitializeAsync();//pasuses here until reply
@@ -65,8 +68,12 @@ public class NetworkUI : MonoBehaviour
             RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
+            JOINCODETEXT.text = "JOIN CODE: " + joinCode;
+            DontDestroyOnLoad(JOINCODE);
+
             NetworkManager.Singleton.StartHost();
-            SceneManager.LoadScene(map1, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(map1, LoadSceneMode.Single);
+            
         }
         catch (RelayServiceException e)
         {
@@ -79,7 +86,6 @@ public class NetworkUI : MonoBehaviour
     {
         try
         {
-            
             joinCode = inputFieldText.text;
             joinCode = joinCode.Substring(0, 6);
             Debug.Log("Joining relay with code: " + joinCode);
@@ -89,7 +95,7 @@ public class NetworkUI : MonoBehaviour
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.StartClient();
-            SceneManager.LoadScene(map1, LoadSceneMode.Single);
+            //SceneManager.LoadScene(map1, LoadSceneMode.Single);
         }
         catch (RelayServiceException e)
         {

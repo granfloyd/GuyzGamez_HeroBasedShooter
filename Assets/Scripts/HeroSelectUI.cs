@@ -6,6 +6,14 @@ using UnityEngine.UI;
 
 public class HeroSelectUI : NetworkBehaviour
 {
+    //cool names Gaius,Jericho,Keturah,Tirzah,Eden
+    //IMPORTANT SORT ORDER FOR CANVAS
+    // 5 = MOST IMPORTANT (HERO SELECT UI) OR ERROR MESSAGE
+    //4 = HERO UI
+    //3IDK
+    //2IDK
+    //1IDK
+    //0 IDK
     public static HeroSelectUI Instance { get; private set; }
     [SerializeField] private List<HeroBase> heroes = new List<HeroBase>();
     [SerializeField] protected GameObject selectHeroUI;
@@ -34,9 +42,17 @@ public class HeroSelectUI : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void ServerDespawnHeroServerRpc(ulong heroId, ServerRpcParams rpcParams = default)
+    {
+        var heroToDespawn = NetworkManager.Singleton.SpawnManager.SpawnedObjects[heroId].GetComponent<HeroBase>();
+        heroToDespawn.NetworkObject.Despawn(true);
+    }
+
     [ServerRpc(RequireOwnership = false)]//so client can use should come back here later to change
     public void ServerSpawnHeroServerRpc(PlayerController.HeroIndex heroIndex, ServerRpcParams rpcParams = default)
     {
+
         ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
         // Instantiate the selected hero
         HeroBase instantiatedHero = Instantiate(PlayerController.currentHero, //1. set hero
@@ -90,9 +106,8 @@ public class HeroSelectUI : NetworkBehaviour
         if (selectedHero == PlayerController.currentHero)
         {
             Debug.Log("same hero");
-            return;
         }
-
+       
         PlayerController.currentHero = selectedHero;
         bussy = PlayerController.currentHero;
     }
@@ -107,6 +122,7 @@ public class HeroSelectUI : NetworkBehaviour
     public void OpenSelectHeroScreen()
     {
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         selectHeroScreen.SetActive(true);
     }
     public void CloseSelectHeroScreen()
@@ -120,16 +136,22 @@ public class HeroSelectUI : NetworkBehaviour
         switch (buttonIndex)
         {
             case 0:
+                if(PlayerController.Player != null)
+                ServerDespawnHeroServerRpc(PlayerController.Player.NetworkObject.NetworkObjectId);
                 ServerSpawnHeroServerRpc(PlayerController.HeroIndex.DamageMain);
                 Debug.Log("press1");
                 CloseSelectHeroScreen();
                 break;
             case 1:
+                if (PlayerController.Player != null)
+                    ServerDespawnHeroServerRpc(PlayerController.Player.NetworkObject.NetworkObjectId);
                 ServerSpawnHeroServerRpc(PlayerController.HeroIndex.TankMain);
                 Debug.Log("press2");
                 CloseSelectHeroScreen();
                 break;
             case 2:
+                if (PlayerController.Player != null)
+                    ServerDespawnHeroServerRpc(PlayerController.Player.NetworkObject.NetworkObjectId);
                 ServerSpawnHeroServerRpc(PlayerController.HeroIndex.SupportMain);
                 Debug.Log("press3");
                 CloseSelectHeroScreen();

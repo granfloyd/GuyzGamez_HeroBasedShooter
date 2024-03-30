@@ -8,6 +8,7 @@ public class RectangleMan : HeroBase
     {
         if (IsOwner)
         {
+            PlayerCamera.iscamset = false;
             PlayerController.Player.baseAbility1 = new Ability(1f, 5f);
             PlayerController.Player.baseAbility2 = new Ability(1f, 3f);
             PlayerController.Player.baseAbility3 = new Ability(1f, 10f);

@@ -9,6 +9,7 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
+            PlayerCamera.iscamset = false;
             PlayerController.Player.baseAbility1 = new Ability(5f, 5f);
             PlayerController.Player.baseAbility2 = new Ability(15f, 3f); 
             PlayerController.Player.baseAbility3 = new Ability(20f, 10f);

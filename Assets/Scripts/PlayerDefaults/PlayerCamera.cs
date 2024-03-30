@@ -18,7 +18,7 @@ public class PlayerCamera : MonoBehaviour
     public float xRotation;
     public float yRotation;
 
-    public bool iscamset = false;
+    public static bool iscamset = false;
 
     // Start is called before the first frame update
     void Start()

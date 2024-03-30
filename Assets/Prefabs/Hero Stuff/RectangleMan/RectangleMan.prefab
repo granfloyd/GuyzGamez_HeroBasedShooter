@@ -122,7 +122,7 @@ MonoBehaviour:
   moveSpeed: 7
   flySpeed: 7
   groundDrag: 6
-  jumpForce: 4
+  jumpForce: 5
   jumpCD: 0.75
   airMultiplier: 1
   isReadyToJump: 1

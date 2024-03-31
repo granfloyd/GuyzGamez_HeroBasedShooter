@@ -598,20 +598,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3991270720934439999, guid: b452934177552ac4d99b30604d100ca9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5630435939259909495, guid: b452934177552ac4d99b30604d100ca9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6185875656942918288, guid: b452934177552ac4d99b30604d100ca9,
         type: 3}
       propertyPath: m_Name
       value: NetworkUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7022154540338740305, guid: b452934177552ac4d99b30604d100ca9,
+        type: 3}
+      propertyPath: m_fontStyle
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

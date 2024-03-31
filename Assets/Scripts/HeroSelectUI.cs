@@ -52,7 +52,6 @@ public class HeroSelectUI : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]//so client can use should come back here later to change
     public void ServerSpawnHeroServerRpc(PlayerController.HeroIndex heroIndex, ServerRpcParams rpcParams = default)
     {
-
         ClientSelectHeroClientRpc(heroIndex, rpcParams.Receive.SenderClientId);
         // Instantiate the selected hero
         HeroBase instantiatedHero = Instantiate(PlayerController.currentHero, //1. set hero
@@ -97,9 +96,6 @@ public class HeroSelectUI : NetworkBehaviour
                 break;
             case PlayerController.HeroIndex.SupportMain:
                 selectedHero = heroes[2];
-                break;
-            default:
-                selectedHero = heroes[0];
                 break;
         }
 

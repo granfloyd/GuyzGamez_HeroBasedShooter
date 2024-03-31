@@ -19,7 +19,7 @@ public class SpawnArea : MonoBehaviour
     }   
     void Start()
     {
-        spawnPoint = transform;
+        //spawnPoint = transform;
     }
     public void EnteredSpawnArea()//safezone
     {

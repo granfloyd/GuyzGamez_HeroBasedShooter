@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1704,6 +1704,9 @@ MonoBehaviour:
   inputFieldTextButton: {fileID: 6294225321446287919}
   isHost: 0
   isClient: 0
+  map1: TestingMap
+  JOINCODE: {fileID: 0}
+  JOINCODETEXT: {fileID: 0}
 --- !u!1 &6333523000870238974
 GameObject:
   m_ObjectHideFlags: 0

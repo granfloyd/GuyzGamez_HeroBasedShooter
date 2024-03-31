@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthScript : NetworkBehaviour
 {
-    public int maxHealth = 100;
-    public NetworkVariable<int> currentHealth = new NetworkVariable<int>(100);
-    public Slider healthBar;
+    public int maxHealth;
+    public NetworkVariable<int> currentHealth = new NetworkVariable<int>(500);
+    public TMP_Text healthText; // Replace Slider with TMP_Text
     public bool isPlayer;
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -19,18 +21,20 @@ public class HealthScript : NetworkBehaviour
         else
         {
             currentHealth.OnValueChanged += OnHealthChange;
+            InitializeHealth();
         }
     }
+
     private void OnHealthChange(int previousHealth, int newHealth)
     {
         Debug.Log("Health changed from " + previousHealth + " to " + newHealth);
-        currentHealth.Value = newHealth;
+        healthText.text = newHealth.ToString(); // Update the text with the new health value
     }
+
     private void InitializeHealth()
     {
         currentHealth.Value = maxHealth; // Set the initial health value
-        healthBar.maxValue = maxHealth;
-        healthBar.value = currentHealth.Value;
+        healthText.text = currentHealth.Value.ToString(); // Update the text with the initial health value
     }
 
     public void CalculateDamage(int damage)
@@ -52,7 +56,7 @@ public class HealthScript : NetworkBehaviour
     private void UpdateClientHealthClientRpc(int updatedHealth)
     {
         Debug.Log("Updating client health: " + updatedHealth);
-        healthBar.value = updatedHealth;
+        healthText.text = updatedHealth.ToString(); // Update the text with the updated health value
     }
 
     void Update()

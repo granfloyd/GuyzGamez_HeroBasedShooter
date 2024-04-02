@@ -1,77 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class AIBehaviour : MonoBehaviour
 {
-    private float stateChangeCooldown;
-    private float stateChangeTimer;
-    public bool isRanged;
-    private bool isReadyToChangeState;
-    private Vector3 targetPosition;
+    [SerializeField] private Vector3 targetPosition;
+    public float viewDistance = 5f;
+    public State currentState;
 
+    public LayerMask PlayerLayer;
     public enum State
     {
         Idle,
         Patrol,
+        Search,
         Chase,
         Attack,
         Dead
     }
     void Start()
     {
-        isReadyToChangeState = false;
-        stateChangeTimer = 0;
-        stateChangeCooldown = 5;
-    }
 
+    }
+    public Vector3 PlayerPosition()
+    {
+        if (PlayerController.Player != null)
+        {
+            return targetPosition = PlayerController.Player.transform.position;
+        }
+        else
+        {
+            return targetPosition = Vector3.zero;
+        }            
+    }
     void Update()
     {
-        if (stateChangeTimer < stateChangeCooldown)
+        //is player within enemy los distance 
+        if (Vector3.Distance(transform.position, PlayerPosition()) <= viewDistance)
         {
-            stateChangeTimer += Time.deltaTime;
-        }
-        else
-        {
-            isReadyToChangeState = true;
-        }
+            Vector3 directionToPlayer = (PlayerPosition() - transform.position).normalized;
 
-        FindTarget();
-    }
-    void FindTarget()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 100))
-        {
-            // Draw a green ray for visualization
-            Debug.DrawRay(transform.position, transform.forward * 100, Color.green);
-            if (hit.transform.tag == "Player")
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, directionToPlayer, out hit, viewDistance, PlayerLayer))
             {
-                if(!isRanged)
-                {
-                    SetState(State.Chase);
-                }
-                else
-                {
-                    SetState(State.Attack);
-                }
-                
+                Debug.Log("Player is not in sight");
+                Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.red);
+            }
+            else//enemy has los on player
+            {
+                Debug.Log("Player is in sight");
+                Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.green);
             }
         }
-        else
-        {
-            // Draw a red ray for visualization
-            Debug.DrawRay(transform.position, transform.forward * 100, Color.red);
-            SetState(State.Patrol);
-        }
     }
-    void ImComingForYou()
+    void MoveToTargetPosition(Vector3 pos)
     {
-
+        float speed = 5f;
+        transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
     }
     void SetState(State state)
     {
-        //if (!isReadyToChangeState) { return;}
+        currentState = state;
 
         switch (state)
         {
@@ -80,7 +70,6 @@ public class AIBehaviour : MonoBehaviour
             case State.Patrol:
                 break;
             case State.Chase:
-                ImComingForYou();
                 break;
             case State.Attack:
                 break;

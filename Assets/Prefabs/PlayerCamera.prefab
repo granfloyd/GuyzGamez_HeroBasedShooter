@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca90ccf394673f84b88d74a7b7e19ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 800
-  sensitivityY: 800
+  sensitivityX: 200
+  sensitivityY: 200
   cameraPos: {fileID: 0}
   camOrientationy: {fileID: 0}
   camOrientationx: {fileID: 0}

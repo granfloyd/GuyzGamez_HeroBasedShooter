@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,10 @@ public class HeroUI : MonoBehaviour
 
     [Header("Duration Slider")]
     [SerializeField] public Slider durationSlider;
+
+    [Header("Abiliy CDs")]
+    public TMP_Text ability1Text;
+    public TMP_Text ability2Text;
     private void Awake()
     {
         // If an instance already exists, destroy this one
@@ -55,5 +60,11 @@ public class HeroUI : MonoBehaviour
             ability3chargeSlider.value += howmuch;
             player.ability3Charge = ability3chargeSlider.value;
         }
+    }
+
+    public void UpdateAbilityCD(Ability ability, TMP_Text abilityText)
+    {
+        float cdLeft = ability.GetCooldownTimeLeft();
+        abilityText.text = ((int)cdLeft).ToString();
     }
 }

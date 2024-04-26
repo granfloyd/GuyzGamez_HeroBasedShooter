@@ -507,7 +507,7 @@ PrefabInstance:
     - target: {fileID: 5555572247123548509, guid: 3c46205fef5afe54ca1a8f4b93bd0e1d,
         type: 3}
       propertyPath: field of view
-      value: 35
+      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1857,16 +1857,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 489186816946124499, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 5399790850894594135, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
         type: 3}
       propertyPath: m_Name
       value: HUD
       objectReference: {fileID: 0}
+    - target: {fileID: 5805671850477275806, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+        type: 3}
+      propertyPath: ability1Text
+      value: 
+      objectReference: {fileID: 3205227544328499505}
+    - target: {fileID: 5805671850477275806, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+        type: 3}
+      propertyPath: ability2Text
+      value: 
+      objectReference: {fileID: 3205227544328499504}
     - target: {fileID: 6058700497831632914, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1937,6 +1942,30 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 435d7f0e24cc3a14385ae2b620bc1c6a, type: 3}
+--- !u!114 &3205227544328499504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3772644213149641145, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3205227544328499503}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3205227544328499505 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4741783455134744356, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3205227544328499503}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5619756429706447366
 PrefabInstance:
   m_ObjectHideFlags: 0

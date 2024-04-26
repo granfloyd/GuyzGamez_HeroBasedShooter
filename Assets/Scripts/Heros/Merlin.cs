@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Bson;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             PlayerCamera.iscamset = false;
-            PlayerController.Player.baseAbility1 = new Ability(5f, 5f);
+            PlayerController.Player.baseAbility1 = new Ability(5f, 0f);
             PlayerController.Player.baseAbility2 = new Ability(15f, 3f); 
             PlayerController.Player.baseAbility3 = new Ability(20f, 10f);
             HeroBase player = PlayerController.Player;
@@ -20,7 +21,7 @@ public class Merlin : HeroBase
                 Debug.LogError("Player is not set yet.");
                 return;
             }
-            boostForce = 40f;
+            boostForce = 70f;
             Cursor.lockState = CursorLockMode.Locked;
         }
         
@@ -34,6 +35,11 @@ public class Merlin : HeroBase
             {
                 HeroUI.Instance.UpdateDurationSlider(PlayerController.Player.baseAbility1);
             }
+        }
+        if (IsOwner)
+        {
+            HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility1, HeroUI.Instance.ability1Text);
+            HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility2, HeroUI.Instance.ability2Text);
         }
     }
     public override void PrimaryFire()
@@ -67,33 +73,39 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
-            Boost();
-            HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
-            Invoke("Ability1Duration", PlayerController.Player.baseAbility1.duration);
+            Dash();
+            //Boost();
+            //HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
+            //Invoke("Ability1Duration", PlayerController.Player.baseAbility1.duration);
         }
     }
-
-    public override void Ability1Duration()
+    void Dash()
     {
         HeroBase player = PlayerController.Player;
-        if (player.isFlying)
-        {
-            player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
-            player.isFlying = false;
-            player.rb.useGravity = true;           
-        }        
+        player.rb.AddForce(player.orientation.forward * boostForce * player.rb.mass , ForceMode.Impulse);
     }
-    void Boost()
-    {
-        HeroBase player = PlayerController.Player;
-        player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
-        player.isFlying = true;
-        player.rb.AddForce(Vector3.up * boostForce * player.rb.mass, ForceMode.Impulse);
-        player.rb.useGravity = false;
-    }
+    //scraping the flying ability for this character 
+    //public override void Ability1Duration()
+    //{
+    //    HeroBase player = PlayerController.Player;
+    //    if (player.isFlying)
+    //    {
+    //        player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
+    //        player.isFlying = false;
+    //        player.rb.useGravity = true;           
+    //    }        
+    //}
+    //void Boost()
+    //{
+    //    HeroBase player = PlayerController.Player;
+    //    player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
+    //    player.isFlying = true;
+    //    player.rb.AddForce(Vector3.up * boostForce * player.rb.mass, ForceMode.Impulse);
+    //    player.rb.useGravity = false;
+    //}
     public override void Ability2()
     {
-        HeroBase player = PlayerController.Player;
+
     }
     
     //public override void Ability3()

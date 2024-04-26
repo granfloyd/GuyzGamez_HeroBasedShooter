@@ -39,6 +39,8 @@ public class HeroBase : PlayerMovement
             PlayerController.Player.baseAbility1.UpdateTimer();
             PlayerController.Player.baseAbility2.UpdateTimer();
             PlayerController.Player.baseAbility3.UpdateTimer();
+            HeroUI.Instance.UpdateAbilityCD(baseAbility1, HeroUI.Instance.ability1Text);
+            HeroUI.Instance.UpdateAbilityCD(baseAbility2, HeroUI.Instance.ability2Text);
         }
         
         if (primaryFireTimer < recovery)

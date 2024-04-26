@@ -35,4 +35,16 @@ public class Ability
             timer = 0;
         }
     }
+    public float GetCooldownTimeLeft()
+    {
+        float timeLeft = cooldown - timer;
+        if (timeLeft > 0)
+        {
+            return timeLeft;
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

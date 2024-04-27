@@ -77,9 +77,7 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             SetDash(true);
-            //Boost();
             HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
-            //Invoke("Ability1Duration", PlayerController.Player.baseAbility1.duration);
         }
     }
     void SetDash(bool state)
@@ -110,26 +108,6 @@ public class Merlin : HeroBase
             Debug.Log("Dashing");
         }
     }
-
-    //scraping the flying ability for this character 
-    //public override void Ability1Duration()
-    //{
-    //    HeroBase player = PlayerController.Player;
-    //    if (player.isFlying)
-    //    {
-    //        player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
-    //        player.isFlying = false;
-    //        player.rb.useGravity = true;           
-    //    }        
-    //}
-    //void Boost()
-    //{
-    //    HeroBase player = PlayerController.Player;
-    //    player.rb.velocity = new Vector3(player.rb.velocity.x, 0, player.rb.velocity.z);
-    //    player.isFlying = true;
-    //    player.rb.AddForce(Vector3.up * boostForce * player.rb.mass, ForceMode.Impulse);
-    //    player.rb.useGravity = false;
-    //}
     public override void Ability2()
     {
 

@@ -2,19 +2,28 @@ using Newtonsoft.Json.Bson;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Merlin : HeroBase
 {
+    public enum Type
+    {
+        primary,
+        secondary
+    }
+    private int speedMultiplier;
     private float dashSpeed = 15f;
     private float dashDuration;
     private float eDuration;
     private Vector3 dashDirection;
     private bool isDashing;
     private const int PRIMARY_FIRE_DAMAGE = 10;
+    private const int SECONDARY_FIRE_DAMAGE = 50;
     private void Start()
     {
         if (IsOwner)
         {
+            speedMultiplier = 1;
             dashDuration = 0.5f;
             eDuration = 3f;
             PlayerCamera.iscamset = false;
@@ -55,28 +64,55 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            SpawnBulletServerRpc(player.primaryFireSpawnPos.position, player.orientation.localRotation, tempGunAngle);
+            SpawnBulletServerRpc(Type.primary,player.primaryFireSpawnPos.position, player.orientation.localRotation, tempGunAngle);
         }
     }
 
     [ServerRpc]
-    void SpawnBulletServerRpc(Vector3 position, Quaternion rotation, Vector3 velocity)
+    void SpawnBulletServerRpc(Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity)
     {
-        GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
+        switch(bulletType)
+        {
+            case Type.primary:
+                float primaryBulletSpeed = 70f;
+                GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
+                spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
+                AssignBulletToPlayer(spawnedPrimaryFire);
+                Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
+                rb.velocity = velocity * primaryBulletSpeed;
+                break;
+            case Type.secondary:
+                float secondaryBulletSpeed = 15f * speedMultiplier;
+                GameObject spawnedSecondaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
+                spawnedSecondaryFire.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE);
+                AssignBulletToPlayer(spawnedSecondaryFire);
+                Rigidbody rb2 = spawnedSecondaryFire.GetComponent<Rigidbody>();
+                rb2.velocity = velocity * secondaryBulletSpeed;
+                break;
 
-        spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
+        }
+        
+        
+        
+
+    }
+
+    void AssignBulletToPlayer(GameObject spawnedGameObject)
+    {
         // Spawn the bullet's NetworkObject
-        NetworkObject bulletNetworkObject = spawnedPrimaryFire.GetComponent<NetworkObject>();
+        NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
         bulletNetworkObject.SpawnWithOwnership(NetworkManager.LocalClientId);
-
-        Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
-        rb.velocity = velocity * 50f;
 
     }
 
     public override void SecondaryFire()
     {
-        
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+            SpawnBulletServerRpc(Type.secondary,player.primaryFireSpawnPos.position, player.orientation.localRotation, tempGunAngle);
+        }
     }
     
     public override void Ability1()
@@ -119,6 +155,7 @@ public class Merlin : HeroBase
             Debug.Log("using ability 2");
             HeroBase player = PlayerController.Player;
             player.gameObject.GetComponent<Modifiers>().isBonk = true;
+            speedMultiplier = 3;
             Invoke("UnnamedAbility2", eDuration);
             HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility2);
         }
@@ -129,6 +166,7 @@ public class Merlin : HeroBase
         {
             HeroBase player = PlayerController.Player;
             player.gameObject.GetComponent<Modifiers>().isBonk = false;
+            speedMultiplier = 1;
         }
         
     }

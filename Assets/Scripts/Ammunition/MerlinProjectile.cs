@@ -18,6 +18,7 @@ public class MerlinProjectile : GenericProjectile
     {
         if (other.gameObject.tag != "Player")
         {
+            Debug.Log("Collided with " + other.gameObject.name);
             rb.velocity = Vector3.zero;
         }
 

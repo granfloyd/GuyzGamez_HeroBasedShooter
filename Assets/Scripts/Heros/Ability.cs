@@ -7,17 +7,22 @@ public class Ability
     public float cooldown { get; set; }
     public float duration { get; set; }
     public float timer { get; set; }
-
+    public float durationTimer { get; set; }
     public Ability(float Cooldown, float Duration)
     {
         cooldown = Cooldown;
         duration = Duration;
-        timer = 0;
+        timer = cooldown;
+        durationTimer = 0;
     }
 
     public void UpdateTimer()
     {
-        if (timer < cooldown)
+        if (durationTimer > 0)
+        {
+            durationTimer -= Time.deltaTime;
+        }
+        else if (timer < cooldown)
         {
             timer += Time.deltaTime;
         }
@@ -25,7 +30,7 @@ public class Ability
 
     public bool IsReady()
     {
-        return timer >= cooldown;
+        return timer >= cooldown && durationTimer <= 0;
     }
 
     public void Use()
@@ -33,6 +38,7 @@ public class Ability
         if (IsReady())
         {
             timer = 0;
+            durationTimer = duration;
         }
     }
     public float GetCooldownTimeLeft()

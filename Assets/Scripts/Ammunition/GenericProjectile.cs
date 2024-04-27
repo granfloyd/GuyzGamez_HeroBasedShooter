@@ -22,12 +22,15 @@ public class GenericProjectile : NetworkBehaviour
             
         }
     }
-    public void SetSLD(float Speed,float Lifespan,int Damage)
+    public void SetDamage(int dmg)
     {
-        speed = Speed;
-        lifespan = Lifespan;
-        damage = Damage;
+        damage = dmg;
     }
+    public void SetLifeSpan(float life)
+    {
+        lifespan = life;
+    }
+
     public virtual void HandleCollision(Collision other) { }
     public virtual void HandleTrigger(Collider other) { }
     private void OnCollisionEnter(Collision other) { HandleCollision(other); }    

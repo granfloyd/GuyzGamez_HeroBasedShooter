@@ -7,9 +7,10 @@ public class MerlinProjectile : GenericProjectile
 {
     void Start()
     {
-        SetSLD(100, 2, 10);
+        SetLifeSpan(2);
+        Debug.Log("MerlinProjectile Start(");
         rb = GetComponent<Rigidbody>();
-        ServerDelete(false);
+        ServerDelete(false);        
         
     }
 

@@ -24,8 +24,8 @@ public class HeroBase : PlayerMovement
     [Header("SecondaryFire")]
     [SerializeField] public float secondaryFireTimer;
 
-    public Ability baseAbility1 { get; set; }
-    public Ability baseAbility2{ get; set; }
+    [SerializeField] public Ability baseAbility1 { get; set; }
+    [SerializeField] public Ability baseAbility2{ get; set; }
     public Ability baseAbility3{ get; set; }   
    
     [SerializeField] public float ability3Charge;
@@ -36,11 +36,11 @@ public class HeroBase : PlayerMovement
 
         if(PlayerController.Player != null && IsOwner)
         {
-            PlayerController.Player.baseAbility1.UpdateTimer();
-            PlayerController.Player.baseAbility2.UpdateTimer();
-            PlayerController.Player.baseAbility3.UpdateTimer();
-            HeroUI.Instance.UpdateAbilityCD(baseAbility1, HeroUI.Instance.ability1Text);
-            HeroUI.Instance.UpdateAbilityCD(baseAbility2, HeroUI.Instance.ability2Text);
+            //PlayerController.Player.baseAbility1.UpdateTimer();
+            //PlayerController.Player.baseAbility2.UpdateTimer();
+            //PlayerController.Player.baseAbility3.UpdateTimer();
+            //HeroUI.Instance.UpdateAbilityCD(baseAbility1, HeroUI.Instance.ability1Text);
+            ///HeroUI.Instance.UpdateAbilityCD(baseAbility2, HeroUI.Instance.ability2Text);
         }
         
         if (primaryFireTimer < recovery)

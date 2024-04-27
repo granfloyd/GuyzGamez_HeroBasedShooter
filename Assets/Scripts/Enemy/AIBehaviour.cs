@@ -44,12 +44,12 @@ public class AIBehaviour : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, directionToPlayer, out hit, viewDistance, PlayerLayer))
             {
-                Debug.Log("Player is not in sight");
+                //Debug.Log("Player is not in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.red);
             }
             else//enemy has los on player
             {
-                Debug.Log("Player is in sight");
+                //Debug.Log("Player is in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.green);
             }
         }

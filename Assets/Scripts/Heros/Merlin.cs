@@ -1,21 +1,25 @@
 using Newtonsoft.Json.Bson;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
 public class Merlin : HeroBase
 {
-    public float boostForce;
     private float dashSpeed = 15f;
-    private float dashDuration = 0.5f;
+    private float dashDuration;
+    private float eDuration;
     private Vector3 dashDirection;
     private bool isDashing;
+    private const int PRIMARY_FIRE_DAMAGE = 10;
     private void Start()
     {
         if (IsOwner)
         {
+            dashDuration = 0.5f;
+            eDuration = 3f;
             PlayerCamera.iscamset = false;
-            PlayerController.Player.baseAbility1 = new Ability(5f, 0.5f);
-            PlayerController.Player.baseAbility2 = new Ability(15f, 3f); 
+            PlayerController.Player.baseAbility1 = new Ability(3f, dashDuration);
+            PlayerController.Player.baseAbility2 = new Ability(7f, eDuration); 
             PlayerController.Player.baseAbility3 = new Ability(20f, 10f);
             HeroBase player = PlayerController.Player;
             HeroUI.Instance.SetUltSlider();
@@ -24,7 +28,6 @@ public class Merlin : HeroBase
                 Debug.LogError("Player is not set yet.");
                 return;
             }
-            boostForce = 30f;
             isDashing = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -35,14 +38,16 @@ public class Merlin : HeroBase
         base.Update();
         if (IsOwner)
         {
+            PlayerController.Player.baseAbility1.UpdateTimer();
+            PlayerController.Player.baseAbility2.UpdateTimer();
+            PlayerController.Player.baseAbility3.UpdateTimer();
             HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility1, HeroUI.Instance.ability1Text);
             HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility2, HeroUI.Instance.ability2Text);
-            if (PlayerController.Player.baseAbility1.duration >= 0)
+            if (PlayerController.Player.baseAbility2.duration >= 0)
             {
-                HeroUI.Instance.UpdateDurationSlider(PlayerController.Player.baseAbility1);
+                HeroUI.Instance.UpdateDurationSlider(PlayerController.Player.baseAbility2);
             }
-            DashMovement();
-            
+            DashMovement();            
         }
     }
     public override void PrimaryFire()
@@ -59,12 +64,14 @@ public class Merlin : HeroBase
     {
         GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
 
+        spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
         // Spawn the bullet's NetworkObject
         NetworkObject bulletNetworkObject = spawnedPrimaryFire.GetComponent<NetworkObject>();
         bulletNetworkObject.SpawnWithOwnership(NetworkManager.LocalClientId);
 
         Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
         rb.velocity = velocity * 50f;
+
     }
 
     public override void SecondaryFire()
@@ -76,8 +83,7 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
-            SetDash(true);
-            HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
+            SetDash(true);            
         }
     }
     void SetDash(bool state)
@@ -87,7 +93,6 @@ public class Merlin : HeroBase
             isDashing = true;
             Vector3 rayOrigin = PlayerController.Player.orientation.position;
             dashDirection = Camera.main.gameObject.transform.forward;
-            Debug.DrawRay(rayOrigin, dashDirection * 10, Color.red);
             Invoke("StopDashing", dashDuration);
         }
         else
@@ -105,14 +110,29 @@ public class Merlin : HeroBase
         {            
             HeroBase player = PlayerController.Player;
             player.rb.velocity = dashDirection * dashSpeed;
-            Debug.Log("Dashing");
         }
     }
     public override void Ability2()
     {
-
+        if (IsOwner)
+        {
+            Debug.Log("using ability 2");
+            HeroBase player = PlayerController.Player;
+            player.gameObject.GetComponent<Modifiers>().isBonk = true;
+            Invoke("UnnamedAbility2", eDuration);
+            HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility2);
+        }
     }
-    
+    void UnnamedAbility2()
+    {
+        if(IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+            player.gameObject.GetComponent<Modifiers>().isBonk = false;
+        }
+        
+    }
+
     //public override void Ability3()
     //{
     //    if (IsOwner)
@@ -124,4 +144,5 @@ public class Merlin : HeroBase
     //        }
     //    }
     //}
+
 }

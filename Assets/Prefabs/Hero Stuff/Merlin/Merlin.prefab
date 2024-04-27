@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 765078473743841145}
   - component: {fileID: 4255925884865736900}
   - component: {fileID: 4701682851179543534}
+  - component: {fileID: 6835992759453817625}
   - component: {fileID: -6397019945846295367}
   - component: {fileID: 1601990111586344745}
   - component: {fileID: 6487457442385066224}
@@ -107,6 +108,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5848897105420163867}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6835992759453817625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f49d3eedf65f546903125d53af0838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-6397019945846295367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +170,6 @@ MonoBehaviour:
   secondaryFireTimer: 0
   ability3Charge: 0
   ability3MaxCharge: 40
-  boostForce: 40
 --- !u!114 &1601990111586344745
 MonoBehaviour:
   m_ObjectHideFlags: 0

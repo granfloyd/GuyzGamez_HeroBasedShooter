@@ -1857,10 +1857,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3042046399391417659, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3042046399391417659, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5399790850894594135, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
         type: 3}
       propertyPath: m_Name
       value: HUD
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752549425253844748, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5805671850477275806, guid: 435d7f0e24cc3a14385ae2b620bc1c6a,
         type: 3}

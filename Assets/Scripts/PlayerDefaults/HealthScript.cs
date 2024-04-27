@@ -12,6 +12,7 @@ public class HealthScript : NetworkBehaviour
     public TMP_Text healthText; // Replace Slider with TMP_Text
     public bool isPlayer;
 
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -40,7 +41,10 @@ public class HealthScript : NetworkBehaviour
     public void CalculateDamage(int damage)
     {
         Debug.Log("Calculating damage");
-        ApplyDamageServerRpc(damage);
+        Debug.Log("Damage un modded: " + damage);
+        int calculatedDamage = PlayerController.Player.gameObject.GetComponent<Modifiers>().ApplyModifier(damage);
+        Debug.Log("Damage modded: " + calculatedDamage);
+        ApplyDamageServerRpc(calculatedDamage);
     }
 
     [ServerRpc(RequireOwnership = false)]

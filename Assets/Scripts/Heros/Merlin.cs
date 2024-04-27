@@ -5,13 +5,16 @@ using UnityEngine;
 public class Merlin : HeroBase
 {
     public float boostForce;
-    
+    private float dashSpeed = 15f;
+    private float dashDuration = 0.5f;
+    private Vector3 dashDirection;
+    private bool isDashing;
     private void Start()
     {
         if (IsOwner)
         {
             PlayerCamera.iscamset = false;
-            PlayerController.Player.baseAbility1 = new Ability(5f, 0f);
+            PlayerController.Player.baseAbility1 = new Ability(5f, 0.5f);
             PlayerController.Player.baseAbility2 = new Ability(15f, 3f); 
             PlayerController.Player.baseAbility3 = new Ability(20f, 10f);
             HeroBase player = PlayerController.Player;
@@ -21,7 +24,8 @@ public class Merlin : HeroBase
                 Debug.LogError("Player is not set yet.");
                 return;
             }
-            boostForce = 70f;
+            boostForce = 30f;
+            isDashing = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
         
@@ -31,15 +35,14 @@ public class Merlin : HeroBase
         base.Update();
         if (IsOwner)
         {
+            HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility1, HeroUI.Instance.ability1Text);
+            HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility2, HeroUI.Instance.ability2Text);
             if (PlayerController.Player.baseAbility1.duration >= 0)
             {
                 HeroUI.Instance.UpdateDurationSlider(PlayerController.Player.baseAbility1);
             }
-        }
-        if (IsOwner)
-        {
-            HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility1, HeroUI.Instance.ability1Text);
-            HeroUI.Instance.UpdateAbilityCD(PlayerController.Player.baseAbility2, HeroUI.Instance.ability2Text);
+            DashMovement();
+            
         }
     }
     public override void PrimaryFire()
@@ -73,17 +76,41 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
-            Dash();
+            SetDash(true);
             //Boost();
-            //HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
+            HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility1);
             //Invoke("Ability1Duration", PlayerController.Player.baseAbility1.duration);
         }
     }
-    void Dash()
+    void SetDash(bool state)
     {
-        HeroBase player = PlayerController.Player;
-        player.rb.AddForce(player.orientation.forward * boostForce * player.rb.mass , ForceMode.Impulse);
+        if(state)
+        {
+            isDashing = true;
+            Vector3 rayOrigin = PlayerController.Player.orientation.position;
+            dashDirection = Camera.main.gameObject.transform.forward;
+            Debug.DrawRay(rayOrigin, dashDirection * 10, Color.red);
+            Invoke("StopDashing", dashDuration);
+        }
+        else
+        {
+            isDashing = false;
+        }
     }
+    void StopDashing()
+    {
+        SetDash(false);
+    }
+    void DashMovement()
+    {
+        if (isDashing)
+        {            
+            HeroBase player = PlayerController.Player;
+            player.rb.velocity = dashDirection * dashSpeed;
+            Debug.Log("Dashing");
+        }
+    }
+
     //scraping the flying ability for this character 
     //public override void Ability1Duration()
     //{

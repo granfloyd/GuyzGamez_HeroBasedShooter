@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 2651883187976737843}
   - component: {fileID: -6569279843921154052}
   - component: {fileID: 5264867310349337250}
+  - component: {fileID: -8211944734249271377}
   m_Layer: 0
   m_Name: RectangleMan
   m_TagString: Player
@@ -205,6 +206,19 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-8211944734249271377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f49d3eedf65f546903125d53af0838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBonk: 0
 --- !u!1 &7043148051412231992
 GameObject:
   m_ObjectHideFlags: 0

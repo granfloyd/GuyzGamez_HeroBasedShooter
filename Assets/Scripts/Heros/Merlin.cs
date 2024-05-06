@@ -90,12 +90,7 @@ public class Merlin : HeroBase
                 Rigidbody rb2 = spawnedSecondaryFire.GetComponent<Rigidbody>();
                 rb2.velocity = velocity * secondaryBulletSpeed;
                 break;
-
         }
-        
-        
-        
-
     }
 
     void AssignBulletToPlayer(GameObject spawnedGameObject)
@@ -143,9 +138,11 @@ public class Merlin : HeroBase
     void DashMovement()
     {
         if (isDashing)
-        {            
+        {
             HeroBase player = PlayerController.Player;
-            player.rb.velocity = dashDirection * dashSpeed;
+            Vector3 dashMovement = dashDirection * dashSpeed * Time.deltaTime;
+            player.verticalVelocity = 0;
+            player.controller.Move(dashMovement);
         }
     }
     public override void Ability2()
@@ -154,7 +151,9 @@ public class Merlin : HeroBase
         {
             Debug.Log("using ability 2");
             HeroBase player = PlayerController.Player;
-            player.gameObject.GetComponent<Modifiers>().isBonk = true;
+            Modifiers mod = player.gameObject.GetComponent<Modifiers>();
+            mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
+            mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
             speedMultiplier = 3;
             Invoke("UnnamedAbility2", eDuration);
             HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility2);
@@ -165,7 +164,8 @@ public class Merlin : HeroBase
         if(IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            player.gameObject.GetComponent<Modifiers>().isBonk = false;
+            Modifiers mod = player.gameObject.GetComponent<Modifiers>();
+            mod.RemoveModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
             speedMultiplier = 1;
         }
         

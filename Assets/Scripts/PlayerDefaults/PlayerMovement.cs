@@ -30,16 +30,20 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private bool isGrounded;
 
     public Transform orientation;
-    public Rigidbody rb;
-
+    
     public float horizontalInput;
     public float verticalInput;
 
     Vector3 moveDirection;
-    
+
+    [SerializeField] public CharacterController controller;
+    [SerializeField] public float verticalVelocity;
+    private float gravityValue = -9.81f;
+    private float lowGravityValue = -4.81f;
+
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        controller = GetComponent<CharacterController>();
     }
     protected void Update()
     {
@@ -48,7 +52,6 @@ public class PlayerMovement : NetworkBehaviour
 
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
-        SpeedControl();
 
         if(isGrounded)
         {
@@ -56,7 +59,7 @@ public class PlayerMovement : NetworkBehaviour
             networkAnimator.Animator.SetBool("isFalling", false);
         }
         else
-        {
+        {            
             networkAnimator.Animator.SetBool("isGrounded", false);
             networkAnimator.Animator.SetBool("isFalling", true);
         }
@@ -68,8 +71,6 @@ public class PlayerMovement : NetworkBehaviour
     }
     public void MyInput()
     {
-        
-
         HeroBase player = PlayerController.Player;
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
@@ -81,30 +82,6 @@ public class PlayerMovement : NetworkBehaviour
             {
                 Jump();
                 Invoke("ResetJump", jumpCD);
-            }
-        }
-        
-        if (player.isFlying)
-        {
-            rb.drag = 1;
-            if (isMovingUp)
-            {
-                MakePlayerMoveUp();
-            }
-            else if (isMovingDown)
-            {
-                MakePlayerMoveDown();
-            }
-        }
-        else
-        {
-            if (isGrounded)
-            {
-                rb.drag = groundDrag;
-            }
-            else
-            {
-                rb.drag = 1;
             }
         }
     }
@@ -123,45 +100,26 @@ public class PlayerMovement : NetworkBehaviour
             networkAnimator.Animator.SetBool("isMoving", false);
         }
 
-        //on ground
         if (isGrounded)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * groundDrag * rb.mass, ForceMode.Force);
+            controller.Move(moveDirection * moveSpeed * Time.deltaTime);
         }
-        //in air
         else
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier * rb.mass, ForceMode.Force);
+            controller.Move(moveDirection * moveSpeed * airMultiplier * Time.deltaTime);
+            if(verticalVelocity > gravityValue)
+            {
+                verticalVelocity += gravityValue * Time.deltaTime;
+            }
         }
-    }
 
-    void SpeedControl()
-    {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-
-        //limit velocity if needed
-        if (flatVel.magnitude > moveSpeed)
-        {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-        }
+        controller.Move(new Vector3(0, verticalVelocity, 0) * Time.deltaTime);
     }
     private void Jump()
     {
         networkAnimator.Animator.SetBool("isJumping", true);
-        isJumping = true;
-        rb.drag = 1;
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        rb.AddForce(Vector3.up * jumpForce * rb.mass, ForceMode.Impulse);
+        verticalVelocity = jumpForce;
         isReadyToJump = false;
-    }
-    private void MakePlayerMoveUp()
-    {
-        rb.AddForce(Vector3.up * flySpeed, ForceMode.Force);
-    }
-    private void MakePlayerMoveDown()
-    {
-        rb.AddForce(Vector3.down * flySpeed, ForceMode.Force);
     }
     private void ResetJump()
     {

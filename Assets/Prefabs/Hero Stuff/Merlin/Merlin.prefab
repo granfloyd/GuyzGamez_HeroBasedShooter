@@ -40,13 +40,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 765078473743841145}
-  - component: {fileID: 4255925884865736900}
   - component: {fileID: 4701682851179543534}
   - component: {fileID: 6835992759453817625}
   - component: {fileID: -6397019945846295367}
   - component: {fileID: 1601990111586344745}
   - component: {fileID: 6487457442385066224}
   - component: {fileID: -3715856479696133166}
+  - component: {fileID: 7592422026553370255}
   m_Layer: 6
   m_Name: Merlin
   m_TagString: Player
@@ -73,33 +73,6 @@ Transform:
   - {fileID: 5586446932242573441}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -7.246, z: 0}
---- !u!54 &4255925884865736900
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5848897105420163867}
-  serializedVersion: 4
-  m_Mass: 60
-  m_Drag: 6
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
 --- !u!33 &4701682851179543534
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -120,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f49d3eedf65f546903125d53af0838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiersList: 
 --- !u!114 &-6397019945846295367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,8 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkAnimator: {fileID: 3696186930139388542}
-  moveSpeed: 7
-  flySpeed: 7
+  moveSpeed: 6
+  flySpeed: 5
   groundDrag: 6
   jumpForce: 4
   jumpCD: 0.75
@@ -151,9 +125,10 @@ MonoBehaviour:
     m_Bits: 8
   isGrounded: 1
   orientation: {fileID: 765078473743841145}
-  rb: {fileID: 4255925884865736900}
   horizontalInput: 0
   verticalInput: 0
+  controller: {fileID: 7592422026553370255}
+  verticalVelocity: 0
   heroId: 0
   health: 200
   recovery: 0.5
@@ -237,9 +212,35 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!143 &7592422026553370255
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.7
+  m_Radius: 0.2
+  m_SlopeLimit: 90
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7043148051412231992
 GameObject:
@@ -1330,6 +1331,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 7663762520359749010, guid: b332da67cb6656e49b5c4164cee8a057,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663762520359749010, guid: b332da67cb6656e49b5c4164cee8a057,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7717437163697615030, guid: b332da67cb6656e49b5c4164cee8a057,
         type: 3}
       propertyPath: m_Layer
@@ -1430,6 +1441,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8402723145484208059, guid: b332da67cb6656e49b5c4164cee8a057,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402723145484208059, guid: b332da67cb6656e49b5c4164cee8a057,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8504735216725770395, guid: b332da67cb6656e49b5c4164cee8a057,
         type: 3}
       propertyPath: m_Layer
@@ -1464,6 +1485,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8863977350543384009, guid: b332da67cb6656e49b5c4164cee8a057,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8994746790164556458, guid: b332da67cb6656e49b5c4164cee8a057,
         type: 3}

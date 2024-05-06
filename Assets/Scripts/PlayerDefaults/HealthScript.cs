@@ -42,7 +42,7 @@ public class HealthScript : NetworkBehaviour
     {
         Debug.Log("Calculating damage");
         Debug.Log("Damage un modded: " + damage);
-        int calculatedDamage = PlayerController.Player.gameObject.GetComponent<Modifiers>().ApplyModifier(damage);
+        int calculatedDamage = PlayerController.Player.gameObject.GetComponent<Modifiers>().ApplyToDamage(damage);
         Debug.Log("Damage modded: " + calculatedDamage);
         ApplyDamageServerRpc(calculatedDamage);
     }

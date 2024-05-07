@@ -45,8 +45,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnPrimaryFire(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started || context.performed) // Add context.performed here
         {
+            Debug.Log("holding");
             if (currentHero == null)
             {
                 return;
@@ -66,6 +67,10 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+        }
+        if (context.canceled)
+        {
+            Debug.Log("released");
         }
     }
     public void OnSecondaryFire(InputAction.CallbackContext context)
@@ -275,7 +280,7 @@ public class PlayerController : MonoBehaviour
         }
         if (primaryFireAction != null)
         {
-            primaryFireAction.performed -= OnPrimaryFire;
+            primaryFireAction.canceled -= OnPrimaryFire;
         }
         if (secondaryFireAction != null)
         {

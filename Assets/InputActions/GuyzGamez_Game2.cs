@@ -47,12 +47,12 @@ public partial class @GuyzGamez_Game2: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""PrimaryFire"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""3d23ca26-5424-4088-a991-c8773c02a421"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""SecondaryFire"",
@@ -288,7 +288,7 @@ public partial class @GuyzGamez_Game2: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""860183f7-9f29-4f13-b124-6d47345036e3"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press(pressPoint=1.401298E-45)"",
+                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=2)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""PrimaryFire"",

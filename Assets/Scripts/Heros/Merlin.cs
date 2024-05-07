@@ -24,8 +24,8 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             speedMultiplier = 1;
-            dashDuration = 0.5f;
-            eDuration = 3f;
+            dashDuration = 0.7f;
+            eDuration = 5f;
             PlayerCamera.iscamset = false;
             PlayerController.Player.baseAbility1 = new Ability(3f, dashDuration);
             PlayerController.Player.baseAbility2 = new Ability(7f, eDuration); 

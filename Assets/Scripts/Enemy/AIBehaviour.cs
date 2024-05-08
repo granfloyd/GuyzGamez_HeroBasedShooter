@@ -15,6 +15,7 @@ public class AIBehaviour : MonoBehaviour
         Idle,
         Patrol,
         Search,
+        Found,
         Chase,
         Attack,
         Dead
@@ -44,18 +45,21 @@ public class AIBehaviour : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, directionToPlayer, out hit, viewDistance, PlayerLayer))
             {
-                //Debug.Log("Player is not in sight");
+                SetState(State.Search);
+                Debug.Log("Player is not in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.red);
             }
             else//enemy has los on player
             {
-                //Debug.Log("Player is in sight");
+                SetState(State.Found);
+                Debug.Log("Player is in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.green);
             }
         }
     }
     void MoveToTargetPosition(Vector3 pos)
     {
+        targetPosition = pos;
         float speed = 5f;
         transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
     }
@@ -71,6 +75,9 @@ public class AIBehaviour : MonoBehaviour
                 break;
             case State.Chase:
                 break;
+            case State.Found:
+                MoveToTargetPosition(targetPosition);
+                    break;
             case State.Attack:
                 break;
             case State.Dead:

@@ -17,46 +17,49 @@ public class MerlinProjectile : GenericProjectile
 
     public override void HandleCollision(Collision other)
     {
-        if (other.gameObject.tag != "Player")
+        if(IsServer)
         {
-            Debug.Log("Collided with " + other.gameObject.name);
-            rb.velocity = Vector3.zero;
-        }
-
-        if(other.gameObject.tag == "Enemy1")
-        {
-            HeroUI.Instance.UpdateUltSlider(10);
-            HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
-            enemyhp.CalculateDamage(damage);
-
-            if (!isSecondaryFire)
+            if (other.gameObject.tag != "Player")
             {
-                if(IsServer)
-                {
-                    if(ownerID == 0)
-                    {
-                        PlayerController.Player.GetComponent<Merlin>().AddToRage(damage);
-                        Debug.Log("sent rage to server");
-                    }
-                    else
-                    {
-                        ClientSendRageClientRpc(ownerID);
-                        Debug.Log("sent rage to client");
-                    }
-                }                             
+                Debug.Log("Collided with " + other.gameObject.name);
+                rb.velocity = Vector3.zero;
             }
-            ServerDelete(true);
+
+            if (other.gameObject.tag == "Enemy1")
+            {
+                HeroUI.Instance.UpdateUltSlider(10);
+                HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
+                enemyhp.CalculateDamage(damage);
+
+                if (!isSecondaryFire)
+                {
+                    if (IsServer)
+                    {
+                        if (ownerID == 0)
+                        {
+                            PlayerController.Player.GetComponent<Merlin>().AddToRage(damage);
+                            Debug.Log("sent rage to server");
+                        }
+                        else
+                        {
+                            ClientSendRageClientRpc(ownerID,damage);
+                            Debug.Log("sent rage to client");
+                        }
+                    }
+                }
+                ServerDelete(true);
+            }
         }
+        
     }
 
     [ClientRpc]
-    private void ClientSendRageClientRpc(ulong clientid)
+    private void ClientSendRageClientRpc(ulong clientid,int damageToSend)
     {
         if(NetworkManager.Singleton.LocalClientId == clientid)
         {
-            Debug.Log("yay");
-            PlayerController.Player.GetComponent<Merlin>().AddToRage(10);
-            Debug.Log("temp fix 10");
+            PlayerController.Player.GetComponent<Merlin>().AddToRage(damageToSend);
+            Debug.Log("adding rage to this client"+ clientid);
         }
         
 

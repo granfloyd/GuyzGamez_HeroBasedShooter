@@ -72,12 +72,17 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, Type.primary,player.primaryFireSpawnPos.position, player.orientation.localRotation, player.tempGunAngle);
+            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
+                Type.primary,
+                player.primaryFireSpawnPos.position,
+                player.orientation.localRotation,
+                player.tempGunAngle,
+                0);//no bonus dmg 
         }
     }
 
     [ServerRpc]
-    void SpawnBulletServerRpc(ulong clientId, Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity)
+    void SpawnBulletServerRpc(ulong clientId, Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity,int rageValue)
     {
         switch(bulletType)
         {
@@ -97,16 +102,31 @@ public class Merlin : HeroBase
                 spawnedSecondaryFire.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
                 spawnedSecondaryFire.GetComponent<MerlinProjectile>().isSecondaryFire = true;
                 spawnedSecondaryFire.GetComponent<MerlinProjectile>().ownerID = clientId;
-                UseRage();//use rage bonus regardless of hitting enemy
-                spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + Rage);
+
+                //UseRage();//use rage bonus regardless of hitting enemy
+                spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + rageValue);
                 ResetRage();//after adding rage to thing set it to 0
                 AssignBulletToPlayer(spawnedSecondaryFire);
                 rb = spawnedSecondaryFire.GetComponent<Rigidbody>();
                 rb.velocity = velocity * secondaryBulletSpeed;
+                if(clientId != 0)
+                {
+                    Debug.Log("reseting client rage value ");
+                    ClientResetRageClientRpc(clientId);
+                    //send this to client 
+                }
                 break;
         }
     }
-
+    [ClientRpc]
+    private void ClientResetRageClientRpc(ulong clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            Debug.Log("calling reset");
+            ResetRage();
+        }
+    }
     void AssignBulletToPlayer(GameObject spawnedGameObject)
     {
         NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
@@ -117,8 +137,14 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
+            UseRage();
             HeroBase player = PlayerController.Player;
-            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, Type.secondary,player.primaryFireSpawnPos.position, player.orientation.localRotation, player.tempGunAngle);
+            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,//owner id
+                Type.secondary,//type
+                player.primaryFireSpawnPos.position,
+                player.orientation.localRotation,
+                player.tempGunAngle,//direction
+                Rage);//bonusdmg
         }
     }
     public void AddToRage(int addTo)

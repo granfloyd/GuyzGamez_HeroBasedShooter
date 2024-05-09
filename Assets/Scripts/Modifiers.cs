@@ -46,6 +46,6 @@ public class Modifiers : MonoBehaviour
 }
 public static class ModifierSignifiers
 {
-    public const float MERLIN_EDMG_MULTIPLIER = 2f;
+    public const float MERLIN_EDMG_MULTIPLIER = 1f;
     public const float SOMETHINGELSE_DEBUFF = 0.50f;
 }

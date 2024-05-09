@@ -47,11 +47,11 @@ public partial class @GuyzGamez_Game2: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""PrimaryFire"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""3d23ca26-5424-4088-a991-c8773c02a421"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -60,8 +60,8 @@ public partial class @GuyzGamez_Game2: IInputActionCollection2, IDisposable
                     ""id"": ""654824ec-7c1a-4d08-a739-042315c0aba2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Ability1"",
@@ -288,7 +288,7 @@ public partial class @GuyzGamez_Game2: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""860183f7-9f29-4f13-b124-6d47345036e3"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=2)"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""PrimaryFire"",
@@ -299,7 +299,7 @@ public partial class @GuyzGamez_Game2: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""1cb56dd1-4783-47ab-bcc6-6f962ddba348"",
                     ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Press"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SecondaryFire"",

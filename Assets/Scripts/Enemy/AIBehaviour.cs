@@ -46,13 +46,13 @@ public class AIBehaviour : MonoBehaviour
             if (Physics.Raycast(transform.position, directionToPlayer, out hit, viewDistance, PlayerLayer))
             {
                 SetState(State.Search);
-                Debug.Log("Player is not in sight");
+                //Debug.Log("Player is not in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.red);
             }
             else//enemy has los on player
             {
                 SetState(State.Found);
-                Debug.Log("Player is in sight");
+                //Debug.Log("Player is in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.green);
             }
         }

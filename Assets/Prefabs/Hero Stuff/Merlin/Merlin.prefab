@@ -145,6 +145,15 @@ MonoBehaviour:
   secondaryFireTimer: 0
   ability3Charge: 0
   ability3MaxCharge: 40
+  speedMultiplier: 0
+  dashSpeed: 15
+  dashDuration: 0
+  eDuration: 0
+  dashDirection: {x: 0, y: 0, z: 0}
+  isDashing: 0
+  isEActive: 0
+  Rage: 0
+  playerID: 0
 --- !u!114 &1601990111586344745
 MonoBehaviour:
   m_ObjectHideFlags: 0

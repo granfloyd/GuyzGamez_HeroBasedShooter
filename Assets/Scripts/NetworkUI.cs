@@ -151,7 +151,17 @@ public class NetworkUI : MonoBehaviour
     {
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
-            //SetPlayerController();
+            if(Lobby.PLAYER_TWO == 0)
+            {
+                Debug.Log("player two joined");
+                Lobby.PLAYER_TWO = clientId;
+                Debug.Log(Lobby.PLAYER_TWO);
+            }
+            else if(Lobby.PLAYER_THREE == 0)
+            {
+                Debug.Log("player three joined");
+                Lobby.PLAYER_THREE = clientId;
+            }
         }
     }
 }

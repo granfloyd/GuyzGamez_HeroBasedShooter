@@ -11,19 +11,23 @@ public class Merlin : HeroBase
         primary,
         secondary
     }
-    private int speedMultiplier;
-    private float dashSpeed = 15f;
-    private float dashDuration;
-    private float eDuration;
-    private Vector3 dashDirection;
-    private bool isDashing;
-    private const int PRIMARY_FIRE_DAMAGE = 10;
-    private const int SECONDARY_FIRE_DAMAGE = 50;
+    [SerializeField] private float speedMultiplier;
+    [SerializeField] private float dashSpeed = 15f;
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float eDuration;
+    [SerializeField] private Vector3 dashDirection;
+    [SerializeField] private bool isDashing;
+    [SerializeField] private bool isEActive;
+    [SerializeField] private const int PRIMARY_FIRE_DAMAGE = 10;
+    [SerializeField] private const int SECONDARY_FIRE_DAMAGE = 50;
+
+    [SerializeField] private int Rage = 0;
     private void Start()
     {
         if (IsOwner)
         {
-            speedMultiplier = 1;
+            Debug.Log("calling start");
+            speedMultiplier = 15f;
             dashDuration = 0.7f;
             eDuration = 5f;
             PlayerCamera.iscamset = false;
@@ -32,12 +36,15 @@ public class Merlin : HeroBase
             PlayerController.Player.baseAbility3 = new Ability(20f, 10f);
             HeroBase player = PlayerController.Player;
             HeroUI.Instance.SetUltSlider();
+            HeroUI.Instance.SetSomethingText(Rage.ToString());
             if (player == null)
             {
                 Debug.LogError("Player is not set yet.");
                 return;
             }
             isDashing = false;
+            isEActive = false;
+
             Cursor.lockState = CursorLockMode.Locked;
         }
         
@@ -56,7 +63,8 @@ public class Merlin : HeroBase
             {
                 HeroUI.Instance.UpdateDurationSlider(PlayerController.Player.baseAbility2);
             }
-            DashMovement();            
+            DashMovement();
+            
         }
     }
     public override void PrimaryFire()
@@ -64,41 +72,45 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            SpawnBulletServerRpc(Type.primary,player.primaryFireSpawnPos.position, player.orientation.localRotation, tempGunAngle);
+            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, Type.primary,player.primaryFireSpawnPos.position, player.orientation.localRotation, player.tempGunAngle);
         }
     }
 
     [ServerRpc]
-    void SpawnBulletServerRpc(Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity)
+    void SpawnBulletServerRpc(ulong clientId, Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity)
     {
         switch(bulletType)
         {
             case Type.primary:
                 float primaryBulletSpeed = 70f;
+                Debug.Log("coming from" + clientId);
                 GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
-                spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
+                spawnedPrimaryFire.GetComponent<MerlinProjectile>().ownerID = clientId;
+                spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);                
                 AssignBulletToPlayer(spawnedPrimaryFire);
                 Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
                 rb.velocity = velocity * primaryBulletSpeed;
                 break;
             case Type.secondary:
-                float secondaryBulletSpeed = 15f * speedMultiplier;
+                float secondaryBulletSpeed = 50f;
                 GameObject spawnedSecondaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
                 spawnedSecondaryFire.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-                spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE);
+                spawnedSecondaryFire.GetComponent<MerlinProjectile>().isSecondaryFire = true;
+                spawnedSecondaryFire.GetComponent<MerlinProjectile>().ownerID = clientId;
+                UseRage();//use rage bonus regardless of hitting enemy
+                spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + Rage);
+                ResetRage();//after adding rage to thing set it to 0
                 AssignBulletToPlayer(spawnedSecondaryFire);
-                Rigidbody rb2 = spawnedSecondaryFire.GetComponent<Rigidbody>();
-                rb2.velocity = velocity * secondaryBulletSpeed;
+                rb = spawnedSecondaryFire.GetComponent<Rigidbody>();
+                rb.velocity = velocity * secondaryBulletSpeed;
                 break;
         }
     }
 
     void AssignBulletToPlayer(GameObject spawnedGameObject)
     {
-        // Spawn the bullet's NetworkObject
         NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
         bulletNetworkObject.SpawnWithOwnership(NetworkManager.LocalClientId);
-
     }
 
     public override void SecondaryFire()
@@ -106,10 +118,48 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            SpawnBulletServerRpc(Type.secondary,player.primaryFireSpawnPos.position, player.orientation.localRotation, tempGunAngle);
+            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, Type.secondary,player.primaryFireSpawnPos.position, player.orientation.localRotation, player.tempGunAngle);
         }
     }
-    
+    public void AddToRage(int addTo)
+    {
+            if (isEActive)
+            addTo *= 2;
+
+        Rage += addTo;
+        
+        if (Rage >= 100)
+        {
+            Rage = 100;
+            HeroUI.Instance.SetSomethingText(Rage.ToString());
+        }
+        else
+        {
+            HeroUI.Instance.SetSomethingText(Rage.ToString());
+        }
+    }
+    private int UseRage()
+    {
+        if (Rage > 0)
+        {
+            if (isEActive)
+            {
+                return Rage *= 2;
+            }
+            else
+            {
+                return Rage;
+            }
+
+        } 
+        //feels bad you have no rage
+        return Rage;
+    }
+    private void ResetRage()
+    {
+        Rage = 0;
+        HeroUI.Instance.SetSomethingText(Rage.ToString());
+    }
     public override void Ability1()
     {
         if (IsOwner)
@@ -150,11 +200,11 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             Debug.Log("using ability 2");
+            isEActive = true;
             HeroBase player = PlayerController.Player;
             Modifiers mod = player.gameObject.GetComponent<Modifiers>();
             mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
-            mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
-            speedMultiplier = 3;
+            speedMultiplier = 50f;
             Invoke("UnnamedAbility2", eDuration);
             HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility2);
         }
@@ -164,9 +214,10 @@ public class Merlin : HeroBase
         if(IsOwner)
         {
             HeroBase player = PlayerController.Player;
+            isEActive = false;
             Modifiers mod = player.gameObject.GetComponent<Modifiers>();
             mod.RemoveModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
-            speedMultiplier = 1;
+            speedMultiplier = 15f;
         }
         
     }

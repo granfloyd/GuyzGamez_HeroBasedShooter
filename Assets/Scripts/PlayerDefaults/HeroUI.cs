@@ -10,6 +10,7 @@ public class HeroUI : MonoBehaviour
     [Header("Player Stuff")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider ability3chargeSlider;
+    [SerializeField] public TMP_Text SomethingText;
 
     [Header("Duration Slider")]
     [SerializeField] public Slider durationSlider;
@@ -44,6 +45,11 @@ public class HeroUI : MonoBehaviour
         {
             durationSlider.gameObject.SetActive(false);
         }
+    }
+
+    public void SetSomethingText(string displaythis)
+    {   
+        SomethingText.text = displaythis;
     }
 
     public void SetUltSlider()

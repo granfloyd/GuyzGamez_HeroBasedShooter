@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,7 +20,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputAction changeHeroAction;
     [SerializeField] private InputAction primaryFireAction;
     [SerializeField] private InputAction secondaryFireAction;
-    
+
+    private bool isPrimaryFireButtonDown = false;
+    private bool isSecondaryFireButtonDown = false;
     public enum HeroIndex
     {
         DamageMain,
@@ -33,21 +36,31 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        //if (Player != null)
-        //{
-        //    Debug.Log(Player.gameObject.name);
-        //}
-        //else
-        //{
-        //    Debug.Log("Player is null");    
-        //}
+        if(isPrimaryFireButtonDown)
+        {
+            OnPrimaryFire(new InputAction.CallbackContext());
+        }
+        if (isSecondaryFireButtonDown)
+        {
+            OnSecondaryFire(new InputAction.CallbackContext());
+        }
     }
 
     public void OnPrimaryFire(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed) // Add context.performed here
+        if(context.performed)
         {
-            Debug.Log("holding");
+            Debug.Log("pressed");
+            isPrimaryFireButtonDown = true;
+        }
+        else if (context.canceled)
+        {
+            isPrimaryFireButtonDown = false;
+            Debug.Log("released");
+        }
+        else if(isPrimaryFireButtonDown)
+        {
+            //Debug.Log("holding");
             if (currentHero == null)
             {
                 return;
@@ -63,19 +76,23 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(NetworkManager.Singleton.LocalClientId + "M1 is on cooldown");
+                        //Debug.Log(NetworkManager.Singleton.LocalClientId + "M1 is on cooldown");
                     }
                 }
             }
-        }
-        if (context.canceled)
-        {
-            Debug.Log("released");
         }
     }
     public void OnSecondaryFire(InputAction.CallbackContext context)
     {
         if (context.performed)
+        {
+            isSecondaryFireButtonDown = true;
+        }
+        else if (context.canceled)
+        {
+            isSecondaryFireButtonDown = false;
+        }
+        else if (isSecondaryFireButtonDown)
         {
             if (currentHero == null)
             {
@@ -92,7 +109,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(" M2 is on cooldown");
+                        //Debug.Log(NetworkManager.Singleton.LocalClientId + "M2 is on cooldown");
                     }
                 }
             }
@@ -240,11 +257,13 @@ public class PlayerController : MonoBehaviour
         if (primaryFireAction != null)
         {
             primaryFireAction.performed += OnPrimaryFire;
+            primaryFireAction.canceled += OnPrimaryFire;
             primaryFireAction.Enable();
         }
         if (secondaryFireAction != null)
         {
             secondaryFireAction.performed += OnSecondaryFire;
+            secondaryFireAction.canceled += OnSecondaryFire;
             secondaryFireAction.Enable();
         }
 
@@ -280,11 +299,13 @@ public class PlayerController : MonoBehaviour
         }
         if (primaryFireAction != null)
         {
+            primaryFireAction.performed -= OnPrimaryFire;
             primaryFireAction.canceled -= OnPrimaryFire;
         }
         if (secondaryFireAction != null)
         {
             secondaryFireAction.performed -= OnSecondaryFire;
+            secondaryFireAction.canceled -= OnSecondaryFire;
         }
     }
 }

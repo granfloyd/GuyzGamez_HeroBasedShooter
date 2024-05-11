@@ -50,13 +50,11 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed)
         {
-            Debug.Log("pressed");
             isPrimaryFireButtonDown = true;
         }
         else if (context.canceled)
         {
             isPrimaryFireButtonDown = false;
-            Debug.Log("released");
         }
         else if(isPrimaryFireButtonDown)
         {
@@ -102,7 +100,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Player != null)
                 {
-                    if (Player.secondaryFireTimer >= currentHero.recovery)
+                    if (Player.secondaryFireTimer >= currentHero.recovery2)
                     {
                         Player.SecondaryFire();
                         Player.secondaryFireTimer = 0;

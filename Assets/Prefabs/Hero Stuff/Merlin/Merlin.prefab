@@ -131,7 +131,8 @@ MonoBehaviour:
   verticalVelocity: 0
   heroId: 0
   health: 200
-  recovery: 0.5
+  recovery: 0.25
+  recovery2: 1
   isFlying: 0
   crosshairPos: {x: 0, y: 0, z: 0}
   tempGunAngle: {x: 0, y: 0, z: 0}
@@ -146,6 +147,7 @@ MonoBehaviour:
   ability3Charge: 0
   ability3MaxCharge: 40
   speedMultiplier: 0
+  secondaryFireSpeed: 30
   dashSpeed: 15
   dashDuration: 0
   eDuration: 0
@@ -153,7 +155,6 @@ MonoBehaviour:
   isDashing: 0
   isEActive: 0
   Rage: 0
-  playerID: 0
 --- !u!114 &1601990111586344745
 MonoBehaviour:
   m_ObjectHideFlags: 0

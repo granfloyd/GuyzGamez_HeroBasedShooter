@@ -12,21 +12,24 @@ public class MerlinProjectile : GenericProjectile
         SetLifeSpan(2);
         rb = GetComponent<Rigidbody>();
         ServerDelete(false);
-        Debug.Log("og owner "+ownerID);
+        //Debug.Log("og owner "+ownerID);
     }
-
     public override void HandleCollision(Collision other)
     {
-        if(IsServer)
+        if (IsServer)
         {
             if (other.gameObject.tag != "Player")
             {
-                Debug.Log("Collided with " + other.gameObject.name);
+                Debug.Log("not player ");
+                //Debug.Log("Collided with " + other.gameObject.name);
                 rb.velocity = Vector3.zero;
+                ServerDelete(true);
             }
+
 
             if (other.gameObject.tag == "Enemy1")
             {
+                Debug.Log("enemy hit ");
                 HeroUI.Instance.UpdateUltSlider(10);
                 HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
                 enemyhp.CalculateDamage(damage);
@@ -42,7 +45,7 @@ public class MerlinProjectile : GenericProjectile
                         }
                         else
                         {
-                            ClientSendRageClientRpc(ownerID,damage);
+                            ClientSendRageClientRpc(ownerID, damage);
                             Debug.Log("sent rage to client");
                         }
                     }
@@ -60,9 +63,7 @@ public class MerlinProjectile : GenericProjectile
         {
             PlayerController.Player.GetComponent<Merlin>().AddToRage(damageToSend);
             Debug.Log("adding rage to this client"+ clientid);
-        }
-        
-
+        } 
     }
     public override void HandleTrigger(Collider other)
     {

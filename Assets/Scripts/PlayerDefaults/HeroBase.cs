@@ -9,6 +9,7 @@ public class HeroBase : PlayerMovement
     [SerializeField] public PlayerController.HeroIndex heroId;
     [SerializeField] protected int health;
     [SerializeField] public float recovery;
+    [SerializeField] public float recovery2;
     [SerializeField] public bool isFlying = false;
     public Vector3 crosshairPos;
     public Vector3 tempGunAngle;
@@ -37,7 +38,7 @@ public class HeroBase : PlayerMovement
         {
             primaryFireTimer += Time.deltaTime;
         }
-        if (secondaryFireTimer < recovery)
+        if (secondaryFireTimer < recovery2)
         {
             secondaryFireTimer += Time.deltaTime;
         }
@@ -51,19 +52,22 @@ public class HeroBase : PlayerMovement
         crosshairPos = Camera.main.ScreenToWorldPoint(screenCenter);
         Vector3 cameraPos = Camera.main.gameObject.transform.position;
         Vector3 cameraDirection = Camera.main.gameObject.transform.forward;
-        int layerMask = 2;
 
         RaycastHit hit;
-        if (Physics.Raycast(cameraPos, cameraDirection, out hit, 100.0f, layerMask))
+        if (Physics.Raycast(cameraPos, cameraDirection, out hit, 100.0f))
         {
             Vector3 temp = hit.point - bulletSpawnPos;
             tempGunAngle = temp.normalized;
+
+            //Debug.DrawRay(cameraPos, cameraDirection * hit.distance, Color.red);
         }
         else
         {
             Vector3 endpointPosition = cameraPos + cameraDirection * 100.0f;
             Vector3 bulletEndPointDistance = endpointPosition - bulletSpawnPos;
             tempGunAngle = bulletEndPointDistance.normalized;
+
+            //Debug.DrawRay(cameraPos, cameraDirection * 100.0f, Color.green);
         }
     }
     public virtual void PrimaryFire()

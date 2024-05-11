@@ -11,7 +11,8 @@ public class Merlin : HeroBase
         primary,
         secondary
     }
-    [SerializeField] private float speedMultiplier;
+    [SerializeField] private float speedMultiplier = 3;
+    [SerializeField] private float secondaryFireSpeed = 30;
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration;
     [SerializeField] private float eDuration;
@@ -26,8 +27,8 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
-            Debug.Log("calling start");
-            speedMultiplier = 15f;
+            //Debug.Log("calling start");
+            //speedMultiplier = 3f;
             dashDuration = 0.7f;
             eDuration = 5f;
             PlayerCamera.iscamset = false;
@@ -88,7 +89,7 @@ public class Merlin : HeroBase
         {
             case Type.primary:
                 float primaryBulletSpeed = 70f;
-                Debug.Log("coming from" + clientId);
+                //Debug.Log("coming from" + clientId);
                 GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
                 spawnedPrimaryFire.GetComponent<MerlinProjectile>().ownerID = clientId;
                 spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);                
@@ -97,13 +98,14 @@ public class Merlin : HeroBase
                 rb.velocity = velocity * primaryBulletSpeed;
                 break;
             case Type.secondary:
-                float secondaryBulletSpeed = 50f;
+                float secondaryBulletSpeed = 90;
                 GameObject spawnedSecondaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
                 spawnedSecondaryFire.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                //GameObject pschild = spawnedSecondaryFire.transform.GetChild(0).gameObject;
+                //pschild.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 spawnedSecondaryFire.GetComponent<MerlinProjectile>().isSecondaryFire = true;
                 spawnedSecondaryFire.GetComponent<MerlinProjectile>().ownerID = clientId;
-
-                //UseRage();//use rage bonus regardless of hitting enemy
+                //use rage bonus regardless of hitting enemy
                 spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + rageValue);
                 ResetRage();//after adding rage to thing set it to 0
                 AssignBulletToPlayer(spawnedSecondaryFire);
@@ -230,7 +232,6 @@ public class Merlin : HeroBase
             HeroBase player = PlayerController.Player;
             Modifiers mod = player.gameObject.GetComponent<Modifiers>();
             mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
-            speedMultiplier = 50f;
             Invoke("UnnamedAbility2", eDuration);
             HeroUI.Instance.SetDurationSlider(PlayerController.Player.baseAbility2);
         }
@@ -243,7 +244,6 @@ public class Merlin : HeroBase
             isEActive = false;
             Modifiers mod = player.gameObject.GetComponent<Modifiers>();
             mod.RemoveModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
-            speedMultiplier = 15f;
         }
         
     }

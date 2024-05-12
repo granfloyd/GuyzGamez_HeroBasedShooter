@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Player != null)
                 {
-                    if (Player.primaryFireTimer >= currentHero.recovery)
+                    if (Player.primaryFireTimer >= Player.recovery)
                     {
                         Player.PrimaryFire();
                         Player.primaryFireTimer = 0;
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Player != null)
                 {
-                    if (Player.secondaryFireTimer >= currentHero.recovery2)
+                    if (Player.secondaryFireTimer >= Player.recovery2)
                     {
                         Player.SecondaryFire();
                         Player.secondaryFireTimer = 0;
@@ -159,16 +159,20 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if(currentHero == null)
+            if (Player == null || Player.baseAbility3 == null)
             {
+                Debug.LogError("Player or Ability3 is not set yet.");
                 return;
+            }
+            if (Player.baseAbility3.IsReady())
+            {
+                Player.Ability3();
+                Player.baseAbility3.Use();
             }
             else
             {
-
-                currentHero.Ability3();
+                Debug.Log("Ability 3 is on cooldown");
             }
-            
         }
     }
     public void OnChangeHero(InputAction.CallbackContext context)
@@ -188,25 +192,40 @@ public class PlayerController : MonoBehaviour
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.performed)
         {
-            currentHero.isMovingDown = true;
+            if (Player.isFlying)
+            {
+                Player.isMovingDown = true;
+            }
         }
-        if (context.canceled)
+        if (context.canceled || !Player.isFlying)
         {
-            currentHero.isMovingDown = false;
+            if(Player.isFlying)
+            {
+                Player.isMovingDown = false;
+            }
+            else
+            {
+                Player.isMovingDown = false;
+            }
+            
         }
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.performed)
         {
-            currentHero.isMovingUp = true;
+            if(Player.isFlying)
+            {
+                Player.isMovingUp = true;
+            }            
         }
-        if (context.canceled)
+
+        if (context.canceled || !Player.isFlying)
         {
-            currentHero.isMovingUp = false;
+            Player.isMovingUp = false;
         }
     }
     void OnEnable()
@@ -242,13 +261,13 @@ public class PlayerController : MonoBehaviour
         }
         if (crouchAction != null)
         {
-            crouchAction.started += OnCrouch;
+            crouchAction.performed += OnCrouch;
             crouchAction.canceled += OnCrouch;
             crouchAction.Enable();
         }
         if (jumpAction != null)
         {
-            jumpAction.started += OnJump;
+            jumpAction.performed += OnJump;
             jumpAction.canceled += OnJump;
             jumpAction.Enable();
         }
@@ -287,12 +306,12 @@ public class PlayerController : MonoBehaviour
         }
         if (crouchAction != null)
         {
-            crouchAction.started -= OnCrouch;
+            crouchAction.performed -= OnCrouch;
             crouchAction.canceled -= OnCrouch;
         }
         if (jumpAction != null)
         {
-            jumpAction.started -= OnJump;
+            jumpAction.performed -= OnJump;
             jumpAction.canceled -= OnJump;
         }
         if (primaryFireAction != null)

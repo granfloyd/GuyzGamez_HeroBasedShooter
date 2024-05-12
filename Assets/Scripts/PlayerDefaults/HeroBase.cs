@@ -11,6 +11,8 @@ public class HeroBase : PlayerMovement
     [SerializeField] public float recovery;
     [SerializeField] public float recovery2;
     [SerializeField] public bool isFlying = false;
+    [SerializeField] public bool isAffectedByGravity = true;
+
     public Vector3 crosshairPos;
     public Vector3 tempGunAngle;
     public Transform weaponPos;

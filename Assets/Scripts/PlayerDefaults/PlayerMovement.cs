@@ -39,36 +39,29 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] public CharacterController controller;
     [SerializeField] public float verticalVelocity;
     private float gravityValue = -9.81f;
-    private float lowGravityValue = -4.81f;
+
+    public AudioSource emoteMusic;
 
     private void Start()
     {
+        emoteMusic = GetComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
     }
     protected void Update()
     {
         if (!IsOwner) return;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
-
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
         MyInput();
-
-        if(isGrounded)
-        {
-            networkAnimator.Animator.SetBool("isGrounded", true);
-            networkAnimator.Animator.SetBool("isFalling", false);
-        }
-        else
-        {            
-            networkAnimator.Animator.SetBool("isGrounded", false);
-            networkAnimator.Animator.SetBool("isFalling", true);
-        }
+        Animations();
     }
+    
     void FixedUpdate()
     {
         if (!IsOwner) return;
-        MovePlayer();
+        MovePlayer(PlayerController.Player.isAffectedByGravity);
     }
+
     public void MyInput()
     {
         HeroBase player = PlayerController.Player;
@@ -76,7 +69,7 @@ public class PlayerMovement : NetworkBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
         networkAnimator.Animator.SetFloat("horz", horizontalInput);
         networkAnimator.Animator.SetFloat("vert", verticalInput);
-        if (!player.isFlying)
+        if (player.isAffectedByGravity)
         {
             if (Input.GetKey(jumpKey) && isReadyToJump && isGrounded)
             {
@@ -84,11 +77,37 @@ public class PlayerMovement : NetworkBehaviour
                 Invoke("ResetJump", jumpCD);
             }
         }
+        else
+        {
+            
+        }
     }
 
-    private void MovePlayer()
+    private void MovePlayer(bool isUsingGravity)
     {
         if (!IsOwner) return;
+
+        if(isUsingGravity)
+        {
+            gravityValue = -9.81f;
+        }
+        else
+        {
+            gravityValue = 0f;
+            verticalVelocity = 0f;
+            if (PlayerController.Player.isFlying)
+            {
+                if (isMovingUp)
+                {
+                    verticalVelocity += 2;
+                }
+                if (isMovingDown)
+                {
+                    verticalVelocity -= 2;
+                }
+            }
+        }
+
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         if(moveDirection.magnitude > Vector3.zero.magnitude)
@@ -99,7 +118,6 @@ public class PlayerMovement : NetworkBehaviour
         {
             networkAnimator.Animator.SetBool("isMoving", false);
         }
-
         if (isGrounded)
         {
             controller.Move(moveDirection * moveSpeed * Time.deltaTime);
@@ -107,20 +125,22 @@ public class PlayerMovement : NetworkBehaviour
         else
         {
             controller.Move(moveDirection * moveSpeed * airMultiplier * Time.deltaTime);
-            if(verticalVelocity > gravityValue)
+
+            if (verticalVelocity > gravityValue)
             {
                 verticalVelocity += gravityValue * Time.deltaTime;
             }
         }
-
         controller.Move(new Vector3(0, verticalVelocity, 0) * Time.deltaTime);
     }
+
     private void Jump()
     {
         networkAnimator.Animator.SetBool("isJumping", true);
         verticalVelocity = jumpForce;
         isReadyToJump = false;
     }
+
     private void ResetJump()
     {
         networkAnimator.Animator.SetBool("isJumping", false);
@@ -128,4 +148,43 @@ public class PlayerMovement : NetworkBehaviour
         isJumping = false;
     }
 
+    void Animations()
+    {
+        if (isGrounded)
+        {
+            networkAnimator.Animator.SetBool("isGrounded", true);
+            networkAnimator.Animator.SetBool("isFalling", false);
+        }
+        else
+        {
+            networkAnimator.Animator.SetBool("isGrounded", false);
+            networkAnimator.Animator.SetBool("isFalling", true);
+            networkAnimator.Animator.SetBool("isEmoting", false);
+        }
+
+        if (networkAnimator.Animator.GetBool("isEmoting") == false)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                networkAnimator.Animator.SetBool("isEmoting", true);
+                Debug.Log("1 pressed");
+                emoteMusic.Play();
+
+            }
+        }
+
+        if (networkAnimator.Animator.GetBool("isEmoting") == true)
+        {
+            if (networkAnimator.Animator.GetBool("isMoving") == true)
+            {
+                Debug.Log("is moving stoping emoting");
+                networkAnimator.Animator.SetBool("isEmoting", false);
+                if (emoteMusic.isPlaying)
+                {
+                    emoteMusic.Stop();
+                }
+            }
+
+        }
+    }
 }

@@ -7,13 +7,27 @@ public class GenericProjectile : NetworkBehaviour
     public float lifespan;
     public int damage;
     public Rigidbody rb;
-    public void ServerDelete(bool deletenow)
+    public void ServerDelete(bool deletenow,int whatwasHit)//im lazy ill change this later
     {
         if(IsServer)
         {
             if(deletenow)
             {
-                Destroy(gameObject);
+
+                if(whatwasHit == 1)
+                {
+                    CoolEffects.Instance.PlayCoolEffectServerRpc(CoolEffects.EffectIndex.bullethitground, transform.position);
+                    Destroy(gameObject);
+                }
+                else if(whatwasHit == 2)
+                {
+                    CoolEffects.Instance.PlayCoolEffectServerRpc(CoolEffects.EffectIndex.bullethitground, transform.position);
+                    Destroy(gameObject);
+                }
+                else if(whatwasHit == 0)
+                {
+                    Destroy(gameObject);
+                }
             }
             else
             {

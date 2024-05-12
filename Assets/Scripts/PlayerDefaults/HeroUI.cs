@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,6 +67,13 @@ public class HeroUI : MonoBehaviour
             ability3chargeSlider.value += howmuch;
             player.ability3Charge = ability3chargeSlider.value;
         }
+    }
+
+    public void ResetUltSlider()
+    {
+        HeroBase player = PlayerController.Player;
+        ability3chargeSlider.value = 0;
+        player.ability3Charge = ability3chargeSlider.value;
     }
 
     public void UpdateAbilityCD(Ability ability, TMP_Text abilityText)

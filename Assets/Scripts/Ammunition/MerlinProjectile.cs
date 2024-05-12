@@ -7,63 +7,87 @@ public class MerlinProjectile : GenericProjectile
 {
     public bool isSecondaryFire;
     public ulong ownerID;
+    float movespeed = 0.5f;
     void Start()
     {
-        SetLifeSpan(2);
+        SetLifeSpan(10);
         rb = GetComponent<Rigidbody>();
-        ServerDelete(false);
+        ServerDelete(false,0);
         //Debug.Log("og owner "+ownerID);
+    }
+    private void Update()
+    {
+        movespeed += Time.deltaTime;
+        if (IsServer)
+        {
+            if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, movespeed))
+            {
+                Debug.Log("hit");
+            }
+            Debug.DrawRay(transform.position, transform.forward * movespeed , Color.red);
+        }
     }
     public override void HandleCollision(Collision other)
     {
         if (IsServer)
         {
-            if (other.gameObject.tag != "Player")
+            if (other.gameObject.tag != "Enemy1")
             {
-                Debug.Log("not player ");
+                Debug.Log("not enemy ");
                 //Debug.Log("Collided with " + other.gameObject.name);
                 rb.velocity = Vector3.zero;
-                ServerDelete(true);
+                ServerDelete(true, 1);
             }
-
-
-            if (other.gameObject.tag == "Enemy1")
+            else if (other.gameObject.tag == "Enemy1")
             {
                 Debug.Log("enemy hit ");
-                HeroUI.Instance.UpdateUltSlider(10);
+
                 HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
                 enemyhp.CalculateDamage(damage);
 
+                if (ownerID == 0)
+                {
+                    HeroUI.Instance.UpdateUltSlider(damage);
+                }
+                else
+                {
+                    ClientSendUltChargeClientRpc(ownerID, damage);
+                }
+
                 if (!isSecondaryFire)
                 {
-                    if (IsServer)
+                    if (ownerID == 0)
                     {
-                        if (ownerID == 0)
-                        {
-                            PlayerController.Player.GetComponent<Merlin>().AddToRage(damage);
-                            Debug.Log("sent rage to server");
-                        }
-                        else
-                        {
-                            ClientSendRageClientRpc(ownerID, damage);
-                            Debug.Log("sent rage to client");
-                        }
+                        PlayerController.Player.GetComponent<Merlin>().AddToRage(damage);
+                    }
+                    else
+                    {
+                        ClientSendRageClientRpc(ownerID, damage);
                     }
                 }
-                ServerDelete(true);
+                ServerDelete(true, 2);
             }
         }
-        
+
     }
 
     [ClientRpc]
-    private void ClientSendRageClientRpc(ulong clientid,int damageToSend)
+    private void ClientSendRageClientRpc(ulong clientid, int damageToSend)
     {
         if(NetworkManager.Singleton.LocalClientId == clientid)
         {
             PlayerController.Player.GetComponent<Merlin>().AddToRage(damageToSend);
             Debug.Log("adding rage to this client"+ clientid);
         } 
+    }
+
+    [ClientRpc]
+    private void ClientSendUltChargeClientRpc(ulong clientid, float amountToSend)
+    {
+        if(NetworkManager.Singleton.LocalClientId == clientid)
+        {
+            HeroUI.Instance.UpdateUltSlider(amountToSend);
+        }
     }
     public override void HandleTrigger(Collider other)
     {

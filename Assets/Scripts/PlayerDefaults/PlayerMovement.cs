@@ -41,6 +41,7 @@ public class PlayerMovement : NetworkBehaviour
     private float gravityValue = -9.81f;
 
     public AudioSource emoteMusic;
+    public bool isEmoting;
 
     private void Start()
     {
@@ -99,11 +100,11 @@ public class PlayerMovement : NetworkBehaviour
             {
                 if (isMovingUp)
                 {
-                    verticalVelocity += 2;
+                    verticalVelocity += moveSpeed;
                 }
                 if (isMovingDown)
                 {
-                    verticalVelocity -= 2;
+                    verticalVelocity -= moveSpeed;
                 }
             }
         }
@@ -160,6 +161,7 @@ public class PlayerMovement : NetworkBehaviour
             networkAnimator.Animator.SetBool("isGrounded", false);
             networkAnimator.Animator.SetBool("isFalling", true);
             networkAnimator.Animator.SetBool("isEmoting", false);
+            isEmoting = false;
         }
 
         if (networkAnimator.Animator.GetBool("isEmoting") == false)
@@ -168,6 +170,7 @@ public class PlayerMovement : NetworkBehaviour
             {
                 networkAnimator.Animator.SetBool("isEmoting", true);
                 Debug.Log("1 pressed");
+                isEmoting = true;
                 emoteMusic.Play();
 
             }
@@ -179,6 +182,7 @@ public class PlayerMovement : NetworkBehaviour
             {
                 Debug.Log("is moving stoping emoting");
                 networkAnimator.Animator.SetBool("isEmoting", false);
+                isEmoting = false;
                 if (emoteMusic.isPlaying)
                 {
                     emoteMusic.Stop();

@@ -11,6 +11,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float sensitivityY;
 
     public Transform cameraPos;
+    public Transform cameraPosEmote;
     public Transform camOrientationy;//pivot y
     public Transform camOrientationx;
     public Transform gunOrientation;
@@ -30,6 +31,7 @@ public class PlayerCamera : MonoBehaviour
         //Debug.Log("Setting Camera");
         HeroBase player = PlayerController.Player;
         cameraPos = player.gameObject.transform.GetChild(2);
+        cameraPosEmote = cameraPos.gameObject.transform.GetChild(0);
         camOrientationy = player.gameObject.transform;
         camOrientationx = player.gameObject.transform.GetChild(1);
         gunOrientation = player.gameObject.transform.GetChild(0);
@@ -51,14 +53,28 @@ public class PlayerCamera : MonoBehaviour
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 65f);
 
-        //rotate camera orientation
+        
+
         if (iscamset)
         {
-            transform.position = cameraPos.transform.position;
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
-            camOrientationy.rotation = Quaternion.Euler(0f, yRotation, 0f);
-            camOrientationx.rotation = Quaternion.Euler(xRotation, 0f, 0f);
-            gunOrientation.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            if (PlayerController.Player.isEmoting)
+            {
+                transform.position = cameraPosEmote.transform.position;
+                transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+                //camOrientationy.rotation = Quaternion.Euler(0f, yRotation, 0f);
+                camOrientationx.rotation = Quaternion.Euler(xRotation, 0f, 0f);
+                gunOrientation.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            }
+            else
+            {
+                transform.position = cameraPos.transform.position;
+                transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+                camOrientationy.rotation = Quaternion.Euler(0f, yRotation, 0f);
+                camOrientationx.rotation = Quaternion.Euler(xRotation, 0f, 0f);
+                gunOrientation.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+            }
+            
         }
+        
     }
 }

@@ -33,6 +33,8 @@ public class HeroBase : PlayerMovement
    
     [SerializeField] public float ability3Charge;
     public float ability3MaxCharge;
+
+    public bool canGainUltCharge = true;
     new protected void Update()
     {
         base.Update();        

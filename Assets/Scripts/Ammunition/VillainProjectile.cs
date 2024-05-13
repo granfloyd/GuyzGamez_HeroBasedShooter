@@ -26,6 +26,10 @@ public class VillainProjectile : ClientProjectile
             ClientSendUltChargeClientRpc(ownerID, damage);
             ClientSendRageClientRpc(ownerID, damage);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public override void HandleCollision(Collision other)//server aka the HOST uses collision
@@ -48,6 +52,10 @@ public class VillainProjectile : ClientProjectile
             {
                 PlayerController.Player.GetComponent<Villain>().AddToRage(damage);
             }            
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 

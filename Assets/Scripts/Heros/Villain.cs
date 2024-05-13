@@ -356,11 +356,13 @@ public class Villain : HeroBase
                 HeroUI.Instance.ResetUltSlider();
                 player.isAffectedByGravity = false;
                 player.isFlying = true;
+                player.canGainUltCharge = false;
                 isUltForm = true;
                 SetDash(false, true);
                 player.recovery /= ultMultiplier; 
                 player.recovery2 /= ultMultiplier;
                 maxRage *= ultMultiplier;
+                eDuration *= ultMultiplier;                
                 ps.Play();
                 Invoke("UnnamedAbility3", ultDuration);
             }
@@ -376,10 +378,12 @@ public class Villain : HeroBase
             HeroBase player = PlayerController.Player;
             player.isAffectedByGravity = true;
             player.isFlying = false;
+            player.canGainUltCharge = true;
             isUltForm = false;
             player.recovery *= ultMultiplier;
             player.recovery2 *= ultMultiplier; 
             maxRage /= ultMultiplier;
+            eDuration /= ultMultiplier;            
             ps.Stop();
         }
     }

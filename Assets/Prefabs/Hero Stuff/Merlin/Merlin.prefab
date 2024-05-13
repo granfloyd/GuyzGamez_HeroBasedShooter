@@ -588,6 +588,9 @@ MonoBehaviour:
   Rage: 0
   maxRage: 0
   ultMultiplier: 0
+  roundedPing: 0
+  ClientProjectilePrefab: {fileID: 5308884282720409307, guid: e66b0db8a5785aa4ca504acf0915e63b,
+    type: 3}
 --- !u!114 &1601990111586344745
 MonoBehaviour:
   m_ObjectHideFlags: 0

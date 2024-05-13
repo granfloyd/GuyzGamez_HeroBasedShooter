@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Bson;
+using System;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -35,7 +36,9 @@ public class Merlin : HeroBase
     [SerializeField] private int Rage;
     [SerializeField] private int maxRage;
     [SerializeField] private int ultMultiplier;
-    
+    [SerializeField] private double roundedPing;
+
+    public GameObject ClientProjectilePrefab;
     private void Start()
     {
         if (IsOwner)
@@ -76,6 +79,9 @@ public class Merlin : HeroBase
         base.Update();
         if (IsOwner)
         {
+            NetworkTime ping = NetworkManager.Singleton.LocalTime - NetworkManager.Singleton.ServerTime;
+            double pingInMilliseconds = ping.Time * 1000;
+            roundedPing = Math.Round(pingInMilliseconds, 1);
             PlayerController.Player.baseAbility1.UpdateTimer();
             PlayerController.Player.baseAbility2.UpdateTimer();
             PlayerController.Player.baseAbility3.UpdateTimer();
@@ -93,7 +99,17 @@ public class Merlin : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
+            // Spawn the bullet immediately on the client side.
+            SpawnBulletClient(NetworkManager.Singleton.LocalClientId,
+                roundedPing,
+                Type.primary,
+                player.primaryFireSpawnPos.position,
+                player.orientation.localRotation,
+                player.tempGunAngle,
+                0);
+            //Request the server to spawn the bullet.
             SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
+                roundedPing,
                 Type.primary,
                 player.primaryFireSpawnPos.position,
                 player.orientation.localRotation,
@@ -101,19 +117,39 @@ public class Merlin : HeroBase
                 0);//no bonus dmg 
         }
     }
-
-    [ServerRpc]
-    void SpawnBulletServerRpc(ulong clientId, Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity,int rageValue)
+    
+    void SpawnBulletClient(ulong clientid ,double ping ,Type bulletType ,Vector3 position ,Quaternion rotation ,Vector3 velocity ,int rageValue)
     {
+        if (IsServer) return;//host has  0 ping
+
         switch(bulletType)
         {
             case Type.primary:
+                GameObject clientProjectile = Instantiate(ClientProjectilePrefab, position, rotation);
+                clientProjectile.GetComponent<ClientProjectile>().ownerID = clientid;
+                clientProjectile.GetComponent<ClientProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
+                float speed = 10.0f;
+                Rigidbody rb = clientProjectile.GetComponent<Rigidbody>();
+                rb.velocity = velocity * speed;
+                break;
+            case Type.secondary:
+                break;
+        }
+        
+    }
+
+    [ServerRpc]
+    void SpawnBulletServerRpc(ulong clientId,double ping, Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity, int rageValue)
+    { 
+        switch (bulletType)
+        {
+            case Type.primary:
                 leftclickSound.Play();
-                float primaryBulletSpeed = 70f;
+                float primaryBulletSpeed = 10.0f;
                 GameObject spawnedPrimaryFire = Instantiate(heroPrimaryFirePrefab, position, rotation);
                 spawnedPrimaryFire.GetComponent<MerlinProjectile>().ownerID = clientId;
                 spawnedPrimaryFire.GetComponent<MerlinProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);                
-                AssignBulletToPlayer(spawnedPrimaryFire);
+                AssignBulletToPlayer(spawnedPrimaryFire, clientId);
                 Rigidbody rb = spawnedPrimaryFire.GetComponent<Rigidbody>();
                 rb.velocity = velocity * primaryBulletSpeed;
                 break;
@@ -127,7 +163,7 @@ public class Merlin : HeroBase
                 //use rage bonus regardless of hitting enemy
                 spawnedSecondaryFire.GetComponent<MerlinProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + rageValue);
                 ResetRage();//after adding rage to thing set it to 0
-                AssignBulletToPlayer(spawnedSecondaryFire);
+                AssignBulletToPlayer(spawnedSecondaryFire,clientId);
                 rb = spawnedSecondaryFire.GetComponent<Rigidbody>();
                 rb.velocity = velocity * secondaryBulletSpeed;
                 if(clientId != 0)
@@ -136,7 +172,9 @@ public class Merlin : HeroBase
                     //send this to client 
                 }
                 break;
+
         }
+
     }
 
     [ClientRpc]
@@ -147,10 +185,13 @@ public class Merlin : HeroBase
             ResetRage();
         }
     }
-    void AssignBulletToPlayer(GameObject spawnedGameObject)
+    void AssignBulletToPlayer(GameObject spawnedGameObject, ulong clientid)
     {
         NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
-        bulletNetworkObject.SpawnWithOwnership(NetworkManager.LocalClientId);
+        bulletNetworkObject.SpawnWithOwnership(clientid);
+        if(!IsOwnedByServer)
+        bulletNetworkObject.NetworkHide(clientid);
+
     }
 
     public override void SecondaryFire()
@@ -160,6 +201,7 @@ public class Merlin : HeroBase
             UseRage();
             HeroBase player = PlayerController.Player;
             SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,//owner id
+                roundedPing,//ping
                 Type.secondary,//type
                 player.primaryFireSpawnPos.position,
                 player.orientation.localRotation,
@@ -233,14 +275,12 @@ public class Merlin : HeroBase
 
         if(isforult)
         {
-            Debug.Log("2");
             isBoosting = true;
             boostDirection = Camera.main.gameObject.transform.up;
             Invoke("StopDashing", 0.5f);
         }
         else
         {
-            Debug.Log("5");
             isBoosting = false;
         }
     }
@@ -264,7 +304,6 @@ public class Merlin : HeroBase
 
     void StopDashing()
     {
-        Debug.Log("update was 3 this is 4");
         SetDash(false, false);
     }
     
@@ -272,7 +311,6 @@ public class Merlin : HeroBase
     {
         if (IsOwner)
         {
-            Debug.Log("using ability 2");
             isEActive = true;
             HeroBase player = PlayerController.Player;
             Modifiers mod = player.gameObject.GetComponent<Modifiers>();
@@ -300,7 +338,6 @@ public class Merlin : HeroBase
             HeroBase player = PlayerController.Player;
             if (player.ability3Charge >= player.ability3MaxCharge)
             {
-                Debug.Log("1");
                 HeroUI.Instance.ResetUltSlider();
                 player.isAffectedByGravity = false;
                 player.isFlying = true;
@@ -329,7 +366,6 @@ public class Merlin : HeroBase
             player.recovery2 *= ultMultiplier; 
             maxRage /= ultMultiplier;
             ps.Stop();
-            Debug.Log("6");
         }
     }
 

@@ -75,14 +75,14 @@ public class HeroSelectUI : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            Debug.Log("setting player");
+            //Debug.Log("setting player");
             var spawnhero = NetworkManager.Singleton.SpawnManager.SpawnedObjects[spawnheroId].GetComponent<HeroBase>();
             PlayerController.Player = spawnhero;
         }
     }
     public void SelectHero(PlayerController.HeroIndex heroindex, ulong clientId)
     {
-        Debug.Log("SelectHero called with hero index: " + heroindex + " and client ID: " + clientId);
+        //Debug.Log("SelectHero called with hero index: " + heroindex + " and client ID: " + clientId);
 
         HeroBase selectedHero = null;
 
@@ -101,7 +101,7 @@ public class HeroSelectUI : NetworkBehaviour
 
         if (selectedHero == PlayerController.currentHero)
         {
-            Debug.Log("same hero");
+            //Debug.Log("same hero");
         }
        
         PlayerController.currentHero = selectedHero;
@@ -135,21 +135,21 @@ public class HeroSelectUI : NetworkBehaviour
                 if(PlayerController.Player != null)
                 ServerDespawnHeroServerRpc(PlayerController.Player.NetworkObject.NetworkObjectId);
                 ServerSpawnHeroServerRpc(PlayerController.HeroIndex.DamageMain);
-                Debug.Log("press1");
+                //Debug.Log("press1");
                 CloseSelectHeroScreen();
                 break;
             case 1:
                 if (PlayerController.Player != null)
                     ServerDespawnHeroServerRpc(PlayerController.Player.NetworkObject.NetworkObjectId);
                 ServerSpawnHeroServerRpc(PlayerController.HeroIndex.TankMain);
-                Debug.Log("press2");
+                //Debug.Log("press2");
                 CloseSelectHeroScreen();
                 break;
             case 2:
                 if (PlayerController.Player != null)
                     ServerDespawnHeroServerRpc(PlayerController.Player.NetworkObject.NetworkObjectId);
                 ServerSpawnHeroServerRpc(PlayerController.HeroIndex.SupportMain);
-                Debug.Log("press3");
+                //Debug.Log("press3");
                 CloseSelectHeroScreen();
                 break;
             default:

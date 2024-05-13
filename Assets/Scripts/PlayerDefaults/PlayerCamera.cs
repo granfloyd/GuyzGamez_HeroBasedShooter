@@ -27,7 +27,7 @@ public class PlayerCamera : MonoBehaviour
     }
     public void SetCamera() //called in hero base
     {
-        Debug.Log("Setting Camera");
+        //Debug.Log("Setting Camera");
         HeroBase player = PlayerController.Player;
         cameraPos = player.gameObject.transform.GetChild(2);
         camOrientationy = player.gameObject.transform;

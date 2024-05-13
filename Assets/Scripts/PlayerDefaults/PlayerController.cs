@@ -58,7 +58,6 @@ public class PlayerController : MonoBehaviour
         }
         else if(isPrimaryFireButtonDown)
         {
-            //Debug.Log("holding");
             if (currentHero == null)
             {
                 return;

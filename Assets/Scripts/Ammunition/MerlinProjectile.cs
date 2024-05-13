@@ -7,40 +7,29 @@ public class MerlinProjectile : GenericProjectile
 {
     public bool isSecondaryFire;
     public ulong ownerID;
-    float movespeed = 0.5f;
+    //float movespeed = 0.5f;
     void Start()
     {
-        SetLifeSpan(10);
+        SetLifeSpan(2);
         rb = GetComponent<Rigidbody>();
         ServerDelete(false,0);
         //Debug.Log("og owner "+ownerID);
     }
-    private void Update()
-    {
-        movespeed += Time.deltaTime;
-        if (IsServer)
-        {
-            if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, movespeed))
-            {
-                Debug.Log("hit");
-            }
-            Debug.DrawRay(transform.position, transform.forward * movespeed , Color.red);
-        }
-    }
+
     public override void HandleCollision(Collision other)
     {
-        if (IsServer)
+        if (IsOwner)
         {
             if (other.gameObject.tag != "Enemy1")
             {
-                Debug.Log("not enemy ");
+                //Debug.Log("not enemy ");
                 //Debug.Log("Collided with " + other.gameObject.name);
                 rb.velocity = Vector3.zero;
                 ServerDelete(true, 1);
             }
             else if (other.gameObject.tag == "Enemy1")
             {
-                Debug.Log("enemy hit ");
+                //Debug.Log("enemy hit ");
 
                 HealthScript enemyhp = other.gameObject.GetComponentInChildren<HealthScript>();
                 enemyhp.CalculateDamage(damage);

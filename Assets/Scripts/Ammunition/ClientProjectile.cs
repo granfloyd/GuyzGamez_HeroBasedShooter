@@ -7,15 +7,18 @@ using UnityEngine;
 
 public class ClientProjectile : MonoBehaviour
 {
-    public ulong ownerID;
+    public Rigidbody rb;
     public bool isSecondaryFire;
-    public float speed;
-    public float lifespan = 10.0f;
+    public ulong ownerID;
     public int damage;
-    public Rigidbody rb;    
+    public float lifespan = 5;
+    public float speed;     
+    public Vector3 velocity;
     
-    private void Start()
+
+    protected void Start()
     {  
+        rb = GetComponent<Rigidbody>();
         Destroy(gameObject, lifespan);
     }
 
@@ -29,19 +32,20 @@ public class ClientProjectile : MonoBehaviour
         lifespan = life;
     }
 
-    private void OnCollisionEnter(Collision other)
+    public void SetMovement(Vector3 dir,float spd)
     {
-        if (other.gameObject.tag == "Enemy1")
-        {
-            if(other.gameObject.GetComponent<NetworkObject>() == null)
-            {
-                Debug.Log("No NetworkObject found on the object");
-                return;
-            }
-            ulong objectid = other.gameObject.GetComponent<NetworkObject>().NetworkObjectId;
-            NetcodeSolutions netcodeSolutions = other.gameObject.GetComponent<NetcodeSolutions>();
-            netcodeSolutions.ClientProjectileOnHit(objectid, transform.position,ownerID,damage);
-            Destroy(gameObject);
-        }
+        velocity = dir;
+        speed = spd;
+        rb.velocity = dir.normalized * spd;
     }
+    public virtual void HandleCollision(Collision other) { }
+    public virtual void HandleTrigger(Collider other)
+    {
+        //if (other.gameObject.tag != "Enemy1")
+        //{
+        //    rb.velocity = Vector3.zero;
+        //}
+    }
+    private void OnCollisionEnter(Collision other) { HandleCollision(other); }
+    private void OnTriggerEnter(Collider other) { HandleTrigger(other); }
 }

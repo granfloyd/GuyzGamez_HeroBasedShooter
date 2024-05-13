@@ -47,7 +47,7 @@ public class MerlinProjectile : GenericProjectile
                 {
                     if (ownerID == 0)
                     {
-                        PlayerController.Player.GetComponent<Merlin>().AddToRage(damage);
+                        //PlayerController.Player.GetComponent<Merlin>().AddToRage(damage);
                     }
                     else
                     {
@@ -65,7 +65,7 @@ public class MerlinProjectile : GenericProjectile
     {
         if(NetworkManager.Singleton.LocalClientId == clientid)
         {
-            PlayerController.Player.GetComponent<Merlin>().AddToRage(damageToSend);
+            //PlayerController.Player.GetComponent<Merlin>().AddToRage(damageToSend);
             Debug.Log("adding rage to this client"+ clientid);
         } 
     }

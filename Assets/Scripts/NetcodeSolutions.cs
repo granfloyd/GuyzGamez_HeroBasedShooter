@@ -16,7 +16,7 @@ public class NetcodeSolutions : NetworkBehaviour
 
     [SerializeField] private NetworkObjectType type;
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void ServerInfoFromClientServerRpc(ulong objectid, Vector3 whereWasHit, ulong owner, int clientDamage)
     {
         if (IsObjectInScene(objectid))

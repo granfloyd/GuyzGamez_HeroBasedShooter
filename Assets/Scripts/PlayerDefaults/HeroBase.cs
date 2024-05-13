@@ -132,7 +132,7 @@ public class HeroBase : PlayerMovement
         }
             
     }
-    public virtual void Ability1Duration() { }
+
     void OnTriggerEnter(Collider other)
     {
         CollisionEnter(other);

@@ -28,7 +28,7 @@ public class HealthScript : NetworkBehaviour
 
     private void OnHealthChange(int previousHealth, int newHealth)
     {
-        Debug.Log("Health changed from " + previousHealth + " to " + newHealth);
+        //Debug.Log("Health changed from " + previousHealth + " to " + newHealth);
         healthText.text = newHealth.ToString(); // Update the text with the new health value
     }
 
@@ -40,10 +40,10 @@ public class HealthScript : NetworkBehaviour
 
     public void CalculateDamage(int damage)
     {
-        Debug.Log("Calculating damage");
-        Debug.Log("Damage un modded: " + damage);
+        //Debug.Log("Calculating damage");
+        //Debug.Log("Damage un modded: " + damage);
         int calculatedDamage = PlayerController.Player.gameObject.GetComponent<Modifiers>().ApplyToDamage(damage);
-        Debug.Log("Damage modded: " + calculatedDamage);
+        //Debug.Log("Damage modded: " + calculatedDamage);
         ApplyDamageServerRpc(calculatedDamage);
     }
 
@@ -51,7 +51,7 @@ public class HealthScript : NetworkBehaviour
     private void ApplyDamageServerRpc(int damage)
     {
         if (!IsServer) return;
-        Debug.Log("Applying damage on server");
+        //Debug.Log("Applying damage on server");
         currentHealth.Value -= damage;
         UpdateClientHealthClientRpc(currentHealth.Value);
     }
@@ -59,7 +59,7 @@ public class HealthScript : NetworkBehaviour
     [ClientRpc]
     private void UpdateClientHealthClientRpc(int updatedHealth)
     {
-        Debug.Log("Updating client health: " + updatedHealth);
+        //Debug.Log("Updating client health: " + updatedHealth);
         healthText.text = updatedHealth.ToString(); // Update the text with the updated health value
     }
 

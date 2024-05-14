@@ -10,6 +10,8 @@ public class AIBehaviour : MonoBehaviour
     public State currentState;
 
     public LayerMask PlayerLayer;
+    public Transform[] patrolPoints;
+    private int currentPatrolIndex = 0;
     public enum State
     {
         Idle,
@@ -22,7 +24,14 @@ public class AIBehaviour : MonoBehaviour
     }
     void Start()
     {
-
+        if (patrolPoints.Length > 0)
+        {
+            SetState(State.Patrol);
+        }
+        else
+        {
+            SetState(State.Idle);
+        }
     }
     public Vector3 PlayerPosition()
     {
@@ -45,16 +54,20 @@ public class AIBehaviour : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, directionToPlayer, out hit, viewDistance, PlayerLayer))
             {
-                SetState(State.Search);
+                SetState(State.Patrol);
                 //Debug.Log("Player is not in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.red);
             }
             else//enemy has los on player
             {
-                SetState(State.Found);
+                SetState(State.Chase);
                 //Debug.Log("Player is in sight");
                 Debug.DrawRay(transform.position, directionToPlayer * viewDistance, Color.green);
             }
+        }
+        else if (currentState == State.Patrol)
+        {
+            MoveToTargetPosition(patrolPoints[currentPatrolIndex].position);
         }
     }
     void MoveToTargetPosition(Vector3 pos)
@@ -62,6 +75,11 @@ public class AIBehaviour : MonoBehaviour
         targetPosition = pos;
         float speed = 5f;
         transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, pos) < 0.1f && currentState == State.Patrol)
+        {
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+        }
     }
     void SetState(State state)
     {
@@ -72,12 +90,14 @@ public class AIBehaviour : MonoBehaviour
             case State.Idle:
                 break;
             case State.Patrol:
+                MoveToTargetPosition(patrolPoints[currentPatrolIndex].position);
                 break;
             case State.Chase:
+                MoveToTargetPosition(PlayerPosition());
                 break;
             case State.Found:
-                MoveToTargetPosition(targetPosition);
-                    break;
+                SetState(State.Chase);
+                break;
             case State.Attack:
                 break;
             case State.Dead:

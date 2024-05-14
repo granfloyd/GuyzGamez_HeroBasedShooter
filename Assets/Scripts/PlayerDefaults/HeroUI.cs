@@ -19,6 +19,8 @@ public class HeroUI : MonoBehaviour
     [Header("Abiliy CDs")]
     public TMP_Text ability1Text;
     public TMP_Text ability2Text;
+
+    
     private void Awake()
     {
         // If an instance already exists, destroy this one

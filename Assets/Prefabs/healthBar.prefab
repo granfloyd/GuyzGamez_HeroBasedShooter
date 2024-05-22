@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 6906544989513526663}
   - component: {fileID: 5756708539563695186}
   - component: {fileID: 2828301831491999582}
-  - component: {fileID: 1563933042001308885}
+  - component: {fileID: 511740117907466817}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -454,7 +454,7 @@ MonoBehaviour:
     m_InternalValue: 100
   healthText: {fileID: 7202242179232143924}
   isPlayer: 0
---- !u!114 &1563933042001308885
+--- !u!114 &511740117907466817
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

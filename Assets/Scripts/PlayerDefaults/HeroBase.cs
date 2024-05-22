@@ -107,29 +107,43 @@ public class HeroBase : PlayerMovement
     {
         if(IsOwner)
         {
-            if (other.tag != CollisionPlayer.SpawnCollision)
-            {
-                return;
-            }
-            else
+
+            if (other.tag == CollisionPlayer.SpawnCollision)
             {
                 SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
                 spawnArea.EnteredSpawnArea();
             }
+
+            if (other.tag == CollisionPlayer.StartEndSim)
+            {
+                AreaData areaData = other.GetComponent<AreaData>();
+                areaData.isSceneActive = true;
+ 
+            }
+    
+    
         }        
     }
     public virtual void CollisionExit(Collider other)
     {
         if (IsOwner)
         {
-            if (other.tag != CollisionPlayer.SpawnCollision)
+            if (other.tag != CollisionPlayer.SpawnCollision || other.tag != CollisionPlayer.StartEndSim)
             {
                 return;
             }
-            else
+
+            if (other.tag == CollisionPlayer.SpawnCollision)
             {
                 SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
                 spawnArea.ExitedSpawnArea();
+            }
+            else if (other.tag == CollisionPlayer.StartEndSim)
+            {
+                Debug.Log("YO YO YO YO hows it goin");
+                //AreaData areaData = other.GetComponent<AreaData>();
+                ///areaData.isSceneActive = false;
+                //areaData.StartSim();
             }
         }
             

@@ -1727,9 +1727,7 @@ PrefabInstance:
     - target: {fileID: 8816394715327054344, guid: b068d6412f460f54c817adc03450f7bd,
         type: 3}
       propertyPath: m_text
-      value: 'Merlin
-
-'
+      value: Villain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1884,7 +1882,11 @@ PrefabInstance:
     - target: {fileID: 8816394715327054344, guid: b068d6412f460f54c817adc03450f7bd,
         type: 3}
       propertyPath: m_text
-      value: RectangleMan
+      value: 'RectangleMan
+
+        dont pick
+
+        is null'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

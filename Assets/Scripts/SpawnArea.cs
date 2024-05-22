@@ -23,12 +23,12 @@ public class SpawnArea : MonoBehaviour
     }
     public void EnteredSpawnArea()//safezone
     {
-        HeroSelectUI.Instance.RenderUI(); 
+        //HeroSelectUI.Instance.RenderUI(); 
         isInSpawnArea = true;
     }
     public void ExitedSpawnArea()//safezone
     {
-        HeroSelectUI.Instance.HideUI();    
+        //HeroSelectUI.Instance.HideUI();    
         isInSpawnArea = false;
     }
 

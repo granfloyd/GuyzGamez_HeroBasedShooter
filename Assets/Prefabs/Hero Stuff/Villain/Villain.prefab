@@ -552,6 +552,7 @@ MonoBehaviour:
   controller: {fileID: 7592422026553370255}
   verticalVelocity: 0
   emoteMusic: {fileID: 326425577595167283}
+  isEmoting: 0
   heroId: 0
   health: 200
   recovery: 0.3
@@ -570,6 +571,7 @@ MonoBehaviour:
   secondaryFireTimer: 0
   ability3Charge: 0
   ability3MaxCharge: 300
+  canGainUltCharge: 1
   speedMultiplier: 0
   secondaryFireSpeed: 30
   dashSpeed: 15
@@ -652,7 +654,7 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

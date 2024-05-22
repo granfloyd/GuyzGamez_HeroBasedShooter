@@ -25,6 +25,7 @@ public class NetcodeSolutions : NetworkBehaviour
             switch (type)
             {
                 case NetworkObjectType.Player:
+                    Debug.Log("player hit");
                     //Do something for when player hit
                     break;
                 case NetworkObjectType.Enemy:
@@ -41,7 +42,6 @@ public class NetcodeSolutions : NetworkBehaviour
             }
         }
     }
-
     public void ClientProjectileOnHit(ulong objectid, Vector3 whereWasHit, ulong ownerId, int damageToSend)
     {
         if(!IsObjectInScene(objectid))

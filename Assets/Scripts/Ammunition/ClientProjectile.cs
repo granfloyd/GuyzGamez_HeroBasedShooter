@@ -11,13 +11,14 @@ public class ClientProjectile : MonoBehaviour
     public bool isSecondaryFire;
     public ulong ownerID;
     public int damage;
-    public float lifespan = 5;
+    public float lifespan;
     public float speed;     
     public Vector3 velocity;
     
 
     protected void Start()
     {  
+        lifespan = 5;
         rb = GetComponent<Rigidbody>();
         Destroy(gameObject, lifespan);
     }

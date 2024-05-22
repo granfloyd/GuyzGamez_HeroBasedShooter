@@ -2,7 +2,9 @@ using Newtonsoft.Json.Bson;
 using System;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Villain : HeroBase
 {
@@ -229,14 +231,22 @@ public class Villain : HeroBase
         if (isEActive)
         {
             addTo *= 2;
-            if(chargeupbeepSource.pitch < 1.50f)
-                chargeupbeepSource.pitch += 0.10f;
         }
         Rage += addTo;
-        if (chargeupbeepSource.pitch < 1.50f)
-            chargeupbeepSource.pitch += 0.10f;
 
-        chargeupbeepSource.Play();
+        chargeupbeepSource.pitch = 0.6f + ((float)Rage / maxRage) * (1.5f - 0.6f);
+
+        // Ensure the pitch does not exceed the maximum.
+        if (chargeupbeepSource.pitch > 1.5f)
+        {
+            chargeupbeepSource.pitch = 1.5f;
+        }
+
+        if (!chargeupbeepSource.isPlaying)
+        {
+            chargeupbeepSource.Play();
+        }
+
         if (Rage >= maxRage)
         {
             Rage = maxRage;
@@ -280,7 +290,25 @@ public class Villain : HeroBase
         if(isLshift)//Lshift
         {
             isDashing = true;
-            dashDirection = Camera.main.gameObject.transform.forward;
+            //float horizontal = Input.GetAxisRaw("Horizontal");
+            //float vertical = Input.GetAxisRaw("Vertical");
+            
+            if (horizontalInput != 0)
+            {
+                dashDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+                
+            }
+            else
+            {
+                Debug.Log("Hello2");
+                if (verticalInput > 0 && horizontalInput == 0)
+                {
+                    Debug.Log("Hello");
+                    float cameraPosY = Camera.main.gameObject.transform.forward.y;
+                    dashDirection.y = cameraPosY;
+                }
+                dashDirection = Camera.main.gameObject.transform.forward;
+            }
             Invoke("StopDashing", dashDuration);
         }
         else
@@ -307,12 +335,13 @@ public class Villain : HeroBase
             Vector3 dashMovement = dashDirection * dashSpeed * Time.deltaTime;
             player.verticalVelocity = 0;
             player.controller.Move(dashMovement);
+            AddToRage(1);
         }
 
         if(isBoosting)
         {
             HeroBase player = PlayerController.Player;
-            Vector3 boostMovement = boostDirection * dashSpeed * ultMultiplier * Time.deltaTime;
+            Vector3 boostMovement = boostDirection * dashSpeed * Time.deltaTime;
             player.controller.Move(boostMovement);
         }
     }

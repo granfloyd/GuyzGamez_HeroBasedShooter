@@ -8,6 +8,7 @@ TagManager:
   - Enemy1
   - PlayerHead
   - PlayerBody
+  - StartEndSim
   layers:
   - Default
   - TransparentFX

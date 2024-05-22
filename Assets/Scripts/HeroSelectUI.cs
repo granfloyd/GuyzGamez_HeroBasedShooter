@@ -61,7 +61,7 @@ public class HeroSelectUI : NetworkBehaviour
         instantiatedHero.NetworkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
 
         // Assign the instantiated hero to the Player variable of the client that instantiated the hero
-        ClientSlutPlayerClientRpc(instantiatedHero.NetworkObject.NetworkObjectId, rpcParams.Receive.SenderClientId);
+        ClientSetPlayerClientRpc(instantiatedHero.NetworkObject.NetworkObjectId, rpcParams.Receive.SenderClientId);
     }
 
     [ClientRpc]
@@ -71,7 +71,7 @@ public class HeroSelectUI : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void ClientSlutPlayerClientRpc(ulong spawnheroId, ulong clientId, ClientRpcParams rpcParams = default)
+    private void ClientSetPlayerClientRpc(ulong spawnheroId, ulong clientId, ClientRpcParams rpcParams = default)
     {
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {

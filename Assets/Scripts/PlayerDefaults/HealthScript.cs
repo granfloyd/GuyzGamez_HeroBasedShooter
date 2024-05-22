@@ -54,6 +54,11 @@ public class HealthScript : NetworkBehaviour
         //Debug.Log("Applying damage on server");
         currentHealth.Value -= damage;
         UpdateClientHealthClientRpc(currentHealth.Value);
+
+        if (currentHealth.Value <= 0)
+        {
+            Destroy(transform.root.gameObject);
+        }
     }
 
     [ClientRpc]

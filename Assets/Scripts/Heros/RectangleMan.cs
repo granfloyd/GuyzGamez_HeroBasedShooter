@@ -1,17 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class RectangleMan : HeroBase
 {
+    [SerializeField] private Vector3 hitPoint;
+    [SerializeField] private GameObject hitPointPrefab;
+    private GameObject hitPointInstance;
+    private bool isOut = false;
+    private bool isReTracking = false;
+    private float grappleSpeed = 40f;
+    private float totalGrappleDistance = 0f;
+    private float coveredGrappleDistance = 0f;
     private void Start()
     {
         if (IsOwner)
         {
             PlayerCamera.iscamset = false;
-            PlayerController.Player.baseAbility1 = new Ability(1f, 5f);
-            PlayerController.Player.baseAbility2 = new Ability(1f, 3f);
-            PlayerController.Player.baseAbility3 = new Ability(1f, 10f);
+            PlayerController.Player.baseAbility1 = new Ability(3f, 0);
+            PlayerController.Player.baseAbility2 = new Ability(3f, 0);
+            PlayerController.Player.baseAbility3 = new Ability(1f, 0);
             HeroBase player = PlayerController.Player;
             HeroUI.Instance.SetUltSlider();
             if (player == null)
@@ -23,5 +33,110 @@ public class RectangleMan : HeroBase
         }
 
     }
+    protected new void Update()
+    {
+        base.Update();
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+            player.baseAbility1.UpdateTimer();
+            player.baseAbility2.UpdateTimer();
+            player.baseAbility3.UpdateTimer();
+            HeroUI.Instance.UpdateAbilityCD(player.baseAbility1, HeroUI.Instance.ability1Text);
+            HeroUI.Instance.UpdateAbilityCD(player.baseAbility2, HeroUI.Instance.ability2Text);
+        }
 
+        if (isReTracking)
+        {
+            ReTrack();
+        }
+    }
+
+    public override void PrimaryFire()
+    {
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+
+        }
+    }
+    public override void SecondaryFire()
+    {
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+        }
+    }
+    void AssignBulletToPlayer(GameObject spawnedGameObject, ulong clientid)
+    {
+        NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
+        bulletNetworkObject.SpawnWithOwnership(clientid);
+        if (!IsOwnedByServer)
+            bulletNetworkObject.NetworkHide(clientid);
+
+    }
+
+    public override void Ability1()
+    {
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+
+            if(isOut)
+            {
+                isReTracking = true;
+                totalGrappleDistance = Vector3.Distance(player.transform.position, hitPoint);
+                return;
+            }
+            if (Physics.Raycast(player.transform.position, player.tempGunAngle, out RaycastHit hit, 20.0f))
+            {
+                hitPoint = hit.point;
+                hitPointInstance = Instantiate(hitPointPrefab, hitPoint, Quaternion.identity);
+                isOut = true;
+            }
+        }
+    }
+
+    private void ReTrack()
+    {
+        if (IsOwner)
+        {
+            HeroBase player = PlayerController.Player;
+            Vector3 direction = hitPoint - transform.position;
+            float distanceToMove = grappleSpeed * Time.deltaTime;
+
+            if (coveredGrappleDistance + distanceToMove > totalGrappleDistance * 0.95f)
+            {
+                player.controller.Move(direction.normalized * (totalGrappleDistance * 0.95f - coveredGrappleDistance));
+                player.isAffectedByGravity = true;
+                isReTracking = false;
+                isOut = false;
+                coveredGrappleDistance = 0f;
+                Destroy(hitPointInstance);
+            }
+            else
+            {
+                player.controller.Move(direction.normalized * distanceToMove);
+                coveredGrappleDistance += distanceToMove;
+                player.isAffectedByGravity = false;
+            }
+        }
+    }
+
+
+    public override void Ability2()
+    {
+        if (IsOwner)
+        {
+
+        }
+    }
+
+    public override void Ability3()
+    {
+        if (IsOwner)
+        {
+
+        }
+    }
 }

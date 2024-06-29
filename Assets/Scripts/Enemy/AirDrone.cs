@@ -59,6 +59,6 @@ public class AirDrone : EnemyBehaviour
             flip = 0;
         }
         enemyProjectile.SetLifeSpan(5f);
-        enemyProjectile.SetMovement(directionToPlayer, 10f );
+        enemyProjectile.SetMovement(directionToPlayer, 20f );
     }
 }

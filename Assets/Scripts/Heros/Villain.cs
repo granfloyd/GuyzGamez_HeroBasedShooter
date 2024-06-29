@@ -290,8 +290,6 @@ public class Villain : HeroBase
         if(isLshift)//Lshift
         {
             isDashing = true;
-            //float horizontal = Input.GetAxisRaw("Horizontal");
-            //float vertical = Input.GetAxisRaw("Vertical");
             
             if (horizontalInput != 0)
             {
@@ -300,10 +298,8 @@ public class Villain : HeroBase
             }
             else
             {
-                Debug.Log("Hello2");
                 if (verticalInput > 0 && horizontalInput == 0)
                 {
-                    Debug.Log("Hello");
                     float cameraPosY = Camera.main.gameObject.transform.forward.y;
                     dashDirection.y = cameraPosY;
                 }

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4765677001372984927
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8159117307678970392}
+  m_Layer: 6
+  m_Name: EmoteCameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8159117307678970392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4765677001372984927}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.06319113, z: -0, w: 0.99800146}
+  m_LocalPosition: {x: -0.45, y: 0.39, z: -23.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5762210167914606906}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5804139517725607008
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,10 +56,11 @@ Transform:
   m_GameObject: {fileID: 5804139517725607008}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.4156, z: 0.1817}
+  m_LocalPosition: {x: 0, y: 0.662, z: 0.1817}
   m_LocalScale: {x: 0.17, y: 0.24, z: 0.17}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8159117307678970392}
   m_Father: {fileID: 765078473743841145}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5848897105420163867
@@ -40,12 +72,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 765078473743841145}
-  - component: {fileID: 4255925884865736900}
   - component: {fileID: 4701682851179543534}
+  - component: {fileID: -8211944734249271377}
   - component: {fileID: 2651883187976737843}
   - component: {fileID: -6569279843921154052}
   - component: {fileID: 5264867310349337250}
-  - component: {fileID: -8211944734249271377}
+  - component: {fileID: -4146345379672204511}
   m_Layer: 0
   m_Name: RectangleMan
   m_TagString: Player
@@ -72,33 +104,6 @@ Transform:
   - {fileID: 4551928501192402297}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4255925884865736900
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5848897105420163867}
-  serializedVersion: 4
-  m_Mass: 60
-  m_Drag: 1
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
 --- !u!33 &4701682851179543534
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -107,6 +112,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5848897105420163867}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &-8211944734249271377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f49d3eedf65f546903125d53af0838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modifiersList: 
 --- !u!114 &2651883187976737843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,10 +138,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkAnimator: {fileID: 6551855594477305928}
-  moveSpeed: 7
-  flySpeed: 7
+  moveSpeed: 6
+  flySpeed: 5
   groundDrag: 6
-  jumpForce: 5
+  jumpForce: 4
   jumpCD: 0.75
   airMultiplier: 1
   isReadyToJump: 1
@@ -138,13 +156,18 @@ MonoBehaviour:
     m_Bits: 8
   isGrounded: 0
   orientation: {fileID: 765078473743841145}
-  rb: {fileID: 4255925884865736900}
   horizontalInput: 0
   verticalInput: 0
+  controller: {fileID: -4146345379672204511}
+  verticalVelocity: 0
+  emoteMusic: {fileID: 0}
+  isEmoting: 0
   heroId: 1
   health: 0
   recovery: 0
+  recovery2: 0
   isFlying: 0
+  isAffectedByGravity: 1
   crosshairPos: {x: 0, y: 0, z: 0}
   tempGunAngle: {x: 0, y: 0, z: 0}
   weaponPos: {fileID: 2097113761491064701}
@@ -156,6 +179,11 @@ MonoBehaviour:
   secondaryFireTimer: 0
   ability3Charge: 0
   ability3MaxCharge: 0
+  canGainUltCharge: 1
+  hitPoint: {x: 0, y: 0, z: 0}
+  hitPointPrefab: {fileID: 5839375063029116307, guid: 753ded231e08d4e4ca48a731a9922544,
+    type: 3}
+  grappleSpeed: 10
 --- !u!114 &-6569279843921154052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,19 +234,32 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &-8211944734249271377
-MonoBehaviour:
+--- !u!143 &-4146345379672204511
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5848897105420163867}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f49d3eedf65f546903125d53af0838, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isBonk: 0
+  serializedVersion: 3
+  m_Height: 1.7
+  m_Radius: 0.2
+  m_SlopeLimit: 90
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7043148051412231992
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +369,7 @@ PrefabInstance:
     - target: {fileID: 2874305322097482943, guid: 612b579d0332d4e4da5c51d5bd64ef3a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2874305322097482943, guid: 612b579d0332d4e4da5c51d5bd64ef3a,
         type: 3}

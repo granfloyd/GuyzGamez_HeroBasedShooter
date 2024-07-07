@@ -8,15 +8,11 @@ using UnityEngine.UI;
 public class HeroUI : MonoBehaviour
 {
     public static HeroUI Instance { get; private set; }
-    [Header("Player Stuff")]
+
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider ability3chargeSlider;
-    [SerializeField] public TMP_Text SomethingText;
-
-    [Header("Duration Slider")]
-    [SerializeField] public Slider durationSlider;
-
-    [Header("Abiliy CDs")]
+    [SerializeField] public TMP_Text displayTMP;
+    [SerializeField] public Slider displaySlider;
     public TMP_Text ability1Text;
     public TMP_Text ability2Text;
 
@@ -32,27 +28,38 @@ public class HeroUI : MonoBehaviour
         // Set this as the instance
         Instance = this;
     }
-    public void SetDurationSlider(Ability ability)
+    public void DisplayDurationSlider(float duration)
     {
-        durationSlider.maxValue = ability.duration;
-        durationSlider.value = ability.duration;
-        durationSlider.gameObject.SetActive(true);
+        displaySlider.gameObject.SetActive(true);
+        displaySlider.maxValue = duration;
+        displaySlider.value = duration;        
     }
-    public void UpdateDurationSlider(Ability ability)
+    public void UpdateDurationSlider(float currentDuration)
     {
-        if (durationSlider.value > 0)
+        displaySlider.value = currentDuration;
+        if (currentDuration < 0)
         {
-            durationSlider.value -= Time.deltaTime;
-        }
-        else
-        {
-            durationSlider.gameObject.SetActive(false);
+            displaySlider.gameObject.SetActive(false);
         }
     }
 
-    public void SetSomethingText(string displaythis)
-    {   
-        SomethingText.text = displaythis;
+    public void RemoveDurationSlider()
+    {
+        displaySlider.gameObject.SetActive(false);
+    }
+
+    public void DisplayText(string displaythis)
+    {
+        if(displayTMP.gameObject.activeSelf == false)
+        {
+            displayTMP.gameObject.SetActive(true);
+            displayTMP.text = displaythis;
+        }
+        else
+        {
+               displayTMP.text = displaythis;
+        }
+        
     }
 
     public void SetUltSlider()
@@ -64,7 +71,7 @@ public class HeroUI : MonoBehaviour
     public void UpdateUltSlider(float howmuch)
     {
         HeroBase player = PlayerController.Player;
-        if (ability3chargeSlider.value < ability3chargeSlider.maxValue)
+        if (ability3chargeSlider.value < ability3chargeSlider.maxValue && player.canGainUltCharge)
         {
             ability3chargeSlider.value += howmuch;
             player.ability3Charge = ability3chargeSlider.value;
@@ -78,7 +85,7 @@ public class HeroUI : MonoBehaviour
         player.ability3Charge = ability3chargeSlider.value;
     }
 
-    public void UpdateAbilityCD(Ability ability, TMP_Text abilityText)
+    public void UpdateAbilityCD(AbilityBase ability, TMP_Text abilityText)
     {
         float cdLeft = ability.GetCooldownTimeLeft();
         abilityText.text = ((int)cdLeft).ToString();

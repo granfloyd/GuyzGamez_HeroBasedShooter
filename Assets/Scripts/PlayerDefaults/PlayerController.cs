@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Player != null)
                 {
-                    if (Player.primaryFireTimer >= Player.recovery)
+                    if (Player.primaryFireTimer >= Player.primaryRecovery)
                     {
                         Player.PrimaryFire();
                         Player.primaryFireTimer = 0;
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Player != null)
                 {
-                    if (Player.secondaryFireTimer >= Player.recovery2)
+                    if (Player.secondaryFireTimer >= Player.secondaryRecovery)
                     {
                         Player.SecondaryFire();
                         Player.secondaryFireTimer = 0;
@@ -116,15 +116,14 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (Player == null || Player.baseAbility1 == null)
+            if (Player == null || Player.BaseAbility1 == null)
             {
                 Debug.LogError("Player or Ability1 is not set yet.");
                 return;
             }
-            if (Player.baseAbility1.IsReady())
+            if (Player.BaseAbility1.IsReady())
             {
                 Player.Ability1();
-                Player.baseAbility1.Use();
             }
             else
             {
@@ -137,15 +136,14 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (Player == null || Player.baseAbility2 == null)
+            if (Player == null || Player.BaseAbility2 == null)
             {
                 Debug.LogError("Player or Ability2 is not set yet.");
                 return;
             }
-            if (Player.baseAbility2.IsReady())
+            if (Player.BaseAbility2.IsReady())
             {
                 Player.Ability2();
-                Player.baseAbility2.Use();
             }
             else
             {
@@ -158,15 +156,14 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            if (Player == null || Player.baseAbility3 == null)
+            if (Player == null || Player.BaseAbility3 == null)
             {
                 Debug.LogError("Player or Ability3 is not set yet.");
                 return;
             }
-            if (Player.baseAbility3.IsReady())
+            if (Player.BaseAbility3.IsReady())
             {
                 Player.Ability3();
-                Player.baseAbility3.Use();
             }
             else
             {

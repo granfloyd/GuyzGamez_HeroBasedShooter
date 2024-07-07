@@ -39,13 +39,21 @@ public class ClientProjectile : MonoBehaviour
         speed = spd;
         rb.velocity = dir.normalized * spd;
     }
-    public virtual void HandleCollision(Collision other) { }
+    public virtual void HandleCollision(Collision other)
+    {
+        if (other.gameObject.tag != "Player")
+        {
+            Debug.Log("chit" + other.gameObject.tag.ToString());
+            rb.velocity = Vector3.zero;
+        }
+    }
     public virtual void HandleTrigger(Collider other)
     {
-        //if (other.gameObject.tag != "Enemy1")
-        //{
-        //    rb.velocity = Vector3.zero;
-        //}
+        if (other.gameObject.tag != "Player")
+        {
+            Debug.Log("thit" + other.gameObject.tag.ToString());
+            rb.velocity = Vector3.zero;
+        }
     }
     private void OnCollisionEnter(Collision other) { HandleCollision(other); }
     private void OnTriggerEnter(Collider other) { HandleTrigger(other); }

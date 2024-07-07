@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 706024504729989969}
   - component: {fileID: 749350404774384514}
   - component: {fileID: 4779852623781185443}
+  - component: {fileID: 6515179371879453182}
   - component: {fileID: 4075755436471573613}
   m_Layer: 5
   m_Name: HeroSelectUI
@@ -167,6 +168,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5657116135220082985}
   - {fileID: 7418199008226769442}
   - {fileID: 3633921716383163939}
   - {fileID: 6114196892630085847}
@@ -264,6 +266,31 @@ MonoBehaviour:
   - {fileID: 639118011394819014}
   bussy: {fileID: 0}
   newhero: {fileID: 0}
+--- !u!114 &6515179371879453182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845834870583374376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d3e32952474e44c9b6d67f197f0abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isducttape: 0
+  maxHealth: 200
+  currentHealth:
+    m_InternalValue: 500
+  isPlayer: 0
+  totalWidth: 300
+  blockHeight: 75
+  blockWidth: 0
+  healthPerBlock: 25
+  healthBlockStart: {fileID: 5657116135220082985}
+  healthBlockPrefab: {fileID: 7386056504188965107, guid: 364e97bc2bc7f404396cbc970545bcc6,
+    type: 3}
+  healthBlockList: []
 --- !u!114 &4075755436471573613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,6 +1050,41 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &5591838055849690708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5657116135220082985}
+  m_Layer: 5
+  m_Name: healthbar location
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5657116135220082985
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5591838055849690708}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1967848682198111216}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 150, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5966327168202158430
 GameObject:
   m_ObjectHideFlags: 0
@@ -1727,7 +1789,9 @@ PrefabInstance:
     - target: {fileID: 8816394715327054344, guid: b068d6412f460f54c817adc03450f7bd,
         type: 3}
       propertyPath: m_text
-      value: Villain
+      value: 'Villain
+
+'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1886,7 +1950,7 @@ PrefabInstance:
 
         dont pick
 
-        is null'
+        game will crash'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

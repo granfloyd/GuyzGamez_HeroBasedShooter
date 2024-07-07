@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +8,9 @@ public class HeroBase : PlayerMovement
 {    
     [Header("   HeroBase")]
     [SerializeField] public PlayerController.HeroIndex heroId;
-    [SerializeField] protected int health;
-    [SerializeField] public float recovery;
-    [SerializeField] public float recovery2;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] public float primaryRecovery;
+    [SerializeField] public float secondaryRecovery;
     [SerializeField] public bool isFlying = false;
     [SerializeField] public bool isAffectedByGravity = true;
 
@@ -27,22 +28,21 @@ public class HeroBase : PlayerMovement
     [Header("SecondaryFire")]
     [SerializeField] public float secondaryFireTimer;
 
-    public Ability baseAbility1 { get; set; }
-    public Ability baseAbility2{ get; set; }
-    public Ability baseAbility3{ get; set; }   
+    public AbilityBase BaseAbility1 { get; set; }
+    public AbilityBase BaseAbility2{ get; set; }
+    public AbilityBase BaseAbility3{ get; set; }   
    
     [SerializeField] public float ability3Charge;
     public float ability3MaxCharge;
-
     public bool canGainUltCharge = true;
     new protected void Update()
     {
         base.Update();        
-        if (primaryFireTimer < recovery)
+        if (primaryFireTimer < primaryRecovery)
         {
             primaryFireTimer += Time.deltaTime;
         }
-        if (secondaryFireTimer < recovery2)
+        if (secondaryFireTimer < secondaryRecovery)
         {
             secondaryFireTimer += Time.deltaTime;
         }
@@ -62,16 +62,12 @@ public class HeroBase : PlayerMovement
         {
             Vector3 temp = hit.point - bulletSpawnPos;
             tempGunAngle = temp.normalized;
-
-            //Debug.DrawRay(cameraPos, cameraDirection * hit.distance, Color.red);
         }
         else
         {
             Vector3 endpointPosition = cameraPos + cameraDirection * 100.0f;
             Vector3 bulletEndPointDistance = endpointPosition - bulletSpawnPos;
             tempGunAngle = bulletEndPointDistance.normalized;
-
-            //Debug.DrawRay(cameraPos, cameraDirection * 100.0f, Color.green);
         }
     }
     public virtual void PrimaryFire()
@@ -103,24 +99,34 @@ public class HeroBase : PlayerMovement
         if (!IsOwner) return;
         Debug.Log("q");
     }
+
+    public virtual void Ability1End()
+    {
+        if (!IsOwner) return;
+        Debug.Log("lshift end");
+        HeroBase player = PlayerController.Player;
+        player.BaseAbility1.End();
+    }
+
+    public virtual void Ability2End()
+    {
+        if (!IsOwner) return;
+        Debug.Log("e end");
+        HeroBase player = PlayerController.Player;
+        player.BaseAbility2.End();
+    }
+
+    public virtual void Ability3End()
+    {
+        if (!IsOwner) return;
+        Debug.Log("q end");
+        HeroBase player = PlayerController.Player;
+        player.BaseAbility3.End();
+    }
     public virtual void CollisionEnter(Collider other)
     {
         if(IsOwner)
-        {
-
-            if (other.tag == CollisionPlayer.SpawnCollision)
-            {
-                SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
-                spawnArea.EnteredSpawnArea();
-            }
-
-            if (other.tag == CollisionPlayer.StartEndSim)
-            {
-                AreaData areaData = other.GetComponent<AreaData>();
-                areaData.isSceneActive = true;
- 
-            }
-    
+        { 
     
         }        
     }
@@ -128,23 +134,7 @@ public class HeroBase : PlayerMovement
     {
         if (IsOwner)
         {
-            if (other.tag != CollisionPlayer.SpawnCollision || other.tag != CollisionPlayer.StartEndSim)
-            {
-                return;
-            }
 
-            if (other.tag == CollisionPlayer.SpawnCollision)
-            {
-                SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
-                spawnArea.ExitedSpawnArea();
-            }
-            else if (other.tag == CollisionPlayer.StartEndSim)
-            {
-                Debug.Log("YO YO YO YO hows it goin");
-                //AreaData areaData = other.GetComponent<AreaData>();
-                ///areaData.isSceneActive = false;
-                //areaData.StartSim();
-            }
         }
             
     }

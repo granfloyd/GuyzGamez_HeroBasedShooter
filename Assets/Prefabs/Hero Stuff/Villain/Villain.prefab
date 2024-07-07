@@ -554,9 +554,9 @@ MonoBehaviour:
   emoteMusic: {fileID: 326425577595167283}
   isEmoting: 0
   heroId: 0
-  health: 200
-  recovery: 0.3
-  recovery2: 1
+  maxHealth: 0
+  primaryRecovery: 0.25
+  secondaryRecovery: 2
   isFlying: 0
   isAffectedByGravity: 1
   crosshairPos: {x: 0, y: 0, z: 0}
@@ -574,23 +574,12 @@ MonoBehaviour:
   canGainUltCharge: 1
   speedMultiplier: 0
   secondaryFireSpeed: 30
-  dashSpeed: 15
-  dashDuration: 0
-  eDuration: 0
-  ultDuration: 0
-  dashDirection: {x: 0, y: 0, z: 0}
-  boostDirection: {x: 0, y: 0, z: 0}
-  isDashing: 0
-  isBoosting: 0
-  isEActive: 0
-  isUltForm: 0
   chargeupbeepSource: {fileID: 4658188016031586560}
   rightclickSound: {fileID: 2890731084455365621}
   leftclickSound: {fileID: 5910859485392241050}
   ps: {fileID: 5281293693604004607}
   Rage: 0
   maxRage: 0
-  ultMultiplier: 0
   roundedPing: 0
   ClientProjectilePrefab: {fileID: 5308884282720409307, guid: e66b0db8a5785aa4ca504acf0915e63b,
     type: 3}

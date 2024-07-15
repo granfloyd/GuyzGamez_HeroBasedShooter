@@ -10,6 +10,7 @@ public abstract class AbilityBase : IAbility
     public float timer;
     public float durationTimer;
     public bool isActive;
+    public bool isInstanced;
     protected AbilityBase()
     {
         cooldown = 0;
@@ -34,8 +35,8 @@ public abstract class AbilityBase : IAbility
 
         HeroBase player = PlayerController.Player;
         UpdateTimer();
-        HeroUI.Instance.UpdateAbilityCD(player.BaseAbility1, HeroUI.Instance.ability1Text);
-        HeroUI.Instance.UpdateAbilityCD(player.BaseAbility2, HeroUI.Instance.ability2Text);
+        //HeroUI.Instance.UpdateAbilityCD(player.BaseAbility1, HeroUI.Instance.ability1Text);
+        //HeroUI.Instance.UpdateAbilityCD(player.BaseAbility2, HeroUI.Instance.ability2Text);
     }
     public virtual bool IsReady()
     {

@@ -18,6 +18,7 @@ public class HeroBase : PlayerMovement
     public Vector3 tempGunAngle;
     public Transform weaponPos;
     public GameObject heroPrimaryFirePrefab;
+    public GameObject localGO;
     public Transform primaryFireSpawnPos;
     [HideInInspector] public GameObject weaponInstance = null;
     [HideInInspector] public GameObject bulletInstance = null;    

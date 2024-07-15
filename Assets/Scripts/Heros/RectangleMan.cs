@@ -7,21 +7,16 @@ using UnityEngine.Rendering.Universal.Internal;
 
 public class RectangleMan : HeroBase
 {
-    [SerializeField] private Vector3 hitPoint;
-    [SerializeField] private GameObject grapplePrefab;
-    private GameObject hitPointInstance;
-    private bool isOut = false;
-    private bool isReTracking = false;
-    private float grappleSpeed = 40f;
-    private float totalGrappleDistance = 0f;
-    private float coveredGrappleDistance = 0f;
-    private LineRenderer lineRenderer;
+    //[SerializeField] private Vector3 hitPoint;
+    //[SerializeField] public GameObject grapplePrefab;
+    //private GameObject hitPointInstance;
+    
+    //public LineRenderer lineRendererRM;
     private void Start()
     {
         if (IsOwner)
         {
-            lineRenderer = GetComponent<LineRenderer>();
-            lineRenderer.enabled = false;
+            
             PlayerCamera.iscamset = false;
             PlayerController.Player.BaseAbility1 = new Grapple();
             //PlayerController.Player.baseAbility1 = new Ability(3f, 0);
@@ -44,7 +39,7 @@ public class RectangleMan : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            player.BaseAbility1.UpdateTimer();
+            player.BaseAbility1.AbilityUpdate();
             //player.baseAbility2.UpdateTimer();
             //player.baseAbility3.UpdateTimer();
             //HeroUI.Instance.UpdateAbilityCD(player.baseAbility1, HeroUI.Instance.ability1Text);
@@ -61,19 +56,19 @@ public class RectangleMan : HeroBase
     }
     private void UpdateGrappleLine()
     {
-        if (Physics.Linecast(transform.position, hitPoint, out RaycastHit hit))
-        {
-            if (hit.collider.gameObject != hitPointInstance)
-            {
-                lineRenderer.enabled = false;
-                return;
-            }
-        }
+        //if (Physics.Linecast(transform.position, hitPoint, out RaycastHit hit))
+        //{
+        //    if (hit.collider.gameObject != hitPointInstance)
+        //    {
+        //        lineRendererRM.enabled = false;
+        //        return;
+        //    }
+        //}
 
         // If there's clear LOS, draw the line
-        lineRenderer.enabled = true;
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, hitPoint);
+        //lineRendererRM.enabled = true;
+        //lineRendererRM.SetPosition(0, transform.position);
+        //lineRendererRM.SetPosition(1, hitPoint);
     }
     public override void PrimaryFire()
     {
@@ -99,36 +94,53 @@ public class RectangleMan : HeroBase
 
     }
 
+
     public override void Ability1()
     {
+        HeroBase player = PlayerController.Player;
         if (IsOwner)
         {
-            Debug.Log("pressed");
-            HeroBase player = PlayerController.Player;
             player.BaseAbility1.Use();
-            //if (isOut)
-            //{
-            //    lineRenderer.enabled = false;
-            //    isReTracking = true;
-            //    totalGrappleDistance = Vector3.Distance(player.transform.position, hitPoint);
-            //    return;
-            //}
-            //if (Physics.Raycast(player.transform.position, player.tempGunAngle, out RaycastHit hit, 20.0f))
-            //{
-            //    hitPoint = hit.point;
-            //    hitPointInstance = Instantiate(grapplePrefab, transform.position, player.orientation.localRotation.normalized);
-            //    hitPointInstance.GetComponent<ClientProjectile>().SetMovement(player.tempGunAngle.normalized, 20);
-            //    isOut = true;
-            //    if (lineRenderer != null)
-            //    {
-            //        lineRenderer.enabled = true;
-            //        lineRenderer.SetPosition(0, transform.position);
-            //        lineRenderer.SetPosition(1, hitPoint);
-            //    }
-            //}
+            if (player.BaseAbility1.duration > 0)
+            {
+                Invoke("Ability1End", player.BaseAbility1.duration);
+            }
         }
     }
 
+    public override void Ability1End()
+    {
+        base.Ability1End();
+    }
+    //public override void Ability1()
+    //{
+    //    if (IsOwner)
+    //    {
+    //        Debug.Log("pressed");
+    //        HeroBase player = PlayerController.Player;
+    //        player.BaseAbility1.Use();
+    //        //if (isOut)
+    //        //{
+    //        //    lineRenderer.enabled = false;
+    //        //    isReTracking = true;
+    //        //    totalGrappleDistance = Vector3.Distance(player.transform.position, hitPoint);
+    //        //    return;
+    //        //}
+    //        //if (Physics.Raycast(player.transform.position, player.tempGunAngle, out RaycastHit hit, 20.0f))
+    //        //{
+    //        //    hitPoint = hit.point;
+    //        //    hitPointInstance = Instantiate(grapplePrefab, transform.position, player.orientation.localRotation.normalized);
+    //        //    hitPointInstance.GetComponent<ClientProjectile>().SetMovement(player.tempGunAngle.normalized, 20);
+    //        //    isOut = true;
+    //        //    if (lineRenderer != null)
+    //        //    {
+    //        //        lineRenderer.enabled = true;
+    //        //        lineRenderer.SetPosition(0, transform.position);
+    //        //        lineRenderer.SetPosition(1, hitPoint);
+    //        //    }
+    //        //}
+    //    }
+    //}
     private void ReTrack()
     {
         if (IsOwner)

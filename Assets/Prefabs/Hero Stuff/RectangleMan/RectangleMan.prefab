@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 5264867310349337250}
   - component: {fileID: -4146345379672204511}
   - component: {fileID: 1070641504966947963}
+  - component: {fileID: 607289189292893384}
   m_Layer: 6
   m_Name: RectangleMan
   m_TagString: Player
@@ -164,15 +165,17 @@ MonoBehaviour:
   emoteMusic: {fileID: 0}
   isEmoting: 0
   heroId: 1
-  health: 0
-  recovery: 0
-  recovery2: 0
+  maxHealth: 0
+  primaryRecovery: 0
+  secondaryRecovery: 0
   isFlying: 0
   isAffectedByGravity: 1
   crosshairPos: {x: 0, y: 0, z: 0}
   tempGunAngle: {x: 0, y: 0, z: 0}
   weaponPos: {fileID: 2097113761491064701}
-  heroPrimaryFirePrefab: {fileID: 0}
+  heroPrimaryFirePrefab: {fileID: 5839375063029116307, guid: 753ded231e08d4e4ca48a731a9922544,
+    type: 3}
+  localGO: {fileID: 5839375063029116307, guid: 83d8e041d376bed4cb8a24aa1158b0fa, type: 3}
   primaryFireSpawnPos: {fileID: 2097113761491064701}
   weaponInstance: {fileID: 0}
   bulletInstance: {fileID: 0}
@@ -181,9 +184,6 @@ MonoBehaviour:
   ability3Charge: 0
   ability3MaxCharge: 0
   canGainUltCharge: 1
-  hitPoint: {x: 0, y: 0, z: 0}
-  grapplePrefab: {fileID: 5839375063029116307, guid: 753ded231e08d4e4ca48a731a9922544,
-    type: 3}
 --- !u!114 &-6569279843921154052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +268,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5848897105420163867}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -364,6 +364,23 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &607289189292893384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 880143c50c5c5744795abfc5d06c360f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileLocalPrefab: {fileID: 5839375063029116307, guid: 83d8e041d376bed4cb8a24aa1158b0fa,
+    type: 3}
+  projectileNetcodePrefab: {fileID: 5839375063029116307, guid: 753ded231e08d4e4ca48a731a9922544,
+    type: 3}
+  lineRendererRM: {fileID: 1070641504966947963}
 --- !u!1 &7043148051412231992
 GameObject:
   m_ObjectHideFlags: 0

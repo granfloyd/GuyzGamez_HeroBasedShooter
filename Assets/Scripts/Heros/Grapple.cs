@@ -66,16 +66,27 @@ public class Grapple : AbilityBase
             Debug.Log("Grapple hit");
                 player.GetComponent<SpawnObject>().SpawnObjectLocal(
                 NetworkManager.Singleton.LocalClientId,
+                0,
                 player.transform.position,
                 player.orientation.localRotation.normalized);
-
+            
                 player.GetComponent<SpawnObject>().SpawnObjectServerRpc(
                 NetworkManager.Singleton.LocalClientId,
                 player.transform.position,
                 player.orientation.localRotation.normalized);
+            
+            player.GetComponent<SpawnObject>().ObjectConfig(
+                player.tempGunAngle.normalized,
+                grappleSpeed,
+                0);
+
+            player.GetComponent<SpawnObject>().ObjectConfigServerRpc(
+                player.tempGunAngle.normalized,
+                grappleSpeed,
+                0);
 
             hitPoint = hit.point;
-
+            
             
             isOut = true;
             player.GetComponent<SpawnObject>().SetGameObjectServerRpc(true);

@@ -21,9 +21,10 @@ public class Overclock : AbilityBase
     {
         if (IsReady())
         {
-            HeroUI.Instance.ResetUltSlider();
             HeroBase player = PlayerController.Player;
             base.Use();
+            HeroUI.Instance.DisplayDurationSlider(duration);
+            HeroUI.Instance.ResetUltSlider();
             boostDirection = Camera.main.gameObject.transform.up;
             isBoosting = true;
             player.isAffectedByGravity = false;

@@ -31,7 +31,7 @@ public class Villain : HeroBase
     [SerializeField] private int maxRage;
     [SerializeField] private double roundedPing;
 
-    public GameObject ClientProjectilePrefab;
+    //public GameObject ClientProjectilePrefab;
     private void Start()
     { 
         if (IsOwner)
@@ -60,6 +60,9 @@ public class Villain : HeroBase
             player.BaseAbility1.AbilityUpdate();
             player.BaseAbility2.AbilityUpdate();
             player.BaseAbility3.AbilityUpdate();
+
+            HeroUI.Instance.UpdateAbilityCD(player.BaseAbility1, HeroUI.Instance.ability1Text);
+            HeroUI.Instance.UpdateAbilityCD(player.BaseAbility2, HeroUI.Instance.ability2Text);
         }
     }
     public override void PrimaryFire()
@@ -67,91 +70,30 @@ public class Villain : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
-            // Spawn the bullet immediately on the client side.
-            SpawnBulletClient(NetworkManager.Singleton.LocalClientId,
+            SpawnObject spawnObject = player.GetComponent<SpawnObject>();
+            leftclickSound.Play();
+
+            spawnObject.SpawnObjectLocal(
+                NetworkManager.Singleton.LocalClientId,
                 roundedPing,
-                Type.primary,
                 player.primaryFireSpawnPos.position,
-                player.orientation.localRotation.normalized,
-                player.tempGunAngle.normalized,
-                0);
+                player.orientation.localRotation.normalized);
 
-            //Request the server to spawn the bullet.
-            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
-                roundedPing,
-                Type.primary,
+            spawnObject.SpawnObjectServerRpc(
+                NetworkManager.Singleton.LocalClientId,
                 player.primaryFireSpawnPos.position,
-                player.orientation.localRotation.normalized,
+                player.orientation.localRotation.normalized);
+
+            spawnObject.ObjectConfig(
                 player.tempGunAngle.normalized,
-                0);//no bonus dmg 
+                PRIMARY_FIRE_SPEED,
+                PRIMARY_FIRE_DAMAGE);
+
+            spawnObject.ObjectConfigServerRpc(
+                player.tempGunAngle.normalized,
+                PRIMARY_FIRE_SPEED,
+                PRIMARY_FIRE_DAMAGE); 
         }
-    }
-    
-    void SpawnBulletClient(ulong clientid ,double ping ,Type bulletType ,Vector3 position ,Quaternion rotation ,Vector3 velocity ,int rageValue)
-    {
-        if (IsServer) return;
-
-        switch(bulletType)
-        {
-            case Type.primary:
-                GameObject clientProjectile = Instantiate(ClientProjectilePrefab, position, rotation);
-                clientProjectile.GetComponent<VillainProjectile>().ownerID = clientid;
-                clientProjectile.GetComponent<VillainProjectile>().SetLifeSpan(2);
-                clientProjectile.GetComponent<VillainProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
-                clientProjectile.GetComponent<VillainProjectile>().SetMovement(velocity, PRIMARY_FIRE_SPEED);
-                break;
-            case Type.secondary:
-                GameObject clientSecondaryProjectile = Instantiate(ClientProjectilePrefab, position, rotation);
-                clientSecondaryProjectile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                clientSecondaryProjectile.GetComponent<VillainProjectile>().isSecondaryFire = true;
-                clientSecondaryProjectile.GetComponent<VillainProjectile>().ownerID = clientid;
-                clientSecondaryProjectile.GetComponent<VillainProjectile>().SetLifeSpan(2);
-                clientSecondaryProjectile.GetComponent<VillainProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + rageValue);
-                clientSecondaryProjectile.GetComponent<VillainProjectile>().SetMovement(velocity, SECONDARY_FIRE_SPEED);
-                break;
-        }
-        
-    }
-
-    [ServerRpc]
-    void SpawnBulletServerRpc(ulong clientId,double ping, Type bulletType,Vector3 position, Quaternion rotation, Vector3 velocity, int rageValue)
-    {
-        GameObject serverProjectile;
-        GameObject serverSecondaryProjectile;
-        switch (bulletType)
-        {
-            
-            case Type.primary:
-                leftclickSound.Play();
-                serverProjectile = Instantiate(heroPrimaryFirePrefab, position, rotation);
-                serverProjectile.GetComponent<VillainProjectile>().ownerID = clientId;
-                serverProjectile.GetComponent<VillainProjectile>().SetLifeSpan(2);
-                AssignBulletToPlayer(serverProjectile, clientId);
-                serverProjectile.GetComponent<VillainProjectile>().SetDamage(PRIMARY_FIRE_DAMAGE);
-                serverProjectile.GetComponent<VillainProjectile>().SetMovement(velocity, PRIMARY_FIRE_SPEED);
-                break;
-            case Type.secondary:
-                rightclickSound.Play();
-                serverSecondaryProjectile = Instantiate(heroPrimaryFirePrefab, position, rotation);
-                serverSecondaryProjectile.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-                serverSecondaryProjectile.GetComponent<VillainProjectile>().isSecondaryFire = true;
-                serverSecondaryProjectile.GetComponent<VillainProjectile>().ownerID = clientId;
-                serverSecondaryProjectile.GetComponent<VillainProjectile>().SetLifeSpan(2);
-                AssignBulletToPlayer(serverSecondaryProjectile, clientId);
-                //use rage bonus regardless of hitting enemy
-                serverSecondaryProjectile.GetComponent<VillainProjectile>().SetDamage(SECONDARY_FIRE_DAMAGE + rageValue);
-                serverSecondaryProjectile.GetComponent<VillainProjectile>().SetMovement(velocity, SECONDARY_FIRE_SPEED);
-                ResetRage();//after adding rage to thing set it to 0
-                
-                if(clientId != 0)
-                {
-                    ClientResetRageClientRpc(clientId);
-                    //send this to client 
-                }
-                break;
-
-        }
-
     }
 
     [ClientRpc]
@@ -176,24 +118,38 @@ public class Villain : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
+            SpawnObject spawnObject = player.GetComponent<SpawnObject>();
+            rightclickSound.Play();
             UseRage();
-
-            // Spawn the bullet immediately on the client side.
-            SpawnBulletClient(NetworkManager.Singleton.LocalClientId,//owner id
-                roundedPing,//ping
-                Type.secondary,//type
+            spawnObject.SpawnObjectLocal(
+                NetworkManager.Singleton.LocalClientId,
+                roundedPing,
                 player.primaryFireSpawnPos.position,
-                player.orientation.localRotation.normalized,
-                player.tempGunAngle.normalized,//direction
-                Rage);//bonusdmg
+                player.orientation.localRotation.normalized);
 
-            SpawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
-                roundedPing,//ping
-                Type.secondary,//type
+            spawnObject.SpawnObjectServerRpc(
+                NetworkManager.Singleton.LocalClientId,
                 player.primaryFireSpawnPos.position,
-                player.orientation.localRotation,
-                player.tempGunAngle,//direction
-                Rage);//bonusdmg
+                player.orientation.localRotation.normalized);
+
+            spawnObject.ObjectConfig(
+                player.tempGunAngle.normalized,
+                SECONDARY_FIRE_SPEED,
+                SECONDARY_FIRE_DAMAGE);
+
+            spawnObject.ObjectConfigServerRpc(
+                player.tempGunAngle.normalized,
+                SECONDARY_FIRE_SPEED,
+                SECONDARY_FIRE_DAMAGE);
+
+            ResetRage();//after adding rage to thing set it to 0
+
+            if (NetworkManager.Singleton.LocalClientId != 0)
+            {
+                ClientResetRageClientRpc(NetworkManager.Singleton.LocalClientId);
+                //send this to client 
+            }
+
         }
     }
     public void AddToRage(int addTo)
@@ -298,7 +254,9 @@ public class Villain : HeroBase
             if (player.ability3Charge >= player.ability3MaxCharge)
             {
                 player.BaseAbility3.Use();
+                maxRage = 200;
                 Invoke("Ability3End", player.BaseAbility3.duration);
+
             }
         }
         
@@ -310,7 +268,7 @@ public class Villain : HeroBase
         if (IsOwner)
         {
             base.Ability3End();
-            
+            maxRage = 100;
         }
     }
 

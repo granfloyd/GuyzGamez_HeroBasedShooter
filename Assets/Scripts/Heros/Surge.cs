@@ -9,7 +9,7 @@ public class Surge : AbilityBase
         cooldown = 7f;
         duration = 5f;
         timer = cooldown;
-        isActive = false;
+        durationTimer = 0;
     }
 
     public override void Use()
@@ -34,7 +34,11 @@ public class Surge : AbilityBase
     }
     public override void AbilityUpdate()
     {
-        base.AbilityUpdate(); 
-        
+        base.AbilityUpdate();
+        if (duration > 0)
+        {
+            HeroUI.Instance.UpdateDurationSlider(durationTimer);
+        }
+
     }
 }

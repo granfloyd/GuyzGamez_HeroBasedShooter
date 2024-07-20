@@ -30,16 +30,24 @@ public class HeroUI : MonoBehaviour
     }
     public void DisplayDurationSlider(float duration)
     {
-        displaySlider.gameObject.SetActive(true);
+        displaySlider.value = duration;
         displaySlider.maxValue = duration;
-        displaySlider.value = duration;        
+        displaySlider.gameObject.SetActive(true);
     }
     public void UpdateDurationSlider(float currentDuration)
     {
-        displaySlider.value = currentDuration;
-        if (currentDuration < 0)
+        if (currentDuration <= 0)
         {
             displaySlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            displaySlider.value = currentDuration;
+            // Ensure the slider is visible if there's a valid duration to display.
+            if (!displaySlider.gameObject.activeSelf)
+            {
+                displaySlider.gameObject.SetActive(true);
+            }
         }
     }
 

@@ -127,15 +127,24 @@ public class HeroBase : PlayerMovement
     public virtual void CollisionEnter(Collider other)
     {
         if(IsOwner)
-        { 
-    
+        {
+            if (other.tag == CollisionPlayer.SpawnCollision)
+            {
+                SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
+                spawnArea.EnteredSpawnArea();
+            }
+
         }        
     }
     public virtual void CollisionExit(Collider other)
     {
         if (IsOwner)
         {
-
+            if (other.tag == CollisionPlayer.SpawnCollision)
+            {
+                SpawnArea spawnArea = other.GetComponentInParent<SpawnArea>();
+                spawnArea.ExitedSpawnArea();
+            }
         }
             
     }

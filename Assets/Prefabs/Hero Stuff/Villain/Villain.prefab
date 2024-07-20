@@ -468,6 +468,7 @@ GameObject:
   - component: {fileID: 326425577595167283}
   - component: {fileID: 5281293693604004607}
   - component: {fileID: 6069265351758811484}
+  - component: {fileID: 4235467497631352669}
   m_Layer: 6
   m_Name: Villain
   m_TagString: Player
@@ -564,6 +565,7 @@ MonoBehaviour:
   weaponPos: {fileID: 2097113761491064701}
   heroPrimaryFirePrefab: {fileID: 5308884282720409307, guid: 8bc4a32df342b2f4c97212dfbb24d4f4,
     type: 3}
+  localGO: {fileID: 0}
   primaryFireSpawnPos: {fileID: 2687381878610082463}
   weaponInstance: {fileID: 0}
   bulletInstance: {fileID: 0}
@@ -5550,6 +5552,23 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &4235467497631352669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848897105420163867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 880143c50c5c5744795abfc5d06c360f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileLocalPrefab: {fileID: 5308884282720409307, guid: e66b0db8a5785aa4ca504acf0915e63b,
+    type: 3}
+  projectileNetcodePrefab: {fileID: 5308884282720409307, guid: 8bc4a32df342b2f4c97212dfbb24d4f4,
+    type: 3}
+  lineRendererRM: {fileID: 0}
 --- !u!1 &6692942985396225042
 GameObject:
   m_ObjectHideFlags: 0

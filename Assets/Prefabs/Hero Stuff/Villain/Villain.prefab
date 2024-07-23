@@ -575,7 +575,6 @@ MonoBehaviour:
   ability3MaxCharge: 300
   canGainUltCharge: 1
   speedMultiplier: 0
-  secondaryFireSpeed: 30
   chargeupbeepSource: {fileID: 4658188016031586560}
   rightclickSound: {fileID: 2890731084455365621}
   leftclickSound: {fileID: 5910859485392241050}
@@ -583,8 +582,6 @@ MonoBehaviour:
   Rage: 0
   maxRage: 0
   roundedPing: 0
-  ClientProjectilePrefab: {fileID: 5308884282720409307, guid: e66b0db8a5785aa4ca504acf0915e63b,
-    type: 3}
 --- !u!114 &1601990111586344745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,7 +668,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e37035f508824354f94317e4a3086046, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b45aff2505671d440bfc0769bcfcbe59, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -5569,6 +5566,8 @@ MonoBehaviour:
   projectileNetcodePrefab: {fileID: 5308884282720409307, guid: 8bc4a32df342b2f4c97212dfbb24d4f4,
     type: 3}
   lineRendererRM: {fileID: 0}
+  localInstance: {fileID: 0}
+  netobjectInstance: {fileID: 0}
 --- !u!1 &6692942985396225042
 GameObject:
   m_ObjectHideFlags: 0

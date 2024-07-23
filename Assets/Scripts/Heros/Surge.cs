@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class Surge : AbilityBase
 {
     public Surge() : base()
     {
-        cooldown = 7f;
+        cooldown = 1f;
         duration = 5f;
-        timer = cooldown;
+        timer = 0;
         durationTimer = 0;
+        isActive = false;
     }
 
     public override void Use()
@@ -24,10 +26,6 @@ public class Surge : AbilityBase
     {
         return base.IsReady();
     }
-    public override void UpdateTimer()
-    {
-        base.UpdateTimer();
-    }
     public override void End()
     {
         base.End();
@@ -35,10 +33,5 @@ public class Surge : AbilityBase
     public override void AbilityUpdate()
     {
         base.AbilityUpdate();
-        if (duration > 0)
-        {
-            HeroUI.Instance.UpdateDurationSlider(durationTimer);
-        }
-
     }
 }

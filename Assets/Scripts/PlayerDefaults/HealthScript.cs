@@ -35,7 +35,6 @@ public class HealthScript : NetworkBehaviour
     {
         currentHealth.Value = maxHealth; // Set the initial health value
         CreateHealthBar();
-        //healthText.text = currentHealth.Value.ToString(); // Update the text with the initial health value
     }
     void CreateHealthBar()
     {
@@ -67,7 +66,6 @@ public class HealthScript : NetworkBehaviour
         }
         else//for world space
         {
-            Debug.Log("spawning enemy hp bar");
             blockWidth *= 0.5f;
             blockHeight *= 0.5f;
             for (int i = 0; i < totalBlocks; i++)
@@ -99,7 +97,7 @@ public class HealthScript : NetworkBehaviour
     private void OnHealthChange(int previousHealth, int newHealth)
     {
         //Debug.Log("Health changed from " + previousHealth + " to " + newHealth);
-        //healthText.text = newHealth.ToString(); // Update the text with the new health value
+        currentHealth.Value = newHealth;
     }
     private void FixedUpdate()
     {
@@ -125,31 +123,27 @@ public class HealthScript : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ApplyDamageServerRpc(int damage)
     {
-        if (IsServer)
-        {
-            currentHealth.Value -= damage;
-        }        
-        Updatehp();
-        //UpdateClientHealthClientRpc(currentHealth.Value);
+        if (!IsServer) return;
 
-        if (currentHealth.Value <= 0)
-        {
-            Destroy(transform.root.gameObject);
-        }
+        currentHealth.Value -= damage;
+        Updatehp();
+        UpdateClientHealthClientRpc();
+
+        //if (currentHealth.Value <= 0)
+        //{
+        //    Destroy(transform.root.gameObject);
+        //}
     }
 
     [ClientRpc]
-    private void UpdateClientHealthClientRpc(int updatedHealth)
+    private void UpdateClientHealthClientRpc()
     {
-        //Debug.Log("Updating client health: " + updatedHealth);
-        //healthText.text = updatedHealth.ToString(); // Update the text with the updated health value
-
+        Updatehp();
     }
     private void Updatehp()
     {
         int fullBlocks = currentHealth.Value / healthPerBlock;
         int partialBlockHealth = currentHealth.Value % healthPerBlock;
-        Debug.Log("onclient");
         for (int i = 0; i < healthBlockList.Count; i++)
         {
             Slider healthBlockSlider = healthBlockList[i].GetComponent<Slider>();

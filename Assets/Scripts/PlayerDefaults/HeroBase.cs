@@ -104,6 +104,7 @@ public class HeroBase : PlayerMovement
     public virtual void Ability1End()
     {
         if (!IsOwner) return;
+
         Debug.Log("lshift end");
         HeroBase player = PlayerController.Player;
         player.BaseAbility1.End();
@@ -112,6 +113,7 @@ public class HeroBase : PlayerMovement
     public virtual void Ability2End()
     {
         if (!IsOwner) return;
+
         Debug.Log("e end");
         HeroBase player = PlayerController.Player;
         player.BaseAbility2.End();
@@ -120,6 +122,7 @@ public class HeroBase : PlayerMovement
     public virtual void Ability3End()
     {
         if (!IsOwner) return;
+
         Debug.Log("q end");
         HeroBase player = PlayerController.Player;
         player.BaseAbility3.End();

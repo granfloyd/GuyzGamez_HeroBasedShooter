@@ -19,43 +19,37 @@ public class HeroUI : MonoBehaviour
     
     private void Awake()
     {
-        // If an instance already exists, destroy this one
         if (Instance != null)
         {
             Destroy(gameObject);
             return;
         }
-        // Set this as the instance
         Instance = this;
+    }
+    void Update()
+    {
+        if (PlayerController.Player != null)
+        {
+            UpdateDurationSlider();
+        }        
     }
     public void DisplayDurationSlider(float duration)
     {
-        displaySlider.value = duration;
         displaySlider.maxValue = duration;
+        displaySlider.value = duration;        
         displaySlider.gameObject.SetActive(true);
     }
-    public void UpdateDurationSlider(float currentDuration)
+    public void UpdateDurationSlider()
     {
-        if (currentDuration <= 0)
+        if (displaySlider.gameObject.activeSelf)
         {
-            displaySlider.gameObject.SetActive(false);
-        }
-        else
-        {
-            displaySlider.value = currentDuration;
-            // Ensure the slider is visible if there's a valid duration to display.
-            if (!displaySlider.gameObject.activeSelf)
+            displaySlider.value -= Time.deltaTime;
+            if (displaySlider.value <= 0)
             {
-                displaySlider.gameObject.SetActive(true);
+                displaySlider.gameObject.SetActive(false);
             }
         }
     }
-
-    public void RemoveDurationSlider()
-    {
-        displaySlider.gameObject.SetActive(false);
-    }
-
     public void DisplayText(string displaythis)
     {
         if(displayTMP.gameObject.activeSelf == false)

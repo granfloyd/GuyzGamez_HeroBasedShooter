@@ -13,6 +13,7 @@ public class VillainProjectile : ClientProjectile
     {
         if (other.gameObject.tag == "Enemy1")
         {
+            Debug.Log("Hit Enemy client trigger");
             if(other.gameObject.GetComponent<NetworkObject>() == null)
             {
                 Debug.Log("No NetworkObject found on the object");
@@ -21,10 +22,9 @@ public class VillainProjectile : ClientProjectile
             ulong objectid = other.gameObject.GetComponent<NetworkObject>().NetworkObjectId;
             NetcodeSolutions netcodeSolutions = other.gameObject.GetComponent<NetcodeSolutions>();
             netcodeSolutions.ClientProjectileOnHit(objectid, transform.position,ownerID,damage);
-            Destroy(gameObject);
-
             ClientSendUltChargeClientRpc(ownerID, damage);
             ClientSendRageClientRpc(ownerID, damage);
+            Destroy(gameObject);
         }
         else
         {
@@ -32,8 +32,10 @@ public class VillainProjectile : ClientProjectile
         }
     }
 
-    public override void HandleCollision(Collision other)//server aka the HOST uses collision
+    public override void HandleCollision(Collision other)//server 
     {
+        if (ownerID != 0) return;
+
         if (other.gameObject.tag == "Enemy1")
         {
             if (other.gameObject.GetComponent<NetworkObject>() == null)
@@ -44,14 +46,15 @@ public class VillainProjectile : ClientProjectile
             ulong objectid = other.gameObject.GetComponent<NetworkObject>().NetworkObjectId;
             NetcodeSolutions netcodeSolutions = other.gameObject.GetComponent<NetcodeSolutions>();
             netcodeSolutions.ClientProjectileOnHit(objectid, transform.position, ownerID, damage);
-            Destroy(gameObject);
+            
 
             HeroUI.Instance.UpdateUltSlider(damage);
 
             if (!isSecondaryFire)
             {
                 PlayerController.Player.GetComponent<Villain>().AddToRage(damage);
-            }            
+            }
+            Destroy(gameObject);
         }
         else
         {

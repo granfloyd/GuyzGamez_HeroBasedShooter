@@ -13,8 +13,9 @@ public class Overclock : AbilityBase
     {
         cooldown = 0.7f;
         duration = 10f;
-        timer = cooldown;
         durationTimer = 0;
+        timer = 0;       
+        isActive = false;
     }
 
     public override void Use()
@@ -52,12 +53,8 @@ public class Overclock : AbilityBase
         }
     }
     public override bool IsReady()
-    {
+    {        
         return base.IsReady();
-    }
-    public override void UpdateTimer()
-    {
-        base.UpdateTimer();
     }
     public override void End()
     {
@@ -76,9 +73,5 @@ public class Overclock : AbilityBase
     {
         base.AbilityUpdate();
         BoostMovement();
-        if (duration > 0)
-        {
-            HeroUI.Instance.UpdateDurationSlider(durationTimer);
-        }
     }
 }

@@ -19,7 +19,6 @@ public class Grapple : AbilityBase
         durationTimer = 0;
         isInstanced = false;
         isActive = false;
-        Debug.Log("Grapple created");
     }
     public override void Use()
     {
@@ -27,7 +26,6 @@ public class Grapple : AbilityBase
         {
             base.Use();
             CastGrapple();
-            Debug.Log("used Grapple");
         }
     }
     public override void AbilityUpdate()
@@ -55,7 +53,6 @@ public class Grapple : AbilityBase
         HeroBase player = PlayerController.Player;
         if (isOut)
         {
-            Debug.Log("Grapple out");
             player.GetComponent<SpawnObject>().SetGameObjectServerRpc(false);
             isReTracking = true;
             totalGrappleDistance = Vector3.Distance(player.transform.position, hitPoint);
@@ -63,7 +60,6 @@ public class Grapple : AbilityBase
         }
         if (Physics.Raycast(player.transform.position, player.tempGunAngle, out RaycastHit hit, 20.0f))
         {
-            Debug.Log("Grapple hit");
                 player.GetComponent<SpawnObject>().SpawnObjectLocal(
                 NetworkManager.Singleton.LocalClientId,
                 0,
@@ -95,7 +91,7 @@ public class Grapple : AbilityBase
         }
         else
         {
-            Debug.Log("Grapple missed");
+            //Debug.Log("Grapple missed");
         }
     }
     private void UpdateGrappleLine()
@@ -145,10 +141,6 @@ public class Grapple : AbilityBase
     public override bool IsReady()
     {
         return base.IsReady();
-    }
-    public override void UpdateTimer()
-    {
-        base.UpdateTimer();
     }
 
 

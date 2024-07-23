@@ -10,8 +10,8 @@ public class ChargeupDash : AbilityBase
     {
         cooldown = 4f;
         duration = 0.7f;
-        timer = cooldown;
         durationTimer = 0;
+        timer = 0;
         isActive = false;
     }
     public override void Use()
@@ -70,7 +70,7 @@ public class ChargeupDash : AbilityBase
         SetDash(false);
     }
     public override void AbilityUpdate()
-    {
+    {   
         base.AbilityUpdate();
         DashMovement();
     }
@@ -78,9 +78,5 @@ public class ChargeupDash : AbilityBase
     public override bool IsReady()
     {
         return base.IsReady();
-    }
-    public override void UpdateTimer()
-    {
-        base.UpdateTimer();
     }
 }

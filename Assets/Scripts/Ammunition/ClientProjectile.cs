@@ -20,6 +20,7 @@ public class ClientProjectile : MonoBehaviour
     {  
         lifespan = 5;
         rb = GetComponent<Rigidbody>();
+
         Destroy(gameObject, lifespan);
     }
 
@@ -55,6 +56,6 @@ public class ClientProjectile : MonoBehaviour
             rb.velocity = Vector3.zero;
         }
     }
-    private void OnCollisionEnter(Collision other) { HandleCollision(other); }
-    private void OnTriggerEnter(Collider other) { HandleTrigger(other); }
+    private void OnCollisionStay(Collision other) { HandleCollision(other); }
+    private void OnTriggerStay(Collider other) { HandleTrigger(other); }
 }

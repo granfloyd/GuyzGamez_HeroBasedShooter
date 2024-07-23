@@ -8,18 +8,10 @@ using UnityEngine.EventSystems;
 
 public class Villain : HeroBase
 {
-    public enum Type
-    {
-        primary,
-        secondary
-    }
-    [SerializeField] private float speedMultiplier = 3;
-    [SerializeField] private float secondaryFireSpeed = 30;
-
     [SerializeField] private const int PRIMARY_FIRE_DAMAGE = 10;
     [SerializeField] private const int SECONDARY_FIRE_DAMAGE = 50;
-    [SerializeField] private const float PRIMARY_FIRE_SPEED = 70;
-    [SerializeField] private const float SECONDARY_FIRE_SPEED = 90;
+    [SerializeField] private const float PRIMARY_FIRE_SPEED = 100;
+    [SerializeField] private const float SECONDARY_FIRE_SPEED = 130;
 
     [SerializeField] private AudioSource chargeupbeepSource;//charge sound
     [SerializeField] private AudioSource rightclickSound;
@@ -31,7 +23,6 @@ public class Villain : HeroBase
     [SerializeField] private int maxRage;
     [SerializeField] private double roundedPing;
 
-    //public GameObject ClientProjectilePrefab;
     private void Start()
     { 
         if (IsOwner)
@@ -104,15 +95,6 @@ public class Villain : HeroBase
             ResetRage();
         }
     }
-    void AssignBulletToPlayer(GameObject spawnedGameObject, ulong clientid)
-    {
-        NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
-        bulletNetworkObject.SpawnWithOwnership(clientid);
-        if(!IsOwnedByServer)
-        bulletNetworkObject.NetworkHide(clientid);
-
-    }
-
     public override void SecondaryFire()
     {
         if (IsOwner)

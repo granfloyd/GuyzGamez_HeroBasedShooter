@@ -43,7 +43,6 @@ public class AirDrone : EnemyBehaviour
 
     void MaybeMakeAttackClassThing()
     {
-        Debug.Log("calling dis22");
         Vector3 directionToPlayer = (targetPlayer.transform.position - transform.position).normalized;
         GameObject projectileInstance = Instantiate(Projectile1Prefab, Projectile1SpawnPoint[flip].position, transform.localRotation);
         ServerProjectile serverProjectileComponent = projectileInstance.GetComponent<ServerProjectile>();

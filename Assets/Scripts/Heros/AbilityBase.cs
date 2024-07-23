@@ -15,42 +15,35 @@ public abstract class AbilityBase : IAbility
     {
         cooldown = 0;
         duration = 0;
-        timer = cooldown; // Initialize timer to be ready for first use
+        timer = 0;
         durationTimer = 0;
     }
 
-    public virtual void UpdateTimer()
-    {
-        if (durationTimer > 0)
-        {
-            durationTimer -= Time.deltaTime;
-        }
-        else if (timer < cooldown)
-        {
-            timer += Time.deltaTime;
-        }
-    }
-    public virtual void AbilityUpdate()
-    {
-
-        HeroBase player = PlayerController.Player;
-        UpdateTimer();
-        //HeroUI.Instance.UpdateAbilityCD(player.BaseAbility1, HeroUI.Instance.ability1Text);
-        //HeroUI.Instance.UpdateAbilityCD(player.BaseAbility2, HeroUI.Instance.ability2Text);
-    }
     public virtual bool IsReady()
     {
-        return timer >= cooldown && durationTimer <= 0;
+        return timer <= 0 && durationTimer <= 0;
     }
 
     public virtual void Use()
     {
-        if (IsReady())
+        isActive = true;
+        timer = cooldown;
+        durationTimer = duration;        
+    }
+    public virtual void AbilityUpdate()
+    {
+        UpdateTimer();
+    }
+
+    public void UpdateTimer()
+    {
+        if (durationTimer >= 0)
         {
-            
-            isActive = true;
-            timer = 0;
-            durationTimer = duration;
+            durationTimer -= Time.deltaTime;
+        }
+        else if (timer >= 0)
+        {
+            timer -= Time.deltaTime;
         }
     }
 
@@ -61,9 +54,10 @@ public abstract class AbilityBase : IAbility
             isActive = false;
         }
     }
+
     public float GetCooldownTimeLeft()
     {
-        float timeLeft = cooldown - timer;
+        float timeLeft = timer;
         if (timeLeft > 0)
         {
             return timeLeft;

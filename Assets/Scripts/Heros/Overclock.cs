@@ -12,7 +12,7 @@ public class Overclock : AbilityBase
     public Overclock() : base()
     {
         cooldown = 0.7f;
-        duration = 10f;
+        duration = 15f;
         durationTimer = 0;
         timer = 0;       
         isActive = false;
@@ -32,14 +32,15 @@ public class Overclock : AbilityBase
             player.isFlying = true;
             player.canGainUltCharge = false;
             player.primaryRecovery /= ultMultiplier;
-            player.secondaryRecovery /= ultMultiplier;          
+            player.secondaryRecovery /= ultMultiplier;     
+            player.BaseAbility1.cooldown = 0f;
         }
     }
     public void BoostMovement()
     {
         if (isBoosting)
         {
-            if(durationTimer >= 9.5f)
+            if(durationTimer >= 14.5f)
             {
                 HeroBase player = PlayerController.Player;
                 Vector3 boostMovement = boostDirection * dashSpeed * Time.deltaTime;
@@ -67,7 +68,8 @@ public class Overclock : AbilityBase
         player.canGainUltCharge = true;
         player.primaryRecovery *= ultMultiplier;
         player.secondaryRecovery *= ultMultiplier;
-        
+        player.BaseAbility1.cooldown = 4f;
+
     }
     public override void AbilityUpdate()
     {

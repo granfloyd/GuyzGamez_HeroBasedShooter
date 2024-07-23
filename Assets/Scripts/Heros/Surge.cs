@@ -18,7 +18,10 @@ public class Surge : AbilityBase
     {
         if (IsReady())
         {
+            HeroBase player = PlayerController.Player;
             base.Use();
+            Modifiers mod = player.gameObject.GetComponent<Modifiers>();
+            mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
             HeroUI.Instance.DisplayDurationSlider(duration);
         }
     }

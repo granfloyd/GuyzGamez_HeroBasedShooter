@@ -137,23 +137,17 @@ public class Villain : HeroBase
     public void AddToRage(int addTo)
     {
         if (PlayerController.Player.BaseAbility2.isActive)
-        {
             addTo *= 2;
-        }
+
         Rage += addTo;
 
         chargeupbeepSource.pitch = 0.6f + ((float)Rage / maxRage) * (1.5f - 0.6f);
-
         // Ensure the pitch does not exceed the maximum.
         if (chargeupbeepSource.pitch > 1.5f)
-        {
             chargeupbeepSource.pitch = 1.5f;
-        }
 
         if (!chargeupbeepSource.isPlaying)
-        {
             chargeupbeepSource.Play();
-        }
 
         if (Rage >= maxRage)
         {
@@ -210,8 +204,6 @@ public class Villain : HeroBase
         {
             HeroBase player = PlayerController.Player;
             player.BaseAbility2.Use();
-            Modifiers mod = player.gameObject.GetComponent<Modifiers>();
-            mod.AddModifier(Modifiers.ModifierIndex.MERLIN_EDMG_MULTIPLIER);
             Invoke("Ability2End", player.BaseAbility2.duration);
             
         }

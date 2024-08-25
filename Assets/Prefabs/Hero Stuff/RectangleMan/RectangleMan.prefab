@@ -378,9 +378,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileLocalPrefab: {fileID: 5839375063029116307, guid: 83d8e041d376bed4cb8a24aa1158b0fa,
     type: 3}
-  projectileNetcodePrefab: {fileID: 5839375063029116307, guid: 753ded231e08d4e4ca48a731a9922544,
+  projectileNetcodePrefab: {fileID: 5839375063029116307, guid: b9e452a8cc9ef66438df1588ecbe1d38,
     type: 3}
   lineRendererRM: {fileID: 1070641504966947963}
+  localInstance: {fileID: 0}
+  netobjectInstance: {fileID: 0}
 --- !u!1 &7043148051412231992
 GameObject:
   m_ObjectHideFlags: 0

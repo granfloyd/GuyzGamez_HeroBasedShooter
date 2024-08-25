@@ -14,6 +14,7 @@ public class RectangleMan : HeroBase
         {            
             PlayerCamera.iscamset = false;
             player.BaseAbility1 = new Grapple();
+            player.BaseAbility2 = new ChainTogether();
             
             HeroUI.Instance.SetUltSlider();
             if (player == null)
@@ -32,6 +33,7 @@ public class RectangleMan : HeroBase
         {
             HeroBase player = PlayerController.Player;
             player.BaseAbility1.AbilityUpdate();
+            player.BaseAbility2.AbilityUpdate();
             HeroUI.Instance.UpdateAbilityCD(player.BaseAbility1, HeroUI.Instance.ability1Text);
             //HeroUI.Instance.UpdateAbilityCD(player.baseAbility2, HeroUI.Instance.ability2Text);
         }
@@ -49,16 +51,11 @@ public class RectangleMan : HeroBase
         if (IsOwner)
         {
             HeroBase player = PlayerController.Player;
+            player.BaseAbility2.Use();
+            //player.BaseAbility2.End();
         }
     }
-    void AssignBulletToPlayer(GameObject spawnedGameObject, ulong clientid)
-    {
-        NetworkObject bulletNetworkObject = spawnedGameObject.GetComponent<NetworkObject>();
-        bulletNetworkObject.SpawnWithOwnership(clientid);
-        if (!IsOwnedByServer)
-            bulletNetworkObject.NetworkHide(clientid);
 
-    }
     public override void Ability1()
     {
         HeroBase player = PlayerController.Player;
@@ -76,6 +73,7 @@ public class RectangleMan : HeroBase
     {
         base.Ability1End();
     }
+
     public override void Ability2()
     {
         if (IsOwner)
@@ -84,7 +82,22 @@ public class RectangleMan : HeroBase
         }
     }
 
+    public override void Ability2End()
+    {
+        if (IsOwner)
+        {
+
+        }
+    }
     public override void Ability3()
+    {
+        if (IsOwner)
+        {
+
+        }
+    }
+
+    public override void Ability3End()
     {
         if (IsOwner)
         {

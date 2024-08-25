@@ -9,7 +9,7 @@ public class EnemyBehaviour : NetworkBehaviour
 {
     [SerializeField] public GameObject Projectile1Prefab;
     [SerializeField] public GameObject Projectile2Prefab;
-    [SerializeField] public bool isObjectiveOrineted = false;//if true, the enemy will focus the objective over player
+    [SerializeField] public bool isObjectiveOrineted = false;  //if true, the enemy will focus the objective over player
     [SerializeField] public List<Vector3> playerPosition = new List<Vector3>();
     [SerializeField] public BaseAIBehaviour behaviour;
     [SerializeField] public GameObject targetPlayer;

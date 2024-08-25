@@ -43,9 +43,12 @@ public class SpawnObject : NetworkBehaviour
         netobjectInstance = netcodeGameObject.GetComponent<ClientProjectile>();
 
         NetworkObject networkobject = netobjectInstance.GetComponent<NetworkObject>();
+
         if (NetworkManager.Singleton.IsServer)
         {
             networkobject.SpawnWithOwnership(clientid);
+
+            if (networkobject.GetComponent<ChainProjectile>() != null) return;
 
             if (!IsOwnedByServer) //hide CLONED OBJECT to the client
                 networkobject.NetworkHide(clientid);

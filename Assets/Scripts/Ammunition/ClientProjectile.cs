@@ -44,16 +44,12 @@ public class ClientProjectile : MonoBehaviour
     {
         if (other.gameObject.tag != "Player")
         {
-            Debug.Log("chit" + other.gameObject.tag.ToString());
-            rb.velocity = Vector3.zero;
         }
     }
     public virtual void HandleTrigger(Collider other)
     {
         if (other.gameObject.tag != "Player")
         {
-            Debug.Log("thit" + other.gameObject.tag.ToString());
-            rb.velocity = Vector3.zero;
         }
     }
     private void OnCollisionStay(Collision other) { HandleCollision(other); }

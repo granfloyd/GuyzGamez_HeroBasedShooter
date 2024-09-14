@@ -10,6 +10,7 @@ public class NetcodeSolutions : NetworkBehaviour
     {
         Player,
         Enemy,
+        Objective,
         Projectile,
         Shield
     }
@@ -32,6 +33,11 @@ public class NetcodeSolutions : NetworkBehaviour
                     CoolEffects.Instance.PlayCoolEffectServerRpc(CoolEffects.EffectIndex.bullethitground, whereWasHit);
                     HealthScript enemyhp = gameObject.GetComponentInChildren<HealthScript>();
                     enemyhp.CalculateDamage(clientDamage);
+                    break;
+                case NetworkObjectType.Objective:
+                    CoolEffects.Instance.PlayCoolEffectServerRpc(CoolEffects.EffectIndex.bullethitground, whereWasHit);
+                    HealthScript objectivehp = gameObject.GetComponent<HealthScript>();
+                    objectivehp.CalculateDamage(clientDamage);
                     break;
                 case NetworkObjectType.Projectile:
                     //why do i have this

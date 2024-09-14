@@ -7,6 +7,7 @@ public class EnemyProjectile : ClientProjectile
 {
     new void Start()
     {
+        Debug.Log("start");
         base.Start();
     }
 
@@ -27,11 +28,26 @@ public class EnemyProjectile : ClientProjectile
                 Destroy(gameObject);
             }
         }
+        else if(other.gameObject.tag == "Objective")
+        {
+            if (other.gameObject.GetComponent<NetworkObject>() == null)
+            {
+                Debug.Log("No NetworkObject found on the object");
+                return;
+            }
+            ulong objectid = other.gameObject.GetComponent<NetworkObject>().NetworkObjectId;
+            NetcodeSolutions netcodeSolutions = other.gameObject.GetComponent<NetcodeSolutions>();
+            netcodeSolutions.ClientProjectileOnHit(objectid, transform.position, ownerID, damage);
+            if (NetworkManager.Singleton.IsServer)
+            {
+                Destroy(gameObject);
+            }
+        }
         else
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
             }
         }
     }
@@ -58,7 +74,7 @@ public class EnemyProjectile : ClientProjectile
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
             }
         }
     }

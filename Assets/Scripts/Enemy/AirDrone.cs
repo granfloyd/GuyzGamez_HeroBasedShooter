@@ -49,6 +49,7 @@ public class AirDrone : EnemyBehaviour
         serverProjectileComponent.NetworkObject.Spawn();
         EnemyProjectile enemyProjectile = projectileInstance.GetComponent<EnemyProjectile>();
         enemyProjectile.ownerID = NetworkObject.NetworkObjectId;
+        enemyProjectile.damage = 10;
         if (flip == 0)
         {
             flip = 1;

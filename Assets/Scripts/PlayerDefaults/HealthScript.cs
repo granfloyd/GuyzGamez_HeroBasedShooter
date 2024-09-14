@@ -47,6 +47,7 @@ public class HealthScript : NetworkBehaviour
             {
                 if (i == 0)
                 {
+                    Debug.Log("Spawning payer hp bar");
                     GameObject block = Instantiate(healthBlockPrefab, healthBlockStart);
                     block.GetComponent<RectTransform>().sizeDelta = new Vector2(blockWidth, blockHeight);
                     healthBlockList.Add(block);
@@ -128,11 +129,6 @@ public class HealthScript : NetworkBehaviour
         currentHealth.Value -= damage;
         Updatehp();
         UpdateClientHealthClientRpc();
-
-        //if (currentHealth.Value <= 0)
-        //{
-        //    Destroy(transform.root.gameObject);
-        //}
     }
 
     [ClientRpc]

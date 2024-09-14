@@ -30,7 +30,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private LayerMask Ground;
     [SerializeField] private LayerMask Objective;
     [SerializeField] private bool isGrounded;
-    [SerializeField] private bool isOnObjective;
+    [SerializeField] public bool isOnObjective;
 
     public Transform orientation;
     
@@ -56,7 +56,7 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, Ground);
 
-        isOnObjective = Physics.Raycast(transform.position, Vector3.down, out hit, playerHeight ,Objective);
+        isOnObjective = Physics.Raycast(transform.position, Vector3.down, out hit, 2 ,Objective);
 
         Debug.DrawRay(transform.position, Vector3.down * (playerHeight), Color.red);
 
@@ -72,7 +72,7 @@ public class PlayerMovement : NetworkBehaviour
         if (isOnObjective)
         {
             Objective objective = hit.collider.GetComponent<Objective>();
-            objective.UpdateObjective(0.1f);
+            objective.UpdateObjectiveServerRpc();
         }
     }
 

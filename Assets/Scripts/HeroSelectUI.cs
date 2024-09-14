@@ -6,20 +6,12 @@ using UnityEngine.UI;
 
 public class HeroSelectUI : NetworkBehaviour
 {
-    //cool names Gaius,Jericho,Keturah,Tirzah,Eden
-    //IMPORTANT SORT ORDER FOR CANVAS
-    // 5 = MOST IMPORTANT (HERO SELECT UI) OR ERROR MESSAGE
-    //4 = HERO UI
-    //3IDK
-    //2IDK
-    //1IDK
-    //0 IDK
     public static HeroSelectUI Instance { get; private set; }
     [SerializeField] private List<HeroBase> heroes = new List<HeroBase>();
     [SerializeField] protected GameObject selectHeroUI;
     [SerializeField] protected GameObject selectHeroScreen;
     [SerializeField] protected List<Button> heroButtons;
-    public HeroBase bussy;
+
     public HeroBase newhero;
     private void Awake()
     {
@@ -105,7 +97,6 @@ public class HeroSelectUI : NetworkBehaviour
         }
        
         PlayerController.currentHero = selectedHero;
-        bussy = PlayerController.currentHero;
     }
     public void RenderUI()
     {

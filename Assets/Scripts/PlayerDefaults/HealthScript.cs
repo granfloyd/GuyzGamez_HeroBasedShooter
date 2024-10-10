@@ -7,10 +7,13 @@ using UnityEngine.UI;
 
 public class HealthScript : NetworkBehaviour
 {
+    public bool isFirstHit = false;
+    public bool isHit = false;
     public bool isducttape;
     public int maxHealth;
     public NetworkVariable<int> currentHealth = new NetworkVariable<int>(200);
     public bool isPlayer;
+    public bool isObjective;
     public float totalWidth = 300f;
     public float blockHeight = 50;
     public float blockWidth;
@@ -18,6 +21,7 @@ public class HealthScript : NetworkBehaviour
     public Transform healthBlockStart;
     public GameObject healthBlockPrefab;
     public List<GameObject> healthBlockList = new List<GameObject>();
+    public AudioSource hit;
     
     public override void OnNetworkSpawn()
     {
@@ -126,9 +130,23 @@ public class HealthScript : NetworkBehaviour
     {
         if (!IsServer) return;
 
+        isHit = true;
         currentHealth.Value -= damage;
+
+        if(isObjective)
+        {
+            if(isHit && !isFirstHit)
+            {
+                isFirstHit = true;
+                if(!hit.isPlaying)
+                {
+                    hit.Play();
+                }
+            }
+        }
         Updatehp();
         UpdateClientHealthClientRpc();
+        isHit = false;
     }
 
     [ClientRpc]
@@ -168,7 +186,11 @@ public class HealthScript : NetworkBehaviour
 
     private void OrientTowardsCamera()
     {
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
+        if(!isObjective)
+        {
+            transform.LookAt(Camera.main.transform);
+            transform.Rotate(0, 180, 0);
+        }
+       
     }
 }

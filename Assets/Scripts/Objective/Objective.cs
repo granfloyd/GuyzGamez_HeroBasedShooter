@@ -7,10 +7,14 @@ using UnityEngine;
 public class Objective : NetworkBehaviour
 {
     //[SerializeField] public float currentProgress;
+    public HealthScript ObjectiveHealthScript;
     [SerializeField] private TMP_Text progressTxt;
     [SerializeField] private float minProgress;
     [SerializeField] private float maxProgress;
     public NetworkVariable<float> currentProgress = new NetworkVariable<float>(0);
+    public AudioSource underAttack;
+    public AudioSource defendObjective;
+    public AudioSource uploadingObjective;
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -46,8 +50,13 @@ public class Objective : NetworkBehaviour
         }
         else
         {
-            currentProgress.Value += Time.deltaTime;
-            UpdateObjectiveClientRpc();
+            if (currentProgress.Value == 0 && !uploadingObjective.isPlaying)
+                uploadingObjective.Play();
+            else
+            {
+                currentProgress.Value += Time.deltaTime;
+                UpdateObjectiveClientRpc();
+            }
         }
     }
 
